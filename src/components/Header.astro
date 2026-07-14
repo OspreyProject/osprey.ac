@@ -1,0 +1,29 @@
+---
+import {Image} from 'astro:assets';
+import ospreyIcon from '../assets/osprey-icon.png';
+
+const links = [
+    {href: '/download/', label: 'Download'},
+];
+---
+
+<header class="site-header">
+    <div class="wrap header-inner">
+        <a class="brand" href="/">
+            <Image
+                    src={ospreyIcon}
+                    alt=""
+                    width={32}
+                    height={32}
+                    densities={[1, 2]}
+                    loading="eager"
+                    fetchpriority="high"
+            />
+            <span>Osprey</span>
+        </a>
+
+        <nav class="site-nav">
+            {links.map((link) => <a href={link.href}>{link.label}</a>)}
+        </nav>
+    </div>
+</header>

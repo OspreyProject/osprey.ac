@@ -1,0 +1,72 @@
+---
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import '../styles/global.css';
+
+interface Props {
+    title: string;
+    description: string;
+    schema?: object;
+}
+
+const {title, description, schema} = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const ogImage = new URL('/og-image.png', Astro.site);
+---
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>{title}</title>
+    <meta name="description" content={description}/>
+    <link rel="canonical" href={canonical}/>
+    <link rel="icon" href="/favicon.png" type="image/png"/>
+
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1"/>
+
+    <meta property="og:site_name" content="Osprey"/>
+    <meta property="og:title" content={title}/>
+    <meta property="og:description" content={description}/>
+    <meta property="og:url" content={canonical}/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:image" content={ogImage}/>
+    <meta property="og:image:width" content="1200"/>
+    <meta property="og:image:height" content="630"/>
+    <meta property="og:image:alt"
+          content="Osprey: Browser Protection. Blocks phishing, malware, and scam websites before they load."/>
+    <meta property="og:locale" content="en_US"/>
+
+    <meta name="twitter:card" content="summary_large_image"/>
+    <meta name="twitter:title" content={title}/>
+    <meta name="twitter:description" content={description}/>
+    <meta name="twitter:image" content={ogImage}/>
+
+    {schema && <script is:inline type="application/ld+json" set:html={JSON.stringify(schema)}/>}
+
+    <script is:inline>
+        (function () {
+            const ua = navigator.userAgent;
+            let id = 'chrome';
+
+            if (/firefox|fxios/i.test(ua)) {
+                id = 'firefox';
+            } else if (/edg\//i.test(ua)) {
+                id = 'edge';
+            }
+
+            document.documentElement.setAttribute('data-browser', id);
+        })();
+    </script>
+</head>
+<body>
+<Header/>
+<main>
+    <div class="wrap">
+        <slot/>
+    </div>
+</main>
+<Footer/>
+</body>
+</html>

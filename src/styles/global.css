@@ -1,0 +1,1019 @@
+:root {
+    /* Surfaces */
+    --bg: #282828;
+    --surface: #323232;
+    --surface-raised: #3c3c3c;
+    --surface-hover: #3e3e3e;
+    --header-bg: #373737;
+    --border: #464646;
+
+    /* Text */
+    --text: #ffffff;
+    --text-muted: #b1b5b8;
+    --text-dim: #8c8c8c;
+
+    /* Accent */
+    --accent: #f3ba22;
+    --accent-hover: #dca81c;
+    --accent-active: #c89814;
+    --accent-light: #ffcd4a;
+    --accent-faint: rgba(243, 186, 34, 0.1);
+
+    /* Status */
+    --safe: #5cd67c;
+    --danger: #dc8c8c;
+
+    /* Yellow store buttons. The label and the logo carry separate shadows: a
+       filled glyph and a solid logo mark do not need the same weight to read. */
+    --btn-shadow-1: 0 1px 3px rgba(0, 0, 0, 0.35);
+    --btn-shadow-2: 0 0 1px rgba(0, 0, 0, 0.35);
+    --btn-icon-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+
+    --font: 'Segoe UI', system-ui, sans-serif;
+    --radius: 6px;
+    --max-width: 60rem;
+    --text-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-family: var(--font);
+    font-weight: 400;
+    line-height: 1.6;
+    color: var(--text);
+    background-color: var(--bg);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.wrap {
+    width: 100%;
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 1.25rem;
+}
+
+main {
+    flex: 1;
+    padding: 2.5rem 0;
+}
+
+a {
+    color: var(--accent);
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+h1,
+h2,
+h3 {
+    line-height: 1.25;
+    font-weight: 600;
+}
+
+h1 {
+    font-size: 2rem;
+    margin: 0 0 0.5rem;
+}
+
+hr {
+    border: 0;
+    border-top: 1px solid var(--border);
+    margin: 2rem 0;
+}
+
+code {
+    font-family: ui-monospace, monospace;
+    font-size: 0.9em;
+    background: var(--surface);
+    padding: 0.1em 0.35em;
+    border-radius: 4px;
+}
+
+:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+}
+
+.lede {
+    font-size: 1.1rem;
+    color: var(--text-muted);
+    margin-top: 0;
+}
+
+.meta {
+    font-size: 0.85rem;
+    color: var(--text-dim);
+}
+
+/* --------------------------------------------------
+   Header
+-------------------------------------------------- */
+.site-header {
+    background-color: var(--header-bg);
+    border-bottom: 1px solid var(--border);
+}
+
+/* Brand hard left, nav hard right. Both sit inside .wrap, so they align with
+   the outer edges of the screenshot grid below. */
+.header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding-top: 1.25rem;
+    padding-bottom: 1.25rem;
+}
+
+.brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.85rem;
+    color: var(--text);
+    font-size: 1.2rem;
+    /* 600 to match the h1. No text-shadow: at this size the blur smears under
+       the strokes and reads as extra weight rather than depth. */
+    font-weight: 600;
+}
+
+.brand:hover {
+    text-decoration: none;
+}
+
+.brand img {
+    width: 32px;
+    height: 32px;
+}
+
+.site-nav {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 1.75rem;
+}
+
+.site-nav a {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    font-weight: 600;
+}
+
+.site-nav a:hover {
+    color: var(--accent);
+    text-decoration: none;
+}
+
+/* --------------------------------------------------
+   Buttons
+-------------------------------------------------- */
+.btn {
+    display: inline-block;
+    background-color: var(--accent);
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    padding: 0.65rem 1.5rem;
+    font-family: var(--font);
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+}
+
+.btn:hover {
+    background-color: var(--accent-hover);
+    text-decoration: none;
+}
+
+.btn:active {
+    background-color: var(--accent-active);
+}
+
+/* --------------------------------------------------
+   Home
+-------------------------------------------------- */
+.hero {
+    text-align: center;
+    padding: 2rem 0 2.5rem;
+}
+
+.hero h1 {
+    font-size: 2.15rem;
+    margin: 0 0 0.75rem;
+}
+
+.hero-sub {
+    font-size: 1.2rem;
+    color: var(--text-muted);
+    max-width: 36rem;
+    margin: 0 auto 2rem;
+}
+
+/* Store buttons. Deliberately neutral rather than accent-yellow, so the
+   browser logo is what identifies the button. */
+/*
+ * The same two-column grid as .shots below (1fr 1fr, 1.25rem gap), so the two
+ * rows share a column boundary. The store button is pushed to the end of column
+ * one and the GitHub button to the start of column two, which lands their inner
+ * edges exactly on the inner edges of the two screenshots. Matching the grid
+ * rather than hand-tuning widths means the alignment holds at any viewport.
+ *
+ * Hidden store buttons are display:none, so they occupy no grid cell and the
+ * visible one always lands in column one.
+ */
+.install-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+    align-items: center;
+}
+
+.install-row .install-btn[data-browser] {
+    justify-self: end;
+}
+
+.install-row .install-btn-github {
+    justify-self: start;
+}
+
+.install-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.85rem;
+    background-color: var(--surface);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 0.7rem 1.35rem;
+    font-family: var(--font);
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.install-btn:hover {
+    background-color: var(--surface-hover);
+    border-color: var(--text-dim);
+    text-decoration: none;
+}
+
+.install-btn:active {
+    background-color: var(--surface-raised);
+}
+
+/*
+ * Store buttons are hidden by default and revealed only for the browser the
+ * visitor is actually using. Hiding is the CSS default rather than something JS
+ * applies afterwards, so the buttons never paint and then disappear.
+ *
+ * The inline script in index.astro stamps data-browser onto <html> before the
+ * buttons are parsed. The <noscript> block below covers the case where it never
+ * runs at all.
+ */
+/*
+ * Appearance applies to every store button, wherever it appears, so the download
+ * page and the homepage look identical.
+ */
+.install-btn[data-browser] {
+    background-color: var(--accent);
+    border-color: var(--accent);
+    color: #ffffff;
+    text-shadow: var(--btn-shadow-1), var(--btn-shadow-2);
+}
+
+/*
+ * Visibility is a homepage concern only. The homepage shows one button, chosen
+ * by the browser; the download page shows all three on purpose. Scoping this to
+ * .install-row is what keeps the download page's buttons from being hidden,
+ * since that page never sets html[data-browser].
+ */
+.install-row .install-btn[data-browser] {
+    display: none;
+}
+
+/*
+ * Scoped to .install-row. The download page shows every store button on purpose,
+ * and it never sets html[data-browser], so an unscoped rule hid all three there.
+ */
+html[data-browser="chrome"] .install-row .install-btn[data-browser="chrome"],
+html[data-browser="firefox"] .install-row .install-btn[data-browser="firefox"],
+html[data-browser="edge"] .install-row .install-btn[data-browser="edge"] {
+    display: inline-flex;
+}
+
+/*
+ * Store logos are drawn with background-image rather than <img>. An <img> is
+ * downloaded even when its parent is display:none, so the old markup fetched
+ * chrome.svg, firefox.svg and edge.svg on every visit and showed one of them.
+ * A background-image on a hidden element is never requested.
+ */
+.install-row .install-btn[data-browser]::before {
+    content: '';
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    filter: drop-shadow(var(--btn-icon-shadow));
+}
+
+.install-row .install-btn[data-browser="chrome"]::before {
+    background-image: url('../assets/chrome.svg');
+}
+
+.install-row .install-btn[data-browser="firefox"]::before {
+    background-image: url('../assets/firefox.svg');
+}
+
+.install-row .install-btn[data-browser="edge"]::before {
+    background-image: url('../assets/edge.svg');
+}
+
+/*
+ * The GitHub button is always visible, so this saves no request. It is a
+ * background for consistency: every logo in the install row is now painted the
+ * same way, and .install-btn carries no <img> at all.
+ */
+.install-row .install-btn-github::before {
+    content: '';
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+    background-image: url('../assets/github.svg');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+}
+
+.install-btn[data-browser]:hover {
+    background-color: var(--accent-hover);
+    border-color: var(--accent-hover);
+}
+
+.install-btn[data-browser]:active {
+    background-color: var(--accent-active);
+    border-color: var(--accent-active);
+}
+
+.install-btn[hidden] {
+    display: none;
+}
+
+/* --------------------------------------------------
+   Screenshots
+-------------------------------------------------- */
+.shots {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+}
+
+.shot-trigger {
+    display: block;
+    width: 100%;
+    padding: 0;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: none;
+    cursor: zoom-in;
+    overflow: hidden;
+}
+
+.shot-trigger img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.shots-caption {
+    max-width: 44rem;
+    margin: 1.5rem auto 0;
+    text-align: center;
+    font-style: italic;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+}
+
+/* --------------------------------------------------
+   Homepage content sections
+-------------------------------------------------- */
+.section {
+    max-width: 44rem;
+    margin: 0 auto 2.5rem;
+}
+
+.section h2 {
+    font-size: 1.35rem;
+    margin: 0 0 0.6rem;
+}
+
+.section p {
+    margin: 0 0 0.75rem;
+    color: var(--text-muted);
+}
+
+/* --------------------------------------------------
+   Note callout
+-------------------------------------------------- */
+.note {
+    border-left: 3px solid var(--accent);
+    background-color: var(--surface);
+    padding: 0.85rem 1rem;
+    border-radius: 0 var(--radius) var(--radius) 0;
+}
+
+.perm {
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 0.85rem 1rem;
+}
+
+.perm dt {
+    font-weight: 700;
+    margin-bottom: 0.2rem;
+}
+
+.perm dt code {
+    background: none;
+    padding: 0;
+    color: var(--accent);
+    font-size: 0.95rem;
+}
+
+.perm dd {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+}
+
+/* --------------------------------------------------
+   FAQ
+-------------------------------------------------- */
+.faq {
+    border-bottom: 1px solid var(--border);
+}
+
+.faq summary {
+    cursor: pointer;
+    padding: 0.85rem 0;
+    font-weight: 600;
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    align-items: center;
+}
+
+.faq summary::-webkit-details-marker {
+    display: none;
+}
+
+.faq summary::after {
+    content: '+';
+    color: var(--accent);
+    font-size: 1.3rem;
+    font-weight: 400;
+    line-height: 1;
+    flex-shrink: 0;
+}
+
+.faq[open] summary::after {
+    content: '\2212'; /* minus */
+}
+
+.faq summary:hover {
+    color: var(--accent);
+}
+
+.faq p {
+    margin: 0 0 1rem;
+    color: var(--text-muted);
+}
+
+/* --------------------------------------------------
+   Closing call to action
+-------------------------------------------------- */
+.closing {
+    max-width: 44rem;
+    margin: 3rem auto 1rem;
+    text-align: center;
+}
+
+.closing p {
+    color: var(--text-muted);
+}
+
+/* --------------------------------------------------
+   Section subheadings
+-------------------------------------------------- */
+.section h3 {
+    font-size: 1.1rem;
+    margin: 1.75rem 0 0.5rem;
+}
+
+/* --------------------------------------------------
+   Screen-reader only
+-------------------------------------------------- */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* --------------------------------------------------
+   Bands (top-level page sections)
+-------------------------------------------------- */
+.band {
+    margin: 3.5rem 0;
+}
+
+.band-title {
+    font-size: 1.6rem;
+    text-align: center;
+    margin: 7rem 0 3rem;
+}
+
+.band-sub {
+    max-width: 42rem;
+    margin: 0 auto 2rem;
+    text-align: center;
+    color: var(--text-muted);
+}
+
+.band > p:last-child {
+    text-align: center;
+}
+
+/* --------------------------------------------------
+   Feature grid
+-------------------------------------------------- */
+.feature-grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+    gap: 1rem;
+}
+
+.feature {
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.15rem 1.25rem;
+}
+
+.feature h3 {
+    margin: 0 0 0.4rem;
+    font-size: 1.05rem;
+}
+
+.feature p {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+}
+
+/* --------------------------------------------------
+   Steps
+-------------------------------------------------- */
+.steps {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+    gap: 1.5rem;
+}
+
+.step {
+    text-align: center;
+}
+
+.step-n {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 50%;
+    background-color: var(--accent);
+    color: #ffffff;
+    font-weight: 700;
+    text-shadow: var(--btn-shadow-1), var(--btn-shadow-2);
+    margin-bottom: 0.75rem;
+}
+
+.step h3 {
+    margin: 0 0 0.4rem;
+    font-size: 1.05rem;
+}
+
+.step p {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+}
+
+/* --------------------------------------------------
+   Comparison table
+-------------------------------------------------- */
+.table-scroll {
+    overflow-x: auto;
+}
+
+.compare {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 34rem;
+}
+
+.compare th,
+.compare td {
+    padding: 0.8rem 1rem;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+}
+
+.compare thead th {
+    font-size: 0.9rem;
+    color: var(--text-dim);
+    font-weight: 600;
+    border-bottom: 1px solid var(--border);
+}
+
+.compare tbody th {
+    text-align: left;
+    font-weight: 400;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+}
+
+/* The Osprey column is the point of the table, so it is lifted out. */
+.compare .col-osprey {
+    background-color: var(--surface);
+    color: var(--text);
+    font-weight: 600;
+}
+
+.compare thead .col-osprey {
+    color: var(--accent);
+    font-size: 1rem;
+    border-top-left-radius: var(--radius);
+    border-top-right-radius: var(--radius);
+}
+
+/* Words, not just colours or ticks, so the meaning survives without sight. */
+.compare .yes {
+    color: var(--safe);
+    font-weight: 600;
+}
+
+.compare .no {
+    color: var(--danger);
+}
+
+.compare .val {
+    color: inherit;
+}
+
+/* --------------------------------------------------
+   Download page
+-------------------------------------------------- */
+.download-grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.download-card {
+    flex: 1 1 15rem;
+    max-width: 20rem;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 0.35rem;
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.75rem 1.25rem 1.5rem;
+}
+
+/* The visitor's own browser. Highlighted, but every card stays usable: people
+   do install extensions for a machine they are not sitting at. */
+/*
+ * The visitor's card is highlighted and pulled to the front in CSS, keyed off
+ * html[data-browser] which is set in <head> before first paint. This used to be
+ * done by a deferred script, which meant the badge appeared a frame late and
+ * flickered.
+ */
+html[data-browser="chrome"] .download-card[data-browser="chrome"],
+html[data-browser="firefox"] .download-card[data-browser="firefox"],
+html[data-browser="edge"] .download-card[data-browser="edge"] {
+    border-color: var(--accent);
+    order: -1;
+}
+
+.download-badge {
+    display: none;
+    position: absolute;
+    top: -0.6rem;
+    margin: 0;
+    padding: 0.15rem 0.6rem;
+    background-color: var(--accent);
+    color: #ffffff;
+    text-shadow: var(--btn-shadow-1), var(--btn-shadow-2);
+    border-radius: 999px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+/* Hidden by default: only the visitor's own card shows one. */
+html[data-browser="chrome"] .download-card[data-browser="chrome"] .download-badge,
+html[data-browser="firefox"] .download-card[data-browser="firefox"] .download-badge,
+html[data-browser="edge"] .download-card[data-browser="edge"] .download-badge {
+    display: block;
+}
+
+/*
+ * The SVG is inlined into the HTML, so it paints with the page instead of
+ * arriving in a later request. The box is fixed here so there is no reflow.
+ */
+.download-logo {
+    display: block;
+    width: 48px;
+    height: 48px;
+    flex-shrink: 0;
+}
+
+.download-logo svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.download-card h2 {
+    margin: 0.35rem 0 0;
+    font-size: 1.25rem;
+}
+
+.download-store {
+    margin: 0 0 1rem;
+    font-size: 0.85rem;
+    color: var(--text-dim);
+}
+
+.download-card .install-btn {
+    width: 100%;
+    justify-content: center;
+    margin-top: auto;
+}
+
+/* --------------------------------------------------
+   Manual install
+-------------------------------------------------- */
+.manual-steps {
+    margin: 0 0 1rem;
+    padding-left: 1.25rem;
+    color: var(--text-muted);
+}
+
+.manual-steps li {
+    margin-bottom: 0.5rem;
+}
+
+/* --------------------------------------------------
+   Lightbox
+-------------------------------------------------- */
+.lightbox {
+    border: none;
+    background: none;
+    padding: 0;
+    max-width: 100vw;
+    max-height: 100vh;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.lightbox::backdrop {
+    background: rgba(0, 0, 0, 0.8);
+}
+
+.lightbox img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    max-width: 94vw;
+    max-height: 94vh;
+    width: auto;
+    height: auto;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    cursor: default;
+}
+
+.section {
+    max-width: 44rem;
+    margin: 0 auto;
+    padding: 2.5rem 0;
+    border-bottom: 1px solid var(--border);
+}
+
+.section:last-of-type {
+    border-bottom: none;
+}
+
+.section h2 {
+    font-size: 1.5rem;
+    margin: 0 0 0.75rem;
+}
+
+.section p {
+    color: var(--text-muted);
+    margin: 0 0 1rem;
+}
+
+.section p:last-child {
+    margin-bottom: 0;
+}
+
+/* Threat list. The accent bar on the left is the only decoration, and it is
+   doing real work: it reads as a row of things being stopped. */
+.blocks {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.5rem;
+}
+
+.blocks li {
+    background-color: var(--surface);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 var(--radius) var(--radius) 0;
+    padding: 0.7rem 1rem;
+    color: var(--text);
+}
+
+.closing {
+    text-align: center;
+    padding: 3rem 0 1rem;
+}
+
+.closing h2 {
+    font-size: 1.6rem;
+    margin: 0 0 0.5rem;
+}
+
+.closing p {
+    color: var(--text-muted);
+    margin: 0 0 1.5rem;
+}
+
+.card {
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1rem 1.15rem;
+}
+
+.card:hover {
+    background-color: var(--surface-hover);
+}
+
+.card h3 {
+    margin: 0 0 0.35rem;
+}
+
+.card h3 a {
+    color: var(--text);
+}
+
+.card p {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+}
+
+.card .meta {
+    margin-top: 0.6rem;
+}
+
+/* --------------------------------------------------
+   Legal pages (privacy, terms)
+-------------------------------------------------- */
+.legal h2 {
+    margin-top: 2rem;
+}
+
+.legal li {
+    margin-bottom: 0.35rem;
+}
+
+/*
+ * The all-caps disclaimer and liability blocks in the Terms. They have to stay
+ * capitalised for legal conspicuousness, but at full body weight they read as
+ * shouting, so they are set smaller and muted.
+ */
+.legal-caps {
+    font-size: 0.9rem;
+    line-height: 1.7;
+    color: var(--text-muted);
+}
+
+/* --------------------------------------------------
+   Footer
+-------------------------------------------------- */
+.site-footer {
+    border-top: 1px solid var(--border);
+    padding: 1.5rem 0;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+.site-footer nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.25rem;
+    margin-bottom: 0.75rem;
+}
+
+.site-footer nav a {
+    color: var(--text-muted);
+}
+
+.site-footer nav a:hover {
+    color: var(--accent);
+}
+
+.site-footer p {
+    margin: 0.25rem 0;
+}
+
+@media (max-width: 40rem) {
+
+    .hero h1 {
+        font-size: 1.65rem;
+    }
+
+    .shots {
+        grid-template-columns: 1fr;
+    }
+
+    .install-row {
+        grid-template-columns: 1fr;
+        justify-items: center;
+    }
+
+    .install-row .install-btn[data-browser],
+    .install-row .install-btn-github {
+        justify-self: center;
+    }
+
+    .header-inner {
+        flex-direction: column;
+        gap: 0.85rem;
+    }
+
+    .site-nav {
+        justify-content: center;
+        gap: 1rem;
+    }
+}

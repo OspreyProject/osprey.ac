@@ -1,0 +1,463 @@
+---
+import Base from '../layouts/Base.astro';
+import {Image} from 'astro:assets';
+import promo1 from '../assets/promo1.png';
+import promo2 from '../assets/promo2.png';
+
+const stores = [
+    {
+        id: 'chrome',
+        label: 'Add to Chrome',
+        url: 'https://osprey.ac/chrome'
+    },
+    {
+        id: 'firefox',
+        label: 'Add to Firefox',
+        url: 'https://osprey.ac/firefox'
+    },
+    {
+        id: 'edge',
+        label: 'Add to Edge',
+        url: 'https://osprey.ac/edge'
+    },
+];
+
+const shots = [
+    {img: promo1, alt: 'Protect your browser and your privacy.'},
+    {img: promo2, alt: 'Stop malicious websites before they infect you.'},
+];
+
+const features = [
+    {
+        title: 'Stops fake login pages',
+        body: 'Blocks the counterfeit bank and email pages built to capture your password.',
+    },
+    {
+        title: 'Stops viruses and scams',
+        body: 'Dangerous downloads, fake stores, and fraud are stopped as soon as you visit them.',
+    },
+    {
+        title: 'Up to 22 checks, not just one',
+        body: 'Your browser checks with one threat list. Osprey checks up to 22 at once for every website you visit.',
+    },
+    {
+        title: 'Cannot read your screen',
+        body: 'Osprey has no permission to see the pages you look at, so we can\'t see your sensitive information.',
+    },
+    {
+        title: 'No accounts required',
+        body: 'You do not have to give your name or email address. Osprey works without any personal information.',
+    },
+    {
+        title: 'Protects your privacy',
+        body: 'Osprey does not collect your browsing history. Every link is checked privately and anonymously.',
+    },
+];
+
+const steps = [
+    {
+        n: '1',
+        title: 'You click a link',
+        body: 'Anywhere. An email, a search result, a message from a friend.',
+    },
+    {
+        n: '2',
+        title: 'Osprey checks the address',
+        body: 'It asks up to 22 different sources whether the page is safe, and gets an answer in a fraction of a second.',
+    },
+    {
+        n: '3',
+        title: 'You get a warning, or nothing at all',
+        body: 'If the website is dangerous, Osprey stops it and shows a warning page. If it\'s safe, you see the page as normal.',
+    },
+];
+
+const comparison = [
+    {
+        feature: 'Free, no accounts required',
+        osprey: 'yes',
+        builtin: 'yes',
+        malwarebytes: 'yes',
+        bitdefender: 'yes'
+    },
+    {
+        feature: 'Checks more than one source',
+        osprey: '22 sources',
+        builtin: '1 source',
+        malwarebytes: '1 source',
+        bitdefender: '1 source'
+    },
+    {
+        feature: 'Open-source and auditable',
+        osprey: 'yes',
+        builtin: 'no',
+        malwarebytes: 'no',
+        bitdefender: 'no'
+    },
+    {
+        feature: 'Strict no-logging policy',
+        osprey: 'yes',
+        builtin: 'no',
+        malwarebytes: 'no',
+        bitdefender: 'no'
+    },
+    {
+        feature: 'Configurable threat sources',
+        osprey: 'yes',
+        builtin: 'no',
+        malwarebytes: 'yes',
+        bitdefender: 'no'
+    },
+    {
+        feature: 'Doesn\'t slow down browsing',
+        osprey: 'yes',
+        builtin: 'yes',
+        malwarebytes: 'no',
+        bitdefender: 'no'
+    },
+    {
+        feature: 'Shows no adverts or upsells',
+        osprey: 'yes',
+        builtin: 'yes',
+        malwarebytes: 'no',
+        bitdefender: 'yes'
+    },
+    {
+        feature: 'Blocks >90% on OpenPhish',
+        osprey: 'yes',
+        builtin: 'no',
+        malwarebytes: 'yes',
+        bitdefender: 'no'
+    },
+    {
+        feature: 'Blocks newly registered domains',
+        osprey: 'yes',
+        builtin: 'no',
+        malwarebytes: 'no',
+        bitdefender: 'no'
+    },
+    {
+        feature: 'Instant updates to threat sources',
+        osprey: 'yes',
+        builtin: 'no',
+        malwarebytes: 'no',
+        bitdefender: 'yes'
+    }
+];
+
+const faqs = [
+    {
+        q: 'Will it slow my computer down?',
+        a: 'No. Osprey is built to be as lightweight as possible. It doesn\'t stop pages from loading, and it checks every website in a fraction of a second. You won\'t notice any difference to your browsing speed.',
+    },
+    {
+        q: 'Will it stop websites from working properly?',
+        a: 'No. Osprey either lets a website through completely untouched, or it stops it and shows a warning. There is no in-between. It doesn\'t check page contents or modify anything, so it cannot break a website. It only blocks the whole page if it is dangerous.',
+    },
+    {
+        q: 'What if it blocks a website I know is fine?',
+        a: 'You can add the website to your list of exclusions, click through the \'Continue anyway\' button, or turn off the protection provider that blocked it. You can also take some time to report it as a false positive. You are in control of your browsing experience.',
+    },
+    {
+        q: 'Does it work in private or incognito windows?',
+        a: 'Yes, if you switch it on for those windows. Your browser keeps that turned off by default for every add-on. Private windows stay completely separate from your normal browsing.',
+    },
+    {
+        q: 'The report button opens a blank page. What do I do?',
+        a: 'You might not have a default mailto: handler set up on your computer. Osprey uses mailto: links to create pre-written emails to threat intelligence providers. You can either set up a default mailto: handler, or copy the email address and paste it into your email program.',
+    },
+    {
+        q: 'How is my privacy protected when it checks a website?',
+        a: 'Osprey sends the URL of the page you are visiting to our private proxy server, which checks it against the threat intelligence providers. Since every provider only sees the proxy server\'s IP address, there\'s no way for them to know who you are or what you are looking at. Osprey does not log your browsing history, and the proxy server does not log your IP address.',
+    },
+    {
+        q: 'Does it block ads on websites like AdBlock?',
+        a: 'No. Osprey does not block ads. It only blocks websites that are dangerous, and it does not modify any page contents. You can keep your ad blocker installed alongside Osprey.',
+    },
+    {
+        q: 'Will it cause issues with my antivirus or my ad blocker?',
+        a: 'No. Osprey does a different job from both and is built to sit alongside them. Keep everything you already have. You do not need to turn anything off.',
+    },
+    {
+        q: 'What does it keep on my computer?',
+        a: 'Your settings, and a short-lived note of websites it recently checked so it does not have to ask twice. It all stays on your machine, and uninstalling Osprey removes it.',
+    },
+    {
+        q: 'Can I turn one of the protection providers off?',
+        a: 'Yes, any of them, whenever you like. Click the Osprey icon, choose Open Settings, and switch off the ones you do not want. Nothing is forced on you.',
+    },
+    {
+        q: 'Can I use it at work, or install it across my company?',
+        a: 'Yes. It is free for business use, and an IT administrator can install it across an organisation and lock the settings so nobody can switch protection off.',
+    },
+    {
+        q: 'Is anyone still working on it?',
+        a: 'Yes. Osprey is updated regularly and every change is published publicly the day it is made. You can see the source code and the changelog on GitHub, and you can report bugs or request features there too.',
+    },
+    {
+        q: 'Something went wrong. Who do I talk to?',
+        a: 'Email support@osprey.ac and a person will read it, or make an issue on GitHub. We will get back to you as soon as we can.',
+    },
+];
+
+/*
+ * Structured data. SoftwareApplication is what Google uses for extension rich
+ * results (rating, price, category). FAQPage makes the questions below eligible
+ * for their own SERP treatment, and is also the single easiest thing for an AI
+ * assistant to quote accurately.
+ */
+const schema = {
+    '@context': 'https://schema.org',
+    '@graph': [
+        {
+            '@type': 'SoftwareApplication',
+            '@id': 'https://osprey.ac/#software',
+            name: 'Osprey: Browser Protection',
+            alternateName: 'Osprey',
+            applicationCategory: 'SecurityApplication',
+            applicationSubCategory: 'Browser Extension',
+            operatingSystem: 'Chrome, Firefox, Edge',
+            description:
+                'Osprey is a free, open-source browser extension that blocks phishing, malware, scams, and other dangerous websites before they load. It checks every site you visit against 22 threat intelligence providers through a privacy-preserving proxy that hides your IP address.',
+            url: 'https://osprey.ac/',
+            downloadUrl: 'https://osprey.ac/download/',
+            softwareVersion: '2.0.4.3',
+            license: 'https://www.gnu.org/licenses/gpl-3.0.html',
+            isAccessibleForFree: true,
+            offers: {
+                '@type': 'Offer',
+                price: '0',
+                priceCurrency: 'USD',
+            },
+            featureList: [
+                'Blocks phishing and fake login pages',
+                'Blocks malware and malicious websites',
+                'Blocks scams and online fraud',
+                'Checks 22 threat intelligence providers, not one',
+                'Cannot read page content: no host permissions',
+                'No account, no ads, no premium tier',
+            ],
+            permissions: 'tabs, webNavigation, storage',
+            privacyPolicy: 'https://osprey.ac/privacy/',
+            codeRepository: 'https://github.com/OspreyProject/Osprey',
+            author: {'@id': 'https://osprey.ac/#project'},
+        },
+        {
+            '@type': 'Organization',
+            '@id': 'https://osprey.ac/#project',
+            name: 'Osprey Project',
+            url: 'https://osprey.ac/',
+            logo: 'https://osprey.ac/og-image.png',
+            email: 'support@osprey.ac',
+            sameAs: ['https://github.com/OspreyProject/Osprey'],
+        },
+        {
+            '@type': 'WebSite',
+            '@id': 'https://osprey.ac/#website',
+            url: 'https://osprey.ac/',
+            name: 'Osprey: Browser Protection',
+            publisher: {'@id': 'https://osprey.ac/#project'},
+        },
+        {
+            '@type': 'FAQPage',
+            '@id': 'https://osprey.ac/#faq',
+            mainEntity: faqs.map((faq) => ({
+                '@type': 'Question',
+                name: faq.q,
+                acceptedAnswer: {
+                    '@type': 'Answer',
+                    text: faq.a,
+                },
+            })),
+        },
+    ],
+};
+---
+
+<Base
+        schema={schema}
+        title="Osprey: Browser Protection"
+        description="Automatically blocks phishing, malware, scams, and dangerous websites while you browse. Free protection for safer browsing."
+>
+    <section class="hero">
+        <h1>Osprey: Browser Protection</h1>
+        <p class="hero-sub">
+            Automatically blocks phishing, malware, scams, and dangerous websites while you browse. Free protection for
+            safer browsing.
+        </p>
+
+        <noscript>
+            <style is:inline>
+                .install-btn[data-browser="chrome"] {
+                    display: inline-flex;
+                }
+            </style>
+        </noscript>
+
+        <div class="install-row">
+            {
+                stores.map((store) => (
+                        <a
+                                class="install-btn"
+                                data-browser={store.id}
+                                href={store.url}
+                        >
+                            {store.label}
+                        </a>
+                ))
+            }
+            <a class="install-btn install-btn-github" href="https://github.com/OspreyProject/Osprey">
+                View on GitHub
+            </a>
+        </div>
+    </section>
+
+    <ul class="shots">
+        {
+            shots.map((shot) => (
+                    <li>
+                        <button class="shot-trigger" type="button" data-full={shot.img.src}>
+                            <Image
+                                    src={shot.img}
+                                    alt={shot.alt}
+                                    widths={[450, 900]}
+                                    sizes="(max-width: 40rem) calc(100vw - 2.5rem), 450px"
+                                    loading="eager"
+                                    fetchpriority="high"
+                                    decoding="sync"
+                            />
+                        </button>
+                    </li>
+            ))
+        }
+    </ul>
+
+    <section class="band">
+        <h2 class="band-title">What Osprey does</h2>
+        <ul class="feature-grid">
+            {
+                features.map((feature) => (
+                        <li class="feature">
+                            <h3>{feature.title}</h3>
+                            <p>{feature.body}</p>
+                        </li>
+                ))
+            }
+        </ul>
+    </section>
+
+    <section class="band">
+        <h2 class="band-title">How it works</h2>
+        <ol class="steps">
+            {
+                steps.map((step) => (
+                        <li class="step">
+                            <span class="step-n">{step.n}</span>
+                            <h3>{step.title}</h3>
+                            <p>{step.body}</p>
+                        </li>
+                ))
+            }
+        </ol>
+    </section>
+
+    <section class="band">
+        <h2 class="band-title">How Osprey compares</h2>
+        <div class="table-scroll">
+            <table class="compare">
+                <thead>
+                <tr>
+                    <th scope="col"><span class="sr-only">Feature</span></th>
+                    <th scope="col" class="col-osprey">Osprey</th>
+                    <th scope="col">Your browser alone</th>
+                    <th scope="col">Malwarebytes</th>
+                    <th scope="col">Bitdefender</th>
+                </tr>
+                </thead>
+                <tbody>
+                {
+                    comparison.map((row) => (
+                            <tr>
+                                <th scope="row">{row.feature}</th>
+                                <td class="col-osprey">
+                                    {row.osprey === 'yes' ? <span class="yes">Yes</span> :
+                                            <span class="val">{row.osprey}</span>}
+                                </td>
+                                <td>
+                                    {row.builtin === 'yes' ? <span class="yes">Yes</span> : row.builtin === 'no' ?
+                                            <span class="no">No</span> : <span class="val">{row.builtin}</span>}
+                                </td>
+                                <td>
+                                    {row.malwarebytes === 'yes' ?
+                                            <span class="yes">Yes</span> : row.malwarebytes === 'no' ?
+                                                    <span class="no">No</span> :
+                                                    <span class="val">{row.malwarebytes}</span>}
+                                </td>
+                                <td>
+                                    {row.bitdefender === 'yes' ?
+                                            <span class="yes">Yes</span> : row.bitdefender === 'no' ?
+                                                    <span class="no">No</span> :
+                                                    <span class="val">{row.bitdefender}</span>}
+                                </td>
+                            </tr>
+                    ))
+                }
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="band">
+        <h2 class="band-title">Common questions</h2>
+        {
+            faqs.map((faq) => (
+                    <details class="faq">
+                        <summary>{faq.q}</summary>
+                        <p>{faq.a}</p>
+                    </details>
+            ))
+        }
+    </section>
+
+    <section class="closing">
+        <h2>Something not working?</h2>
+        <p>
+            Email <a href="mailto:support@osprey.ac">support@osprey.ac</a> and a person will read it.
+        </p>
+    </section>
+
+    <dialog id="lightbox" class="lightbox" aria-label="Screenshot">
+        <img id="lightbox-img" src="" alt=""/>
+    </dialog>
+</Base>
+
+<script>
+    const dialog = document.getElementById('lightbox') as HTMLDialogElement | null;
+    const dialogImg = document.getElementById('lightbox-img') as HTMLImageElement | null;
+
+    if (dialog && dialogImg) {
+        document.querySelectorAll<HTMLButtonElement>('.shot-trigger').forEach((trigger) => {
+            trigger.addEventListener('click', () => {
+                const full = trigger.dataset.full;
+
+                if (!full) {
+                    return;
+                }
+
+                dialogImg.src = full;
+                dialogImg.alt = trigger.querySelector('img')?.alt ?? '';
+                dialog.showModal();
+            });
+        });
+
+        dialog.addEventListener('click', (event) => {
+            if (event.target !== dialogImg) {
+                dialog.close();
+            }
+        });
+
+        dialog.addEventListener('close', () => {
+            dialogImg.src = '';
+        });
+    }
+</script>

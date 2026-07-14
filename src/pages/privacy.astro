@@ -1,0 +1,191 @@
+---
+import Base from '../layouts/Base.astro';
+const effective = '13 July 2026';
+
+const permissions = [
+    {
+        name: 'tabs',
+        why: 'Detects tab navigation events.'
+    },
+    {
+        name: 'webNavigation',
+        why: 'Observes navigation events so that destination URLs can be checked.'
+    },
+    {
+        name: 'storage',
+        why: 'Caches results locally and persists your settings.'
+    },
+    {
+        name: 'https://api.osprey.ac/*',
+        why: 'Allows the extension to send URLs to the Osprey proxy server for checking.',
+    },
+    {
+        name: 'https://api.metadefender.com/*',
+        why: 'Allows the extension to contact the MetaDefender API directly, only when you configure your own MetaDefender API key.',
+    },
+];
+
+const localData = [
+    {
+        name: 'Allowed cache',
+        why: 'URLs checked and found safe, stored per provider with an expiration time.',
+    },
+    {
+        name: 'Blocked cache',
+        why: 'URLs that were flagged, stored per provider with an expiration time and threat type.',
+    },
+    {
+        name: 'Processing cache',
+        why: 'URLs currently being checked to prevent duplicate requests. Stored in-memory only.',
+    },
+    {
+        name: 'Your settings',
+        why: 'Enabled providers, cache expiration preferences, and other protection settings.',
+    },
+];
+---
+
+<Base
+        title="Privacy Policy - Osprey"
+        description="What data Osprey processes, what it does not, and how it is handled."
+>
+    <article class="legal">
+        <h1>Privacy Policy</h1>
+        <p class="meta">Effective date: {effective}</p>
+
+        <hr/>
+
+        <p>
+            Osprey: Browser Protection is committed to protecting your privacy. This Privacy Policy explains what data
+            is processed when you use the Osprey browser extension and its supporting proxy service, and how it is
+            handled.
+        </p>
+
+        <p>Osprey consists of two components:</p>
+
+        <ul>
+            <li>The <strong>browser extension</strong>, which runs locally on your device</li>
+            <li>
+                The <strong>proxy server</strong>, hosted in New York, NY at <a href="https://api.osprey.ac">api.osprey.ac</a>
+            </li>
+        </ul>
+
+        <h2>How URL checking works</h2>
+        <p>
+            When you navigate to a website, the browser extension sends the URL to the proxy server, which checks it
+            against threat intelligence providers, DNS filtering services, and local threat intelligence lists.
+        </p>
+        <p>
+            <strong>Providers never see which specific websites you visit.</strong> All checks are routed through the
+            proxy server, so providers only ever see requests originating from the proxy's IP address, not yours.
+            Thousands of users' checks are mixed together from a single IP, making it practically impossible for any
+            provider to associate a URL lookup with you specifically.
+        </p>
+        <p>
+            <strong>Most URLs are never sent to providers at all.</strong> The proxy server maintains a cache of
+            previously checked URLs. If a URL has already been recently evaluated, the result is returned from cache
+            without contacting any provider.
+        </p>
+        <p>When a URL does reach a provider, the data sent depends on the provider type:</p>
+        <ul>
+            <li><strong>DNS-based providers</strong> receive only the hostname, never the full URL or path</li>
+            <li><strong>API-based providers</strong> receive the full URL with query parameters stripped</li>
+            <li>
+                <strong>Local threat intelligence lists</strong> are checked entirely in-memory on the proxy server,
+                with no external calls per request
+            </li>
+        </ul>
+
+        <h2>Your IP address</h2>
+        <p>
+            The proxy server uses your IP address <strong>solely for abuse protections</strong> such as rate limiting.
+            For this purpose, your IP is immediately hashed and stored in-memory. Raw IP addresses are not written to
+            disk as part of normal proxy operation.
+        </p>
+
+        <h2>Third-party integrations</h2>
+        <p>
+            If you configure a provider using your own API key (for example, MetaDefender), that provider receives
+            requests directly from your device rather than through the proxy server. The privacy protections described
+            above, meaning IP shielding and caching, <strong>do not apply</strong> to those integrations. You are
+            subject to that provider's own data handling practices when using a personal API key.
+        </p>
+
+        <h2>Browser permissions</h2>
+        <p>The extension requires the following permissions, used strictly for its security features:</p>
+
+        <ul>
+            {
+                permissions.map((item) => (
+                        <li><b>{item.name}</b>: {item.why}</li>
+                ))
+            }
+        </ul>
+
+        <p>
+            The extension does <strong>not</strong> request host access to the websites you browse. It cannot read page
+            content, inject scripts, or access cookies or form data on the sites you visit. The URLs you navigate to are
+            observed only through the browser's navigation events, which expose the destination URL but not the contents
+            of the page.
+        </p>
+
+        <h2>Data stored locally</h2>
+        <p>
+            The extension stores the following data in your browser's storage:
+        </p>
+
+        <ul>
+            {
+                localData.map((item) => (
+                        <li><b>{item.name}</b>: {item.why}</li>
+                ))
+            }
+        </ul>
+
+        <p>
+            All local storage data is cleared when you uninstall the extension, or when you clear the list of excluded
+            websites using the settings page. None of it is transmitted to the proxy server or any third party.
+        </p>
+
+        <h2>Operational monitoring</h2>
+        <p>
+            The proxy server uses standard operational tooling (Micrometer, Prometheus, Grafana) to monitor service
+            health, stability, and capacity. Metrics include aggregated counts such as requests per provider, cache
+            hit/miss rates, and system performance indicators. This data is used solely for service reliability and
+            abuse prevention, not for advertising or user profiling.
+        </p>
+
+        <h2>False-positive monitoring</h2>
+        <p>
+            To catch cases where a legitimate website is mistakenly flagged as dangerous, the proxy server keeps a
+            transient log entry whenever a provider returns a <strong>malicious</strong> or <strong>phishing</strong>
+            verdict. Each entry records only the provider name, the verdict, and the same value that was checked against
+            that provider: a hostname for DNS-based providers, or the URL with query parameters stripped for URL-based
+            providers. It never includes the query string, your IP address, or any other identifier that could tie the
+            lookup back to you.
+        </p>
+        <p>
+            Results that come back safe are <strong>never</strong> logged. These entries exist only in memory, are not
+            written to disk, and are not sent to any external system. They are lost when the proxy restarts.
+        </p>
+
+        <h2>Data retention</h2>
+        <p>
+            On the proxy server, rate-limit states, local list snapshots, and transient runtime logs (including the
+            false-positive monitoring entries described above) exist only in memory and may be lost on restart.
+            Aggregated operational metrics may be retained longer in Prometheus and Grafana, subject to those systems'
+            retention settings.
+        </p>
+
+        <h2>Changes to this policy</h2>
+        <p>
+            We may update this Privacy Policy from time to time. The effective date at the top reflects the most recent
+            revision.
+        </p>
+
+        <h2>Contact</h2>
+        <p>
+            For privacy-related questions, contact us at <a href="mailto:support@osprey.ac">support@osprey.ac</a>.
+        </p>
+    </article>
+</Base>

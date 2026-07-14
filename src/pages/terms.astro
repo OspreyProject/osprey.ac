@@ -1,0 +1,158 @@
+---
+import Base from '../layouts/Base.astro';
+const effective = '13 July 2026';
+
+const acceptableUse = [
+    'violate applicable law;',
+    'interfere with or disrupt the Service or its infrastructure;',
+    'bypass security controls or rate limits;',
+    'send abusive, excessive, or malformed automated traffic;',
+    'use the hosted Service or its APIs to operate, resell, or support a commercial product or service without prior written permission; or',
+    'use the Service to support harmful, fraudulent, or abusive activity.',
+];
+---
+
+<Base
+        title="Terms of Service - Osprey"
+        description="The terms governing use of the Osprey website and the hosted Osprey proxy service."
+>
+    <article class="legal">
+        <h1>Terms of Service</h1>
+        <p class="meta">Effective date: {effective}</p>
+
+        <hr/>
+
+        <p>
+            These Terms of Service ("Terms") govern your use of the Osprey website, the hosted Osprey proxy service
+            at <a href="https://api.osprey.ac">api.osprey.ac</a>, and related hosted materials or services made
+            available by the Osprey project that are not expressly governed by a separate open-source license
+            (collectively, the "Service").
+        </p>
+        <p>
+            By using the Service, you agree to these Terms. If you do not agree, please do not use the Service.
+        </p>
+
+        <h2>1. About Osprey</h2>
+        <p>
+            Osprey is an open-source browser protection project intended to help identify potentially malicious,
+            phishing, scam-related, or otherwise unsafe websites.
+        </p>
+        <p>
+            Osprey is meant to supplement your own judgment and other security tools, not replace them.
+        </p>
+
+        <h2>2. Open-source software</h2>
+        <p>
+            The Osprey browser extension, OspreyProxy, and related source code made available by the project are
+            licensed under the GNU General Public License, version 3, or (at your option) any later version ("GPLv3 or
+            later"), unless a different license is expressly stated for a specific component or file.
+        </p>
+        <p>
+            Your rights to use, copy, modify, and distribute project source code are governed by the applicable
+            open-source license, not by these Terms.
+        </p>
+        <p>
+            If there is any conflict between these Terms and an applicable open-source license with respect to software
+            released under that license, the open-source license will control for that software.
+        </p>
+
+        <h2>3. GitHub</h2>
+        <p>
+            Project source code, releases, issue tracking, and related materials may be hosted or distributed through
+            GitHub. Your use of GitHub is governed by GitHub's own terms, policies, and privacy practices, not by these
+            Terms.
+        </p>
+
+        <h2>4. Non-commercial use</h2>
+        <p>
+            Osprey is made available on a non-commercial basis for end users, researchers, and organizations using it
+            for their own internal purposes. The hosted Osprey proxy service and any public APIs made available through
+            it are likewise provided for the project's non-commercial use.
+        </p>
+        <p>
+            Restrictions on commercial use of the hosted Service are described in Section 6 (Acceptable Use).
+        </p>
+
+        <h2>5. No guarantee of detection</h2>
+        <p>
+            Osprey is a security aid only. We do not guarantee that the Service will detect, block, or correctly
+            classify every malicious, phishing, scam-related, deceptive, or otherwise unsafe site or URL.
+        </p>
+        <p>
+            Threat intelligence can be incomplete, delayed, unavailable, or inaccurate. You are responsible for your own
+            security decisions and for how you use the results provided by Osprey.
+        </p>
+
+        <h2>6. Acceptable use</h2>
+        <p>Please do not use the Service to:</p>
+        <ul>
+            {acceptableUse.map((item) =>
+                    <li>{item}</li>)}
+        </ul>
+        <p>
+            We may rate-limit, restrict, or block access to the hosted Service if necessary to protect the Service,
+            users, or third parties.
+        </p>
+
+        <h2>7. Third-party services</h2>
+        <p>
+            The Service may rely on third-party threat intelligence, DNS filtering, hosting, network, security,
+            monitoring, or infrastructure providers. We are not responsible for outages, errors, policy changes, or
+            inaccuracies caused by third-party services.
+        </p>
+
+        <h2>8. Privacy</h2>
+        <p>
+            Our <a href="/privacy/">Privacy Policy</a> describes how Osprey processes data, including limited
+            operational monitoring and service telemetry used to run, secure, and maintain the service.
+        </p>
+
+        <h2>9. Project name and branding</h2>
+        <p>
+            Except to the extent governed by applicable open-source licenses, the Osprey name, logos, branding, website
+            content, and other non-code materials made available by the project may be protected by applicable law.
+        </p>
+        <p>
+            These Terms do not give you permission to use the Osprey name, logos, branding, or other source identifiers
+            in a way that is likely to cause confusion about affiliation, sponsorship, or endorsement.
+        </p>
+
+        <h2>10. Changes to the Service</h2>
+        <p>
+            The Service may change over time, and we may modify, limit, suspend, or discontinue parts of it at any time.
+        </p>
+        <p>
+            We may also update these Terms from time to time. The effective date above reflects the date of the most
+            recent revision. Continued use of the Service after an update means you accept the revised Terms.
+        </p>
+
+        <h2>11. Disclaimer</h2>
+        <p class="legal-caps">
+            THE SERVICE IS PROVIDED "AS IS" AND "AS AVAILABLE," WITHOUT WARRANTIES OF ANY KIND, TO THE MAXIMUM EXTENT
+            PERMITTED BY APPLICABLE LAW.
+        </p>
+        <p class="legal-caps">
+            TO THE MAXIMUM EXTENT PERMITTED BY LAW, WE DISCLAIM WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+            PURPOSE, NON-INFRINGEMENT, AND ANY WARRANTY THAT THE SERVICE WILL BE UNINTERRUPTED, ERROR-FREE, SECURE,
+            ACCURATE, OR EFFECTIVE AT DETECTING OR PREVENTING ANY PARTICULAR THREAT.
+        </p>
+
+        <h2>12. Limitation of liability</h2>
+        <p class="legal-caps">
+            TO THE MAXIMUM EXTENT PERMITTED BY LAW, THE OSPREY PROJECT AND ITS CONTRIBUTORS, MAINTAINERS, OPERATORS,
+            LICENSORS, AND SERVICE PROVIDERS WILL NOT BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR
+            PUNITIVE DAMAGES ARISING OUT OF OR RELATED TO YOUR USE OF, OR INABILITY TO USE, THE SERVICE.
+        </p>
+
+        <h2>13. Governing law</h2>
+        <p>
+            These Terms are governed by the laws of the State of California, except to the extent applicable law
+            requires otherwise.
+        </p>
+
+        <h2>14. Contact</h2>
+        <p>
+            If you have questions about these Terms, contact <a href="mailto:support@osprey.ac">support@osprey.ac</a>.
+        </p>
+    </article>
+</Base>

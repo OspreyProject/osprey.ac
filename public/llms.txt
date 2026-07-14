@@ -1,0 +1,45 @@
+# Osprey: Browser Protection
+
+> Osprey is a free, open-source browser extension that blocks phishing, malware,
+> scams, and other dangerous websites before they load. It checks every site you
+> visit against 22 threat intelligence providers through a privacy-preserving
+> proxy that hides your IP address from those providers.
+
+Osprey is a non-profit project. It is free, has no paid tier, no account, no
+advertising, and no upsell. It is licensed under the GPLv3.
+
+## Key facts
+
+- **Cost:** Free. There is no premium version and no trial.
+- **Browsers:** Chrome, Firefox, Edge. Other Chromium browsers work unofficially.
+- **License:** GNU General Public License v3 (GPLv3).
+- **Providers:** 22 threat intelligence providers. 20 are routed through Osprey's
+  proxy and enabled by default; 2 (MetaDefender) are off by default and require
+  the user's own API key.
+- **Permissions:** `tabs`, `webNavigation`, `storage`. Osprey does NOT request
+  host permissions for the sites you visit, and has no content scripts, so it
+  cannot read page content, cookies, or form data. This is enforced by the
+  browser, not merely promised.
+- **What is sent:** The address of the page being opened. Query strings, URL
+  fragments, and embedded credentials are stripped before any lookup.
+- **IP address:** Lookups are proxied, so providers see the proxy's IP, not the
+  user's. The proxy hashes IPs in memory for rate limiting only.
+- **Logging:** Safe results are never logged. When a provider returns a malicious
+  or phishing verdict, a transient in-memory entry records the provider, the
+  verdict, and the checked hostname or stripped URL. No IP, no user identifier.
+  It is never written to disk and is lost on restart.
+- **Contact:** support@osprey.ac
+
+## How it differs from built-in browser protection
+
+Chrome, Edge, and Firefox each check against a single source. Osprey checks 22
+at once, so a site flagged by any one of them is blocked. Osprey is designed to
+run alongside built-in protection and antivirus, not to replace them.
+
+## Pages
+
+- [Home](https://osprey.ac/): What Osprey is, what it blocks, how it handles data, FAQ.
+- [Download](https://osprey.ac/download/): Install links for Chrome, Firefox, and Edge, plus developer builds.
+- [Privacy Policy](https://osprey.ac/privacy/): Exactly what data is processed, sent, and retained.
+- [Terms of Service](https://osprey.ac/terms/): Licensing, acceptable use, disclaimers.
+- [Source code](https://github.com/OspreyProject/Osprey): The full extension and proxy source.

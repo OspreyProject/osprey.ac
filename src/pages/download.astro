@@ -1,0 +1,179 @@
+---
+import Base from '../layouts/Base.astro';
+import chromeSvg from '../assets/chrome.svg?raw';
+import firefoxSvg from '../assets/firefox.svg?raw';
+import edgeSvg from '../assets/edge.svg?raw';
+
+const prepareSvg = (svg: string, prefix: string): string =>
+    svg
+        .replace(/<script[\s\S]*?<\/script>/gi, '')
+        .replace(/<foreignObject[\s\S]*?<\/foreignObject>/gi, '')
+        .replace(/\son\w+\s*=\s*(?:"[^"]*"|'[^']*'|[^\s>]+)/gi, '')
+        .replace(/(href|xlink:href)\s*=\s*"\s*javascript:[^"]*"/gi, '')
+        .replace(/id="([^"]+)"/g, (_match, id) => `id="${prefix}-${id}"`)
+        .replace(/url\(#([^)]+)\)/g, (_match, id) => `url(#${prefix}-${id})`)
+        .replace(/style="([^"]*)"/g, (_match, declarations: string) =>
+            declarations
+                .split(';')
+                .map((declaration) => declaration.trim())
+                .filter(Boolean)
+                .map((declaration) => {
+                    const separator = declaration.indexOf(':');
+                    const property = declaration.slice(0, separator).trim();
+                    const value = declaration.slice(separator + 1).trim();
+                    return `${property}="${value}"`;
+                })
+                .join(' '));
+
+const stores = [
+    {
+        id: 'chrome',
+        browser: 'Chrome',
+        store: 'Chrome Web Store',
+        url: 'https://osprey.ac/chrome',
+        svg: chromeSvg,
+    },
+    {
+        id: 'firefox',
+        browser: 'Firefox',
+        store: 'Firefox Browser Add-ons',
+        url: 'https://osprey.ac/firefox',
+        svg: firefoxSvg,
+    },
+    {
+        id: 'edge',
+        browser: 'Edge',
+        store: 'Edge Add-ons',
+        url: 'https://osprey.ac/edge',
+        svg: edgeSvg,
+    },
+];
+
+const actions = 'https://github.com/OspreyProject/Osprey/actions/workflows';
+
+const afterInstall = [
+    {
+        n: '1',
+        title: 'Pin Osprey to your toolbar',
+        body: 'Click the puzzle-piece icon in your browser toolbar, find Osprey, and pin it. This is optional, but it lets you see the verdict for the page you are on.',
+    },
+    {
+        n: '2',
+        title: 'Start browsing as normal',
+        body: 'Osprey is already protecting you. There\'s no account to create and nothing you need to configure. Every provider is enabled by default.',
+    },
+    {
+        n: '3',
+        title: 'Change anything you like, later',
+        body: 'Click the Osprey icon and choose Open Settings to turn individual providers on or off. You can also add your own API keys for third-party integrations.',
+    },
+];
+---
+
+<Base
+        title="Download - Osprey"
+        description="Install Osprey on Chrome, Firefox, or Edge. Free, open source, and no account required."
+>
+    <section class="hero">
+        <h1>Download Osprey</h1>
+        <p class="hero-sub">
+            Installing Osprey is easy, free, and takes about 10 seconds.
+        </p>
+    </section>
+
+    <ul class="download-grid">
+        {
+            stores.map((store) => (
+                    <li class="download-card" data-browser={store.id}>
+                        <p class="download-badge">Your browser</p>
+
+                        <span
+                                class="download-logo"
+                                aria-hidden="true"
+                                set:html={prepareSvg(store.svg, store.id)}
+                        />
+                        <h2>{store.browser}</h2>
+                        <p class="download-store">{store.store}</p>
+
+                        <a class="install-btn" data-browser={store.id} href={store.url}>
+                            Add to {store.browser}
+                        </a>
+                    </li>
+            ))
+        }
+    </ul>
+
+    <p class="shots-caption">
+        Osprey also works on other Chromium-based browsers. Use the Chrome Web Store listing above. These are not
+        officially supported, so we cannot promise every feature behaves.
+    </p>
+
+    <section class="band">
+        <h2 class="band-title">After you install</h2>
+        <ol class="steps">
+            {
+                afterInstall.map((step) => (
+                        <li class="step">
+                            <span class="step-n">{step.n}</span>
+                            <h3>{step.title}</h3>
+                            <p>{step.body}</p>
+                        </li>
+                ))
+            }
+        </ol>
+    </section>
+
+    <section class="band">
+        <h2 class="band-title">Developer builds</h2>
+        <p class="band-sub">
+            Every commit is built automatically, so you can run the latest code before it reaches a store. These builds
+            are untested, won't get updates, and may be broken. If you just want protection, use the buttons above
+            instead.
+        </p>
+
+        <p class="note">
+            You need a GitHub account to download build artifacts. GitHub requires one, and there is nothing Osprey can
+            do about that.
+        </p>
+
+        <details class="faq">
+            <summary>Developer build on Chrome or Edge</summary>
+            <ol class="manual-steps">
+                <li>
+                    Go to the <a href={actions}>Actions section</a> and
+                    click <strong>Compile for Chrome</strong> or <strong>Compile for Edge</strong>.
+                </li>
+                <li>Open the most recent run, scroll to <strong>Artifacts</strong>, and download the artifact.</li>
+                <li>Extract the ZIP to a folder on your computer.</li>
+                <li>Go to <code>about://extensions</code> in your browser.</li>
+                <li>Turn on <strong>Developer mode</strong>, then click <strong>Load unpacked</strong>.</li>
+                <li>Select the folder you extracted, then click <strong>Select Folder</strong>.</li>
+            </ol>
+        </details>
+
+        <details class="faq">
+            <summary>Developer build on Firefox</summary>
+            <p class="note">
+                This only works on <a href="https://support.mozilla.org/en-US/kb/add-on-signing-in-firefox">builds of
+                Firefox that allow unsigned add-ons</a>. Standard Firefox will refuse to install it.
+            </p>
+            <ol class="manual-steps">
+                <li>
+                    Go to the <a href={actions}>Actions section</a> and click <strong>Compile for Firefox</strong>.
+                </li>
+                <li>Open the most recent run, scroll to <strong>Artifacts</strong>, and download the artifact.</li>
+                <li>Extract the ZIP to a folder on your computer.</li>
+                <li>Go to <code>about:addons</code> in your browser.</li>
+                <li>Click the gear icon and choose <strong>Install Add-on From File</strong>.</li>
+                <li>Select the extracted add-on file.</li>
+            </ol>
+        </details>
+    </section>
+
+    <section class="closing">
+        <h2>Something not working?</h2>
+        <p>
+            Email <a href="mailto:support@osprey.ac">support@osprey.ac</a> and a person will read it.
+        </p>
+    </section>
+</Base>
