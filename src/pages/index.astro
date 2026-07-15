@@ -64,18 +64,27 @@ const steps = [
     {
         n: '1',
         title: 'You click a link',
-        body: 'Anywhere. An email, a search result, a message from a friend.',
+        body: 'Anywhere. An email, a search result, a message from a friend. Osprey checks if it\'s seen that link before. If it hasn\'t...',
     },
     {
         n: '2',
         title: 'Osprey checks the address',
-        body: 'It asks up to 22 different sources whether the page is safe, and gets an answer in a fraction of a second.',
+        body: 'Osprey\'s secure proxy server asks up to 22 different sources if the page is safe, and gets an answer in a fraction of a second.',
     },
     {
         n: '3',
         title: 'You get a warning, or nothing at all',
         body: 'If the website is dangerous, Osprey stops it and shows a warning page. If it\'s safe, you see the page as normal.',
     },
+];
+
+const rating = 4.9;
+
+const partnerLogos = [
+    {file: 'alphamountain.png', name: 'AlphaMountain'},
+    {file: 'bforeai.png', name: 'BforeAI PreCrime'},
+    {file: 'chainpatrol.png', name: 'ChainPatrol'},
+    {file: 'izoologic.png', name: 'iZOOlogic'},
 ];
 
 const comparison = [
@@ -197,6 +206,10 @@ const faqs = [
         a: 'Yes. It is free for business use, and an IT administrator can install it across an organisation and lock the settings so nobody can switch protection off.',
     },
     {
+        q: 'How can I deploy Osprey across an organization?',
+        a: 'Osprey installs from the Chrome, Edge, and Firefox stores, so it can be pushed to managed browsers the same way as any other extension through your existing device management. Because it needs no account and no license keys, there is nothing to provision per user, and every provider is enabled by default. The source is public if your security team wants to review it before rolling it out.',
+    },
+    {
         q: 'Is anyone still working on it?',
         a: 'Yes. Osprey is updated regularly and every change is published publicly the day it is made. You can see the source code and the changelog on GitHub, and you can report bugs or request features there too.',
     },
@@ -206,12 +219,6 @@ const faqs = [
     },
 ];
 
-/*
- * Structured data. SoftwareApplication is what Google uses for extension rich
- * results (rating, price, category). FAQPage makes the questions below eligible
- * for their own SERP treatment, and is also the single easiest thing for an AI
- * assistant to quote accurately.
- */
 const schema = {
     '@context': 'https://schema.org',
     '@graph': [
@@ -318,6 +325,22 @@ const schema = {
         </div>
     </section>
 
+    <div class="trust-line">
+        <p class="trust-rating">
+            <span class="stars" role="img" aria-label={`Rated ${rating} out of 5`}>
+                {
+                    Array.from({length: 5}).map((_, i) => (
+                            <span class:list={['star', {filled: i < Math.round(rating)}]}>&#9733;</span>
+                    ))
+                }
+            </span>
+            <span><strong>{rating.toFixed(1)}</strong> rating</span>
+        </p>
+        <p class="trust-users">
+            <strong id="user-count">10,000+</strong> users protected
+        </p>
+    </div>
+
     <ul class="shots">
         {
             shots.map((shot) => (
@@ -337,6 +360,21 @@ const schema = {
             ))
         }
     </ul>
+
+    <section class="partners-strip" aria-label="Threat intelligence partners">
+        <p class="partners-label">Partnered with</p>
+        <div class="marquee">
+            <ul class="marquee-track">
+                {
+                    [...partnerLogos, ...partnerLogos].map((logo) => (
+                            <li class="marquee-item">
+                                <img src={`/providers/${logo.file}`} alt={logo.name} loading="lazy" height="48"/>
+                            </li>
+                    ))
+                }
+            </ul>
+        </div>
+    </section>
 
     <section class="band">
         <h2 class="band-title">What Osprey does</h2>
@@ -365,6 +403,27 @@ const schema = {
                 ))
             }
         </ol>
+    </section>
+
+    <section class="band">
+        <h2 class="band-title">How Osprey started</h2>
+        <div class="prose">
+            <p>
+                Osprey was created in October 2024 to end the need to install multiple safe-browsing extensions just to
+                get adequate phishing protection. The protection built into most browsers isn't enough on its own
+                anymore, and users shouldn't have to sacrifice their privacy or performance to stay safe online. Osprey
+                is built to be extremely lightweight, privacy-preserving, and thorough, checking every website you visit
+                against more than one threat intelligence source rather than relying on a single list.
+            </p>
+            <p>
+                The mission is simple: be the most trusted, transparent, and effective browser protection extension for
+                home users and businesses, while staying free and open-source, forever. Osprey will never collect,
+                profile, or sell your browsing data. Our development team (one extremely dedicated developer) works
+                tirelessly to make that a reality. We're already partnered with leading cybersecurity companies and
+                constantly push updates to keep up with the latest threats. We hope you enjoy using Osprey, and we
+                welcome your feedback and contributions to make it even better.
+            </p>
+        </div>
     </section>
 
     <section class="band">

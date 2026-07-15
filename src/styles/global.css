@@ -604,6 +604,162 @@ html[data-browser="edge"] .install-row .install-btn[data-browser="edge"] {
 /* --------------------------------------------------
    Steps
 -------------------------------------------------- */
+
+/* --------------------------------------------------
+   Prose (plain body text, e.g. the origin story)
+-------------------------------------------------- */
+.prose {
+    max-width: 42rem;
+    margin: 0 auto;
+}
+
+.prose p {
+    margin: 0 0 1rem;
+    font-size: 1rem;
+    line-height: 1.7;
+    color: var(--text-muted);
+}
+
+.prose p:last-child {
+    margin-bottom: 0;
+}
+
+/* --------------------------------------------------
+   Trust line (floats under the screenshots, no section box)
+-------------------------------------------------- */
+/* Same two-column grid as .install-row / .shots: rating ends at the left
+   screenshot's right edge, user count starts at the right screenshot's left. */
+.trust-line {
+    margin: -1.5rem 0 4.0rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+    align-items: center;
+    font-size: 1.2rem;
+    color: var(--text-muted);
+}
+
+.trust-rating {
+    margin: 0;
+    justify-self: end;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.trust-users {
+    margin: 0;
+    justify-self: start;
+}
+
+.stars {
+    display: inline-flex;
+    gap: 0.15rem;
+    font-size: 1.25rem;
+    line-height: 1;
+}
+
+.star {
+    color: var(--border);
+}
+
+.star.filled {
+    color: var(--accent);
+}
+
+.trust-line strong {
+    color: var(--text);
+    font-weight: 700;
+}
+
+@media (max-width: 40rem) {
+    .trust-line {
+        grid-template-columns: 1fr;
+        justify-items: center;
+        gap: 0.4rem;
+    }
+
+    .trust-rating {
+        justify-self: center;
+    }
+
+    .trust-users {
+        justify-self: center;
+    }
+}
+
+/* --------------------------------------------------
+   Partnered-with marquee (sliding provider logos)
+-------------------------------------------------- */
+.partners-strip {
+    margin: 5rem 0 0;
+    text-align: center;
+}
+
+.partners-label {
+    margin: 0 0 2rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+}
+
+/* The mask fades logos in and out at the edges instead of a hard cut. */
+.marquee {
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+
+.marquee-track {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    width: max-content;
+    /* The track holds two copies of the logo list, so translating by -50%
+       lands exactly on the start of the second copy: a seamless loop. */
+    animation: marquee-scroll 40s linear infinite;
+}
+
+.marquee-item {
+    flex: 0 0 auto;
+    padding: 0 2.5rem;
+    display: flex;
+    align-items: center;
+}
+
+.marquee-item img {
+    height: 48px;
+    width: auto;
+    /* Provider logos come in many colours; muting them to a uniform tone keeps
+       the strip calm and on-theme. Remove this if you want full-colour logos. */
+    opacity: 0.7;
+    filter: grayscale(1);
+    transition: opacity 0.2s, filter 0.2s;
+}
+
+.marquee:hover .marquee-item img {
+    opacity: 1;
+    filter: none;
+}
+
+@keyframes marquee-scroll {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+}
+
+/* Respect users who ask for less motion: freeze the strip. */
+@media (prefers-reduced-motion: reduce) {
+    .marquee-track {
+        animation: none;
+        flex-wrap: wrap;
+        justify-content: center;
+        width: auto;
+    }
+}
+
 .steps {
     list-style: none;
     margin: 0;
