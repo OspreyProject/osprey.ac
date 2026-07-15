@@ -19,6 +19,11 @@
     --accent-light: #ffcd4a;
     --accent-faint: rgba(243, 186, 34, 0.1);
 
+    /* Accent used as text/links. On the dark surfaces the brand yellow reads
+       fine, so it is just the accent. Light mode overrides it with a deeper
+       gold that keeps enough contrast on white. */
+    --accent-ink: var(--accent);
+
     /* Status */
     --safe: #5cd67c;
     --danger: #dc8c8c;
@@ -33,6 +38,53 @@
     --radius: 6px;
     --max-width: 60rem;
     --text-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+
+    /* Soft drop shadow for buttons and screenshots. Kept subtle on the dark
+       surfaces; light mode overrides it with a lighter grey cast. */
+    --shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+    --shadow-hover: 0 5px 14px rgba(0, 0, 0, 0.6);
+
+    color-scheme: dark;
+}
+
+/*
+ * Light theme. Only the variables change; every rule below already reads from
+ * them, so nothing else needs a light-mode branch. The brand yellow (--accent)
+ * stays put for filled buttons, badges and bars; --accent-ink carries the
+ * readable gold used for link and accent text on white.
+ *
+ * The theme is stamped onto <html data-theme="light|dark"> by the inline script
+ * in the head, which runs before first paint, so the correct variables are in
+ * effect for the very first frame.
+ */
+html[data-theme="light"] {
+    --bg: #ffffff;
+    --surface: #f4f4f5;
+    --surface-raised: #ececee;
+    --surface-hover: #eaeaec;
+    --header-bg: #f8f8f9;
+    --border: #dededf;
+
+    --text: #1b1b1d;
+    --text-muted: #55585e;
+    --text-dim: #83868c;
+
+    --accent-ink: #8a6800;
+
+    /* Fully saturated green/red so the Yes/No cells read as vivid rather than
+       muted on white. Pushed as bright as legibility allows. */
+    --safe: #00c000;
+    --danger: #ff0000;
+
+    --btn-shadow-1: 0 1px 2px rgba(0, 0, 0, 0.18);
+    --btn-shadow-2: 0 0 1px rgba(0, 0, 0, 0.18);
+    --btn-icon-shadow: 0 1px 2px rgba(0, 0, 0, 0.18);
+    --text-shadow: 0 1px 2px rgba(0, 0, 0, 0.18);
+
+    --shadow: 0 2px 6px rgba(0, 0, 0, 0.22);
+    --shadow-hover: 0 5px 14px rgba(0, 0, 0, 0.3);
+
+    color-scheme: light;
 }
 
 *,
@@ -43,6 +95,16 @@
 
 html {
     scroll-behavior: smooth;
+}
+
+/*
+ * Nothing is shown until the theme has been resolved. The inline head script
+ * sets data-theme before first paint, so this only ever hides content for the
+ * gap before that script runs (visually none). The <noscript> block in the head
+ * reveals the page for browsers with scripting off, which fall back to dark.
+ */
+html:not([data-theme]) body {
+    visibility: hidden;
 }
 
 body {
@@ -72,11 +134,30 @@ main {
 }
 
 a {
-    color: var(--accent);
+    color: var(--accent-ink);
     text-decoration: none;
 }
 
 a:hover {
+    text-decoration: underline;
+}
+
+/* Email links: plain text colour (black in light mode), no decoration at rest.
+   Underline appears on hover, and the colour never changes on hover. The footer
+   is left untouched, so its links keep the grey/hover treatment of .site-footer
+   nav. The "create an issue on GitHub" link that sits beside an email in the
+   body is matched to the same text colour so the pair reads consistently. */
+a[href^="mailto:"],
+a[href^="mailto:"]:hover,
+a[href*="/issues/new"] {
+    color: var(--text);
+}
+
+a[href^="mailto:"] {
+    text-decoration: none;
+}
+
+a[href^="mailto:"]:hover {
     text-decoration: underline;
 }
 
@@ -164,8 +245,49 @@ code {
 .site-nav {
     display: flex;
     flex-wrap: wrap;
+    align-items: center;
     justify-content: flex-end;
     gap: 1.75rem;
+}
+
+/* --------------------------------------------------
+   Theme toggle
+-------------------------------------------------- */
+/*
+ * One button holding both icons. Which one shows is decided in CSS off
+ * html[data-theme], so switching themes never runs JS to swap an icon: dark
+ * shows the sun (tap for light), light shows the moon (tap for dark). The
+ * hidden icon is display:none, so an inline SVG costs nothing to keep around.
+ */
+.theme-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    padding: 0;
+    background: none;
+    border: none;
+    border-radius: var(--radius);
+    color: var(--text-muted);
+    cursor: pointer;
+    line-height: 0;
+}
+
+.theme-toggle:hover {
+    color: var(--accent-ink);
+    background-color: var(--surface-hover);
+}
+
+.theme-toggle svg {
+    display: block;
+    width: 20px;
+    height: 20px;
+}
+
+html[data-theme="dark"] .theme-toggle .icon-moon,
+html[data-theme="light"] .theme-toggle .icon-sun {
+    display: none;
 }
 
 .site-nav a {
@@ -175,7 +297,7 @@ code {
 }
 
 .site-nav a:hover {
-    color: var(--accent);
+    color: var(--accent-ink);
     text-decoration: none;
 }
 
@@ -194,11 +316,13 @@ code {
     font-weight: 600;
     cursor: pointer;
     text-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+    box-shadow: var(--shadow);
 }
 
 .btn:hover {
     background-color: var(--accent-hover);
     text-decoration: none;
+    box-shadow: var(--shadow-hover);
 }
 
 .btn:active {
@@ -265,12 +389,14 @@ code {
     font-size: 1rem;
     font-weight: 600;
     cursor: pointer;
+    box-shadow: var(--shadow);
 }
 
 .install-btn:hover {
     background-color: var(--surface-hover);
     border-color: var(--text-dim);
     text-decoration: none;
+    box-shadow: var(--shadow-hover);
 }
 
 .install-btn:active {
@@ -362,6 +488,12 @@ html[data-browser="edge"] .install-row .install-btn[data-browser="edge"] {
     background-size: contain;
 }
 
+/* The GitHub mark is a solid white SVG, drawn for the dark button. On the light
+   surface white is invisible, so invert it to black. */
+html[data-theme="light"] .install-row .install-btn-github::before {
+    filter: invert(1);
+}
+
 .install-btn[data-browser]:hover {
     background-color: var(--accent-hover);
     border-color: var(--accent-hover);
@@ -397,6 +529,11 @@ html[data-browser="edge"] .install-row .install-btn[data-browser="edge"] {
     background: none;
     cursor: zoom-in;
     overflow: hidden;
+    box-shadow: var(--shadow);
+}
+
+.shot-trigger:hover {
+    box-shadow: var(--shadow-hover);
 }
 
 .shot-trigger img {
@@ -457,7 +594,7 @@ html[data-browser="edge"] .install-row .install-btn[data-browser="edge"] {
 .perm dt code {
     background: none;
     padding: 0;
-    color: var(--accent);
+    color: var(--accent-ink);
     font-size: 0.95rem;
 }
 
@@ -491,7 +628,7 @@ html[data-browser="edge"] .install-row .install-btn[data-browser="edge"] {
 
 .faq summary::after {
     content: '+';
-    color: var(--accent);
+    color: var(--accent-ink);
     font-size: 1.3rem;
     font-weight: 400;
     line-height: 1;
@@ -503,7 +640,7 @@ html[data-browser="edge"] .install-row .install-btn[data-browser="edge"] {
 }
 
 .faq summary:hover {
-    color: var(--accent);
+    color: var(--accent-ink);
 }
 
 .faq p {
@@ -736,19 +873,27 @@ html[data-browser="edge"] .install-row .install-btn[data-browser="edge"] {
     align-items: center;
 }
 
+/*
+ * Each provider ships two logo files, one tuned for the light page and one for
+ * the dark page. Both are in the markup; the one that does not match the active
+ * theme is display:none, so it is dropped from the layout (and, being lazy and
+ * hidden, is not fetched). Switching data-theme swaps which file shows with no
+ * script involved.
+ */
 .marquee-item img {
     height: 48px;
     width: auto;
-    /* Provider logos come in many colours; muting them to a uniform tone keeps
-       the strip calm and on-theme. Remove this if you want full-colour logos. */
-    opacity: 0.7;
-    filter: grayscale(1);
-    transition: opacity 0.2s, filter 0.2s;
+    opacity: 0.85;
+    transition: opacity 0.2s;
 }
 
 .marquee:hover .marquee-item img {
     opacity: 1;
-    filter: none;
+}
+
+html[data-theme="light"] .marquee-item .logo-dark,
+html[data-theme="dark"] .marquee-item .logo-light {
+    display: none;
 }
 
 @keyframes marquee-scroll {
@@ -846,7 +991,7 @@ html[data-browser="edge"] .install-row .install-btn[data-browser="edge"] {
 }
 
 .compare thead .col-osprey {
-    color: var(--accent);
+    color: var(--text);
     font-size: 1rem;
     border-top-left-radius: var(--radius);
     border-top-right-radius: var(--radius);
@@ -1142,7 +1287,7 @@ html[data-browser="edge"] .download-card[data-browser="edge"] .download-badge {
 }
 
 .site-footer nav a:hover {
-    color: var(--accent);
+    color: var(--accent-ink);
 }
 
 .site-footer p {

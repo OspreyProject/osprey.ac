@@ -3,10 +3,14 @@ import Base from '../layouts/Base.astro';
 import {Image} from 'astro:assets';
 import promo1 from '../assets/promo1.png';
 import promo2 from '../assets/promo2.png';
-import alphamountain from '../assets/providers/alphamountain.png';
-import bforeai from '../assets/providers/bforeai.png';
-import chainpatrol from '../assets/providers/chainpatrol.png';
-import izoologic from '../assets/providers/izoologic.png';
+import alphamountainLight from '../assets/providers/alphamountain-light.png';
+import alphamountainDark from '../assets/providers/alphamountain-dark.png';
+import bforeaiLight from '../assets/providers/bforeai-light.png';
+import bforeaiDark from '../assets/providers/bforeai-dark.png';
+import chainpatrolLight from '../assets/providers/chainpatrol-light.png';
+import chainpatrolDark from '../assets/providers/chainpatrol-dark.png';
+import izoologicLight from '../assets/providers/izoologic-light.png';
+import izoologicDark from '../assets/providers/izoologic-dark.png';
 
 const stores = [
     {
@@ -87,10 +91,10 @@ const steps = [
 const rating = 4.9;
 
 const partnerLogos = [
-    {img: alphamountain, name: 'AlphaMountain', width: 227},
-    {img: bforeai, name: 'BforeAI PreCrime', width: 168},
-    {img: chainpatrol, name: 'ChainPatrol', width: 192},
-    {img: izoologic, name: 'iZOOlogic', width: 206},
+    {light: alphamountainLight, dark: alphamountainDark, name: 'AlphaMountain', width: 227},
+    {light: bforeaiLight, dark: bforeaiDark, name: 'BforeAI PreCrime', width: 168},
+    {light: chainpatrolLight, dark: chainpatrolDark, name: 'ChainPatrol', width: 192},
+    {light: izoologicLight, dark: izoologicDark, name: 'iZOOlogic', width: 206},
 ];
 
 const comparison = [
@@ -372,7 +376,18 @@ const schema = {
                     partnerLogos.map((logo) => (
                             <li class="marquee-item" data-marquee-set>
                                 <Image
-                                        src={logo.img}
+                                        class="logo-light"
+                                        src={logo.light}
+                                        alt={`Logo for ${logo.name}`}
+                                        title={logo.name}
+                                        width={logo.width}
+                                        height={48}
+                                        densities={[1, 2]}
+                                        loading="lazy"
+                                />
+                                <Image
+                                        class="logo-dark"
+                                        src={logo.dark}
                                         alt={`Logo for ${logo.name}`}
                                         title={logo.name}
                                         width={logo.width}

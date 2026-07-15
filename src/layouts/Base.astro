@@ -19,6 +19,44 @@ const ogImage = new URL('/og-image.png', Astro.site);
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+    <script is:inline>
+        (function () {
+            const el = document.documentElement;
+            let saved = null;
+
+            try {
+                saved = localStorage.getItem('theme');
+            } catch (ignored) {
+            }
+
+            const theme = (saved === 'light' || saved === 'dark')
+                ? saved
+                : (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+
+            el.setAttribute('data-theme', theme);
+
+            document.addEventListener('click', function (e) {
+                if (!e.target.closest('.theme-toggle')) {
+                    return;
+                }
+
+                const next = el.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+                el.setAttribute('data-theme', next);
+
+                try {
+                    localStorage.setItem('theme', next);
+                } catch (ignored) {
+                }
+            });
+        })();
+    </script>
+    <noscript>
+        <style>html:not([data-theme]) body {
+            visibility: visible;
+        }</style>
+    </noscript>
+
     <title>{title}</title>
     <meta name="description" content={description}/>
     <link rel="canonical" href={canonical}/>
