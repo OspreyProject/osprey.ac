@@ -3,6 +3,10 @@ import Base from '../layouts/Base.astro';
 import {Image} from 'astro:assets';
 import promo1 from '../assets/promo1.png';
 import promo2 from '../assets/promo2.png';
+import alphamountain from '../assets/providers/alphamountain.png';
+import bforeai from '../assets/providers/bforeai.png';
+import chainpatrol from '../assets/providers/chainpatrol.png';
+import izoologic from '../assets/providers/izoologic.png';
 
 const stores = [
     {
@@ -81,10 +85,10 @@ const steps = [
 const rating = 4.9;
 
 const partnerLogos = [
-    {file: 'alphamountain.png', name: 'AlphaMountain'},
-    {file: 'bforeai.png', name: 'BforeAI PreCrime'},
-    {file: 'chainpatrol.png', name: 'ChainPatrol'},
-    {file: 'izoologic.png', name: 'iZOOlogic'},
+    {img: alphamountain, name: 'AlphaMountain', width: 227},
+    {img: bforeai, name: 'BforeAI PreCrime', width: 168},
+    {img: chainpatrol, name: 'ChainPatrol', width: 192},
+    {img: izoologic, name: 'iZOOlogic', width: 206},
 ];
 
 const comparison = [
@@ -349,7 +353,7 @@ const schema = {
                             <Image
                                     src={shot.img}
                                     alt={shot.alt}
-                                    widths={[450, 900]}
+                                    widths={[450, 740, 900]}
                                     sizes="(max-width: 40rem) calc(100vw - 2.5rem), 450px"
                                     loading="eager"
                                     fetchpriority="high"
@@ -368,7 +372,14 @@ const schema = {
                 {
                     partnerLogos.map((logo) => (
                             <li class="marquee-item" data-marquee-set>
-                                <img src={`/providers/${logo.file}`} alt={logo.name} loading="lazy" height="48"/>
+                                <Image
+                                        src={logo.img}
+                                        alt={logo.name}
+                                        width={logo.width}
+                                        height={48}
+                                        densities={[1, 2]}
+                                        loading="lazy"
+                                />
                             </li>
                     ))
                 }
