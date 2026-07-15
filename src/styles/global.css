@@ -24,6 +24,11 @@
        gold that keeps enough contrast on white. */
     --accent-ink: var(--accent);
 
+    /* Rest colour for the body contact links (the email + "issue on GitHub"
+       link in the "Something not working?" message). Brand yellow on dark;
+       light mode makes it plain black text. */
+    --contact-ink: var(--accent);
+
     /* Status */
     --safe: #5cd67c;
     --danger: #dc8c8c;
@@ -71,10 +76,14 @@ html[data-theme="light"] {
 
     --accent-ink: #8a6800;
 
+    /* Light mode: message contact links are plain black at rest (they turn the
+       muted gold above on hover). */
+    --contact-ink: var(--text);
+
     /* Fully saturated green/red so the Yes/No cells read as vivid rather than
        muted on white. Pushed as bright as legibility allows. */
     --safe: #00c000;
-    --danger: #ff0000;
+    --danger: rgb(236 0 0 / 0.85);
 
     --btn-shadow-1: 0 1px 2px rgba(0, 0, 0, 0.18);
     --btn-shadow-2: 0 0 1px rgba(0, 0, 0, 0.18);
@@ -142,22 +151,20 @@ a:hover {
     text-decoration: underline;
 }
 
-/* Email links: plain text colour (black in light mode), no decoration at rest.
-   Underline appears on hover, and the colour never changes on hover. The footer
-   is left untouched, so its links keep the grey/hover treatment of .site-footer
-   nav. The "create an issue on GitHub" link that sits beside an email in the
-   body is matched to the same text colour so the pair reads consistently. */
+/* Body contact links: the email and the "create an issue on GitHub" link that
+   sit together in the "Something not working?" message. Rest colour is the old
+   brand yellow in dark mode and plain black in light mode. On hover both turn
+   the same muted gold the footer nav uses, and gain an underline. The footer's
+   own links are unaffected: .site-footer nav out-specifies these selectors. */
 a[href^="mailto:"],
-a[href^="mailto:"]:hover,
 a[href*="/issues/new"] {
-    color: var(--text);
-}
-
-a[href^="mailto:"] {
+    color: var(--contact-ink);
     text-decoration: none;
 }
 
-a[href^="mailto:"]:hover {
+a[href^="mailto:"]:hover,
+a[href*="/issues/new"]:hover {
+    color: var(--accent-ink);
     text-decoration: underline;
 }
 
