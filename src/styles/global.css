@@ -718,9 +718,15 @@ html[data-browser="edge"] .install-row .install-btn[data-browser="edge"] {
     padding: 0;
     display: flex;
     width: max-content;
-    /* The track holds two copies of the logo list, so translating by -50%
-       lands exactly on the start of the second copy: a seamless loop. */
-    animation: marquee-scroll 40s linear infinite;
+    /*
+     * --set-width is the pixel width of ONE copy of the logo list, measured and
+     * set by the script in index.astro. Translating by exactly that distance
+     * lands on an identical copy, so the loop is seamless at any screen size.
+     * --marquee-duration is set alongside it so the speed (px/sec) is constant
+     * regardless of how wide the track is. Fallbacks keep it moving before the
+     * script runs.
+     */
+    animation: marquee-scroll var(--marquee-duration, 40s) linear infinite;
 }
 
 .marquee-item {
@@ -747,25 +753,7 @@ html[data-browser="edge"] .install-row .install-btn[data-browser="edge"] {
 
 @keyframes marquee-scroll {
     from { transform: translateX(0); }
-    to   { transform: translateX(-50%); }
-}
-
-/*
- * The animation translates by a percentage of the track's own width, so a
- * narrower viewport covers fewer pixels in the same time and reads as slow.
- * Shortening the duration on smaller screens keeps the visual speed roughly
- * constant across devices.
- */
-@media (max-width: 60rem) {
-    .marquee-track {
-        animation-duration: 28s;
-    }
-}
-
-@media (max-width: 40rem) {
-    .marquee-track {
-        animation-duration: 18s;
-    }
+    to   { transform: translateX(calc(var(--set-width, 50%) * -1)); }
 }
 
 /* Respect users who ask for less motion: freeze the strip. */

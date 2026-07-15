@@ -364,10 +364,10 @@ const schema = {
     <section class="partners-strip" aria-label="Threat intelligence partners">
         <p class="partners-label">Partnered with</p>
         <div class="marquee">
-            <ul class="marquee-track">
+            <ul class="marquee-track" data-marquee>
                 {
-                    [...partnerLogos, ...partnerLogos].map((logo) => (
-                            <li class="marquee-item">
+                    partnerLogos.map((logo) => (
+                            <li class="marquee-item" data-marquee-set>
                                 <img src={`/providers/${logo.file}`} alt={logo.name} loading="lazy" height="48"/>
                             </li>
                     ))
@@ -484,14 +484,11 @@ const schema = {
         }
     </section>
 
-    <section class="band">
-        <h2 class="band-title">Something not working?</h2>
-        <div class="prose">
-            <p>
-                Email <a href="mailto:support@osprey.ac">support@osprey.ac</a> and a person will read it. We will get
-                back to you as soon as we can.
-            </p>
-        </div>
+    <section class="closing">
+        <h2>Something not working?</h2>
+        <p>
+            Email <a href="mailto:support@osprey.ac">support@osprey.ac</a> and a person will read it.
+        </p>
     </section>
 
     <dialog id="lightbox" class="lightbox" aria-label="Screenshot">
@@ -500,6 +497,99 @@ const schema = {
 </Base>
 
 <script>
+    // Provider marquee: constant on-screen speed at any width
+    (() => {
+        const track = document.querySelector<HTMLElement>('[data-marquee]');
+
+        if (!track) {
+            return;
+        }
+
+        const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        if (prefersReduced) {
+            return;
+        }
+
+        const speed = 25; // pixels per second, tune to taste
+
+        // The original, untouched logo set. Captured once so re-runs always
+        // clone from the pristine list, never from previously added clones.
+        const original = Array.from(track.querySelectorAll('[data-marquee-set]'))
+            .map((el) => el.cloneNode(true) as HTMLElement);
+
+        const setWidthOf = (nodes: HTMLElement[]) =>
+            nodes.reduce((sum, el) => sum + el.getBoundingClientRect().width, 0);
+
+        const setup = () => {
+            // Reset to exactly the original set, dropping any prior clones
+            track.querySelectorAll('[data-marquee-clone]').forEach((n) => n.remove());
+
+            const setWidth = setWidthOf(
+                Array.from(track.querySelectorAll('[data-marquee-set]')) as HTMLElement[],
+            );
+
+            if (setWidth === 0) {
+                return;
+            }
+
+            // Translating left by one set width must never expose empty space, so
+            // the whole track has to be at least the viewport PLUS one set wide.
+            // Append whole clone sets until it is, then one extra set for safety.
+            const target = window.innerWidth + setWidth * 2;
+
+            while (track.scrollWidth < target) {
+                for (const el of original) {
+                    const clone = el.cloneNode(true) as HTMLElement;
+                    clone.setAttribute('data-marquee-clone', '');
+                    clone.setAttribute('aria-hidden', 'true');
+                    track.appendChild(clone);
+                }
+            }
+
+            track.style.setProperty('--set-width', `${setWidth}px`);
+            track.style.setProperty('--marquee-duration', `${setWidth / speed}s`);
+        };
+
+        // Wait for logo images to load, since their width feeds the math
+        const imgs = Array.from(track.querySelectorAll('img'));
+        let pending = imgs.filter((img) => !img.complete).length;
+
+        if (pending === 0) {
+            setup();
+        } else {
+            imgs.forEach((img) => {
+                if (img.complete) {
+                    return;
+                }
+
+                img.addEventListener('load', () => {
+                    pending -= 1;
+
+                    if (pending === 0) {
+                        setup();
+                    }
+                }, {once: true});
+
+                img.addEventListener('error', () => {
+                    pending -= 1;
+
+                    if (pending === 0) {
+                        setup();
+                    }
+                }, {once: true});
+            });
+        }
+
+        let resizeTimer: number | undefined;
+
+        // Recompute on resize so speed and seamlessness hold across orientations
+        window.addEventListener('resize', () => {
+            window.clearTimeout(resizeTimer);
+            resizeTimer = window.setTimeout(setup, 200);
+        });
+    })();
+
     const dialog = document.getElementById('lightbox') as HTMLDialogElement | null;
     const dialogImg = document.getElementById('lightbox-img') as HTMLImageElement | null;
 
