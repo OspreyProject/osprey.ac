@@ -4,6 +4,14 @@
 User-agent: *
 Allow: /
 
+# These are 301 redirects to external stores/pages, not site content.
+Disallow: /chrome
+Disallow: /firefox
+Disallow: /edge
+Disallow: /linkedin
+Disallow: /issues
+Disallow: /uninstall
+
 User-agent: GPTBot
 Allow: /
 
