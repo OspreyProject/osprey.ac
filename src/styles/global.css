@@ -750,6 +750,24 @@ html[data-browser="edge"] .install-row .install-btn[data-browser="edge"] {
     to   { transform: translateX(-50%); }
 }
 
+/*
+ * The animation translates by a percentage of the track's own width, so a
+ * narrower viewport covers fewer pixels in the same time and reads as slow.
+ * Shortening the duration on smaller screens keeps the visual speed roughly
+ * constant across devices.
+ */
+@media (max-width: 60rem) {
+    .marquee-track {
+        animation-duration: 28s;
+    }
+}
+
+@media (max-width: 40rem) {
+    .marquee-track {
+        animation-duration: 18s;
+    }
+}
+
 /* Respect users who ask for less motion: freeze the strip. */
 @media (prefers-reduced-motion: reduce) {
     .marquee-track {
