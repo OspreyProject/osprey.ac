@@ -29,11 +29,13 @@ const stores = [
 const shots = [
     {
         img: promo1,
-        alt: 'A promotional screenshot for web stores, captioned "Protect your browser and your privacy", along with an image of the popup panel, and a block of text that says "Osprey blocks up to 99% of new phishing websites without exposing your IP address or collecting your browser data."'
+        alt: 'A promotional screenshot for web stores, captioned "Protect your browser and your privacy", along with an image of the popup panel, and a block of text that says "Osprey blocks up to 99% of new phishing websites without exposing your IP address or collecting your browser data."',
+        title: 'Protect your browser and your privacy.'
     },
     {
         img: promo2,
-        alt: 'A promotional screenshot for web stores, captioned "Stop malicious websites before they infect you", along with an image of the warning page.'
+        alt: 'A promotional screenshot for web stores, captioned "Stop malicious websites before they infect you", along with an image of the warning page.',
+        title: 'Stop malicious websites before they infect you.'
     },
 ];
 
@@ -353,6 +355,7 @@ const schema = {
                             <Image
                                     src={shot.img}
                                     alt={shot.alt}
+                                    title={shot.title}
                                     widths={[450, 740, 900]}
                                     sizes="(max-width: 40rem) calc(100vw - 2.5rem), 450px"
                                     loading="eager"
@@ -374,7 +377,8 @@ const schema = {
                             <li class="marquee-item" data-marquee-set>
                                 <Image
                                         src={logo.img}
-                                        alt={logo.name}
+                                        alt={`Logo for ${logo.name}`}
+                                        title={logo.name}
                                         width={logo.width}
                                         height={48}
                                         densities={[1, 2]}
