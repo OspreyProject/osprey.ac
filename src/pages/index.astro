@@ -336,7 +336,8 @@ const schema = {
             <span class="stars" role="img" aria-label={`Rated ${rating} out of 5`}>
                 {
                     Array.from({length: 5}).map((_, i) => (
-                            <span class:list={['star', {filled: i < Math.round(rating)}]}>&#9733;</span>
+                            <span class:list={['star', {filled: i < Math.round(rating)}]}
+                                  aria-hidden="true">&#9733;</span>
                     ))
                 }
             </span>
@@ -455,7 +456,7 @@ const schema = {
 
     <section class="band">
         <h2 class="band-title">How Osprey compares</h2>
-        <div class="table-scroll">
+        <div class="table-scroll" tabindex="0" role="region" aria-label="How Osprey compares">
             <table class="compare">
                 <caption class="sr-only">How Osprey compares to your browser's built-in protection, Malwarebytes, and
                     Bitdefender

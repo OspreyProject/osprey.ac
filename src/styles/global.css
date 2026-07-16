@@ -37,7 +37,6 @@
        filled glyph and a solid logo mark do not need the same weight to read.
        A11y: the label shadow is darkened (0.6 alpha) so white text keeps >=4.5:1
        contrast against the shadow colour composited over the yellow button. */
-    --btn-shadow: 0 1px 2px rgba(0, 0, 0, 0.9);
     --btn-icon-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
 
     --font: 'Segoe UI', system-ui, sans-serif;
@@ -71,8 +70,7 @@ html[data-theme="light"] {
     --safe: #00611A;
     --danger: #AA0000;
 
-    --btn-shadow: 0 1px 2px rgba(0, 0, 0, 0.9);
-    --btn-icon-shadow: 0 1px 2px rgba(0, 0, 0, 0.18);
+    --btn-icon-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
     --text-shadow: 0 1px 2px rgba(0, 0, 0, 0.18);
     --shadow: 0 2px 6px rgba(0, 0, 0, 0.22);
     --shadow-hover: 0 5px 14px rgba(0, 0, 0, 0.3);
@@ -423,8 +421,7 @@ html[data-theme="light"] .theme-toggle .icon-sun {
 .install-btn[data-browser] {
     background-color: var(--accent);
     border-color: var(--accent);
-    color: #ffffff;
-    text-shadow: var(--btn-shadow);
+    color: #1b1b1d;
 }
 
 /*
@@ -936,9 +933,8 @@ html[data-theme="dark"] .marquee-item .logo-light {
     height: 2.25rem;
     border-radius: 50%;
     background-color: var(--accent);
-    color: #ffffff;
+    color: #1b1b1d;
     font-weight: 700;
-    text-shadow: var(--btn-shadow);
     margin-bottom: 0.75rem;
 }
 
