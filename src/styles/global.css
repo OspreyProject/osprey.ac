@@ -30,8 +30,8 @@
     --contact-ink: var(--text);
 
     /* Status */
-    --safe: #60D780;
-    --danger: #E3A6A6;
+    --safe: #5CD77D;
+    --danger: #E7B3B3;
 
     /* Yellow store buttons. The label and the logo carry separate shadows: a
        filled glyph and a solid logo mark do not need the same weight to read.
@@ -66,7 +66,7 @@ html[data-theme="light"] {
     --text: #1b1b1d;
     --text-muted: #505358;
     --text-dim: #4E5155;
-    --accent-ink: #8a6800;
+    --accent-ink: #705500;
     --contact-ink: var(--text);
     --safe: #00611A;
     --danger: #AA0000;
