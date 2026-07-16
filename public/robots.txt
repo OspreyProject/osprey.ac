@@ -39,5 +39,4 @@ Allow: /
 User-agent: CCBot
 Allow: /
 
-Sitemap: https://osprey.ac/sitemap.xml
 Sitemap: https://osprey.ac/sitemap-index.xml
