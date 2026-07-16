@@ -10,7 +10,7 @@
     /* Text */
     --text: #ffffff;
     --text-muted: #C4C9CA;
-    --text-dim: #C2C2C2;
+    --text-dim: #515151;
 
     /* Accent */
     --accent: #f3ba22;
@@ -65,7 +65,7 @@ html[data-theme="light"] {
     --border: #dededf;
     --text: #1b1b1d;
     --text-muted: #505358;
-    --text-dim: #4E5155;
+    --text-dim: #D3D3D3;
     --accent-ink: #705500;
     --contact-ink: var(--text);
     --safe: #00611A;
