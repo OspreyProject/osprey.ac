@@ -62,7 +62,7 @@ html[data-theme="light"] {
     --surface-hover: #eaeaec;
     --header-bg: #f8f8f9;
     --border: #dededf;
-    --text: #1b1b1d;
+    --text: #282828;
     --text-muted: #505358;
     --text-dim: #525252;
     --accent-ink: #705500;
@@ -933,7 +933,7 @@ html[data-theme="dark"] .marquee-item .logo-light {
     height: 2.25rem;
     border-radius: 50%;
     background-color: var(--accent);
-    color: #1b1b1d;
+    color: #282828;
     font-weight: 700;
     margin-bottom: 0.75rem;
 }
@@ -1064,7 +1064,7 @@ html[data-browser="edge"] .download-card[data-browser="edge"] {
     /* A11y: this label is small and its background is always the yellow accent,
        where white text is only 1.77:1. Dark text gives ~10:1 in both themes; a
        text-shadow can't be relied on to carry contrast at this size. */
-    color: #1b1b1d;
+    color: #282828;
     border-radius: 999px;
     font-size: 0.7rem;
     font-weight: 700;
