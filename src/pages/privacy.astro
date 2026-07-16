@@ -159,11 +159,11 @@ const localData = [
         <h2>False-positive monitoring</h2>
         <p>
             To catch cases where a legitimate website is mistakenly flagged as dangerous, the proxy server keeps a
-            transient log entry whenever a provider returns a <strong>malicious</strong> or <strong>phishing</strong>
-            verdict. Each entry records only the provider name, the verdict, and the same value that was checked against
-            that provider: a hostname for DNS-based providers, or the URL with query parameters stripped for URL-based
-            providers. It never includes the query string, your IP address, or any other identifier that could tie the
-            lookup back to you.
+            transient log entry whenever a provider returns
+            a <strong>malicious</strong> or <strong>phishing</strong> verdict. Each entry records only the provider
+            name, the verdict, and the same value that was checked against that provider: a hostname for DNS-based
+            providers, or the URL with query parameters stripped for URL-based providers. It never includes the query
+            string, your IP address, or any other identifier that could tie the lookup back to you.
         </p>
         <p>
             Results that come back safe are <strong>never</strong> logged. These entries exist only in memory, are not
