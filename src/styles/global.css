@@ -9,10 +9,8 @@
 
     /* Text */
     --text: #ffffff;
-    --text-muted: #b1b5b8;
-    /* A11y: lightened from #8c8c8c so dim text (labels, table headers, meta)
-       reaches >=4.5:1 on both the dark background and the lighter card surface. */
-    --text-dim: #a0a0a0;
+    --text-muted: #C4C9CA;
+    --text-dim: #C2C2C2;
 
     /* Accent */
     --accent: #f3ba22;
@@ -32,15 +30,14 @@
     --contact-ink: var(--text);
 
     /* Status */
-    --safe: #5cd67c;
-    --danger: #dc8c8c;
+    --safe: #60D780;
+    --danger: #E3A6A6;
 
     /* Yellow store buttons. The label and the logo carry separate shadows: a
        filled glyph and a solid logo mark do not need the same weight to read.
        A11y: the label shadow is darkened (0.6 alpha) so white text keeps >=4.5:1
        contrast against the shadow colour composited over the yellow button. */
-    --btn-shadow-1: 0 1px 2px rgba(0, 0, 0, 0.6);
-    --btn-shadow-2: 0 0 1px rgba(0, 0, 0, 0.6);
+    --btn-shadow: 0 1px 2px rgba(0, 0, 0, 0.9);
     --btn-icon-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
 
     --font: 'Segoe UI', system-ui, sans-serif;
@@ -57,14 +54,7 @@
 }
 
 /*
- * Light theme. Only the variables change; every rule below already reads from
- * them, so nothing else needs a light-mode branch. The brand yellow (--accent)
- * stays put for filled buttons, badges and bars; --accent-ink carries the
- * readable gold used for link and accent text on white.
- *
- * The theme is stamped onto <html data-theme="light|dark"> by the inline script
- * in the head, which runs before first paint, so the correct variables are in
- * effect for the very first frame.
+ * Light theme
  */
 html[data-theme="light"] {
     --bg: #ffffff;
@@ -73,32 +63,17 @@ html[data-theme="light"] {
     --surface-hover: #eaeaec;
     --header-bg: #f8f8f9;
     --border: #dededf;
-
     --text: #1b1b1d;
-    --text-muted: #55585e;
-    /* A11y: darkened from #83868c so the partners label and table column
-       headers reach >=4.5:1 against the white background. */
-    --text-dim: #6c6f75;
-
+    --text-muted: #505358;
+    --text-dim: #4E5155;
     --accent-ink: #8a6800;
-
-    /* Light mode: message contact links are plain black at rest (they turn the
-       muted gold above on hover). */
     --contact-ink: var(--text);
+    --safe: #006100;
+    --danger: #A80000;
 
-    /* Saturated green/red for the Yes/No cells, darkened to the brightest tone
-       that still clears 4.5:1 (green on the #f4f4f5 Osprey column, red on white
-       cells). Red is fully opaque so it does not lighten over the background. */
-    --safe: #008000;
-    --danger: #e00000;
-
-    /* A11y: darker label shadow (0.6 alpha) matches the dark theme so white
-       button text keeps >=4.5:1 against its shadow in light mode too. */
-    --btn-shadow-1: 0 1px 2px rgba(0, 0, 0, 0.6);
-    --btn-shadow-2: 0 0 1px rgba(0, 0, 0, 0.6);
+    --btn-shadow: 0 1px 2px rgba(0, 0, 0, 0.9);
     --btn-icon-shadow: 0 1px 2px rgba(0, 0, 0, 0.18);
     --text-shadow: 0 1px 2px rgba(0, 0, 0, 0.18);
-
     --shadow: 0 2px 6px rgba(0, 0, 0, 0.22);
     --shadow-hover: 0 5px 14px rgba(0, 0, 0, 0.3);
 
@@ -129,7 +104,7 @@ body {
     margin: 0;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    font-family: var(--font);
+    font-family: var(--font), system-ui, sans-serif;
     font-weight: 400;
     line-height: 1.6;
     color: var(--text);
@@ -169,13 +144,15 @@ a:hover {
    own links are unaffected: .site-footer nav out-specifies these selectors, and
    the footer email is explicitly kept undecorated below. */
 a[href^="mailto:"],
-a[href*="/issues/new"] {
+a[href*="/issues/new"],
+a.contact-link {
     color: var(--contact-ink);
     text-decoration: underline;
 }
 
 a[href^="mailto:"]:hover,
-a[href*="/issues/new"]:hover {
+a[href*="/issues/new"]:hover,
+a.contact-link:hover {
     color: var(--accent-ink);
     text-decoration: underline;
 }
@@ -447,7 +424,7 @@ html[data-theme="light"] .theme-toggle .icon-sun {
     background-color: var(--accent);
     border-color: var(--accent);
     color: #ffffff;
-    text-shadow: var(--btn-shadow-1), var(--btn-shadow-2);
+    text-shadow: var(--btn-shadow);
 }
 
 /*
@@ -961,7 +938,7 @@ html[data-theme="dark"] .marquee-item .logo-light {
     background-color: var(--accent);
     color: #ffffff;
     font-weight: 700;
-    text-shadow: var(--btn-shadow-1), var(--btn-shadow-2);
+    text-shadow: var(--btn-shadow);
     margin-bottom: 0.75rem;
 }
 
