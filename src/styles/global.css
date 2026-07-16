@@ -65,7 +65,7 @@ html[data-theme="light"] {
     --border: #dededf;
     --text: #1b1b1d;
     --text-muted: #505358;
-    --text-dim: #D3D3D3;
+    --text-dim: #525252;
     --accent-ink: #705500;
     --contact-ink: var(--text);
     --safe: #00611A;
