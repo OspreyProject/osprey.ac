@@ -12,6 +12,30 @@ interface Props {
 const {title, description, schema} = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 const ogImage = new URL('/og-image.png', Astro.site);
+
+const siteSchema = {
+    '@context': 'https://schema.org',
+    '@graph': [
+        {
+            '@type': 'WebSite',
+            '@id': 'https://osprey.ac/#website',
+            url: 'https://osprey.ac/',
+            name: 'Osprey',
+            alternateName: 'Osprey: Browser Protection',
+            publisher: {'@id': 'https://osprey.ac/#project'},
+        },
+        {
+            '@type': 'Organization',
+            '@id': 'https://osprey.ac/#project',
+            name: 'Osprey Project',
+            url: 'https://osprey.ac/',
+            logo: 'https://osprey.ac/og-image.png',
+            email: 'support@osprey.ac',
+            sameAs: ['https://github.com/OspreyProject/Osprey'],
+        },
+        ...((schema as { '@graph'?: unknown[] })?.['@graph'] ?? []),
+    ],
+};
 ---
 
 <!doctype html>
@@ -83,7 +107,7 @@ const ogImage = new URL('/og-image.png', Astro.site);
     <meta name="twitter:description" content={description}/>
     <meta name="twitter:image" content={ogImage}/>
 
-    {schema && <script is:inline type="application/ld+json" set:html={JSON.stringify(schema)}/>}
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(siteSchema)}/>
 
     <!-- Google tag (gtag.js), loaded lazily to keep it off the critical path -->
     <script is:inline>
