@@ -1,5 +1,6 @@
 import {defineConfig} from 'astro/config';
 import sitemap from '@astrojs/sitemap';
+import indexnow from 'astro-indexnow';
 
 export default defineConfig({
     // Custom domain on GitHub Pages, so no `base` is needed.
@@ -25,6 +26,9 @@ export default defineConfig({
                 }
                 return item;
             },
+        }),
+        indexnow({
+            key: process.env.INDEXNOW_KEY,
         }),
     ],
 });
