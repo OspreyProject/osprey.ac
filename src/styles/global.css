@@ -10,7 +10,9 @@
     /* Text */
     --text: #ffffff;
     --text-muted: #b1b5b8;
-    --text-dim: #8c8c8c;
+    /* A11y: lightened from #8c8c8c so dim text (labels, table headers, meta)
+       reaches >=4.5:1 on both the dark background and the lighter card surface. */
+    --text-dim: #a0a0a0;
 
     /* Accent */
     --accent: #f3ba22;
@@ -25,18 +27,20 @@
     --accent-ink: var(--accent);
 
     /* Rest colour for the body contact links (the email + "issue on GitHub"
-       link in the "Something not working?" message). Brand yellow on dark;
-       light mode makes it plain black text. */
-    --contact-ink: var(--accent);
+       link in the "Something not working?" message). White on dark so the
+       underline reads clearly; light mode makes it plain black. */
+    --contact-ink: var(--text);
 
     /* Status */
     --safe: #5cd67c;
     --danger: #dc8c8c;
 
     /* Yellow store buttons. The label and the logo carry separate shadows: a
-       filled glyph and a solid logo mark do not need the same weight to read. */
-    --btn-shadow-1: 0 1px 3px rgba(0, 0, 0, 0.35);
-    --btn-shadow-2: 0 0 1px rgba(0, 0, 0, 0.35);
+       filled glyph and a solid logo mark do not need the same weight to read.
+       A11y: the label shadow is darkened (0.6 alpha) so white text keeps >=4.5:1
+       contrast against the shadow colour composited over the yellow button. */
+    --btn-shadow-1: 0 1px 2px rgba(0, 0, 0, 0.6);
+    --btn-shadow-2: 0 0 1px rgba(0, 0, 0, 0.6);
     --btn-icon-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
 
     --font: 'Segoe UI', system-ui, sans-serif;
@@ -72,7 +76,9 @@ html[data-theme="light"] {
 
     --text: #1b1b1d;
     --text-muted: #55585e;
-    --text-dim: #83868c;
+    /* A11y: darkened from #83868c so the partners label and table column
+       headers reach >=4.5:1 against the white background. */
+    --text-dim: #6c6f75;
 
     --accent-ink: #8a6800;
 
@@ -80,13 +86,16 @@ html[data-theme="light"] {
        muted gold above on hover). */
     --contact-ink: var(--text);
 
-    /* Fully saturated green/red so the Yes/No cells read as vivid rather than
-       muted on white. Pushed as bright as legibility allows. */
-    --safe: #00c000;
-    --danger: rgb(236 0 0 / 0.85);
+    /* Saturated green/red for the Yes/No cells, darkened to the brightest tone
+       that still clears 4.5:1 (green on the #f4f4f5 Osprey column, red on white
+       cells). Red is fully opaque so it does not lighten over the background. */
+    --safe: #008000;
+    --danger: #e00000;
 
-    --btn-shadow-1: 0 1px 2px rgba(0, 0, 0, 0.18);
-    --btn-shadow-2: 0 0 1px rgba(0, 0, 0, 0.18);
+    /* A11y: darker label shadow (0.6 alpha) matches the dark theme so white
+       button text keeps >=4.5:1 against its shadow in light mode too. */
+    --btn-shadow-1: 0 1px 2px rgba(0, 0, 0, 0.6);
+    --btn-shadow-2: 0 0 1px rgba(0, 0, 0, 0.6);
     --btn-icon-shadow: 0 1px 2px rgba(0, 0, 0, 0.18);
     --text-shadow: 0 1px 2px rgba(0, 0, 0, 0.18);
 
@@ -152,20 +161,29 @@ a:hover {
 }
 
 /* Body contact links: the email and the "create an issue on GitHub" link that
-   sit together in the "Something not working?" message. Rest colour is the old
-   brand yellow in dark mode and plain black in light mode. On hover both turn
-   the same muted gold the footer nav uses, and gain an underline. The footer's
-   own links are unaffected: .site-footer nav out-specifies these selectors. */
+   sit together in the "Something not working?" message (and the contact emails
+   in the legal pages). Rest colour is the old brand yellow in dark mode and
+   plain black in light mode. On hover both turn the same muted gold the footer
+   nav uses. A11y: they are underlined at rest so they are distinguishable from
+   the surrounding paragraph text without relying on colour alone. The footer's
+   own links are unaffected: .site-footer nav out-specifies these selectors, and
+   the footer email is explicitly kept undecorated below. */
 a[href^="mailto:"],
 a[href*="/issues/new"] {
     color: var(--contact-ink);
-    text-decoration: none;
+    text-decoration: underline;
 }
 
 a[href^="mailto:"]:hover,
 a[href*="/issues/new"]:hover {
     color: var(--accent-ink);
     text-decoration: underline;
+}
+
+/* Footer email stays gray and undecorated at rest, matching the other footer
+   links. The :not(:hover) scope ensures the hover underline still fires. */
+.site-footer nav a[href^="mailto:"]:not(:hover) {
+    text-decoration: none;
 }
 
 h1,
@@ -322,7 +340,9 @@ html[data-theme="light"] .theme-toggle .icon-sun {
     font-size: 1rem;
     font-weight: 600;
     cursor: pointer;
-    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+    /* A11y: darker shadow so white label text keeps >=4.5:1 against the shadow
+       composited over the yellow button. */
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
     box-shadow: var(--shadow);
 }
 
@@ -1068,8 +1088,10 @@ html[data-browser="edge"] .download-card[data-browser="edge"] {
     margin: 0;
     padding: 0.15rem 0.6rem;
     background-color: var(--accent);
-    color: #ffffff;
-    text-shadow: var(--btn-shadow-1), var(--btn-shadow-2);
+    /* A11y: this label is small and its background is always the yellow accent,
+       where white text is only 1.77:1. Dark text gives ~10:1 in both themes; a
+       text-shadow can't be relied on to carry contrast at this size. */
+    color: #1b1b1d;
     border-radius: 999px;
     font-size: 0.7rem;
     font-weight: 700;
@@ -1253,6 +1275,12 @@ html[data-browser="edge"] .download-card[data-browser="edge"] .download-badge {
 /* --------------------------------------------------
    Legal pages (privacy, terms)
 -------------------------------------------------- */
+/* A11y: links sit inside running paragraphs here, so underline them to stay
+   distinguishable from the surrounding text without relying on colour alone. */
+.legal a {
+    text-decoration: underline;
+}
+
 .legal h2 {
     margin-top: 2rem;
 }
