@@ -421,7 +421,7 @@ html[data-theme="light"] .theme-toggle .icon-sun {
 .install-btn[data-browser] {
     background-color: var(--accent);
     border-color: var(--accent);
-    color: #1b1b1d;
+    color: #282828;
 }
 
 /*
