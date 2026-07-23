@@ -545,7 +545,9 @@ const schema = {
             track.querySelectorAll('[data-marquee-clone]').forEach((n) => n.remove());
 
             const setWidth = setWidthOf(
-                Array.from(track.querySelectorAll('[data-marquee-set]')) as HTMLElement[],
+                Array.from(
+                    track.querySelectorAll('[data-marquee-set]:not([data-marquee-clone])'),
+                ) as HTMLElement[],
             );
 
             // If the set width is 0, we can't calculate a duration, so just return early
@@ -554,56 +556,53 @@ const schema = {
             }
 
             const target = window.innerWidth + setWidth * 2;
+            let guard = 0;
 
-            while (track.scrollWidth < target) {
+            // Keep cloning the set until the track is wide enough to fill the screen and allow for a smooth scroll
+            while (track.scrollWidth < target && guard < 50) {
                 for (const el of original) {
                     const clone = el.cloneNode(true) as HTMLElement;
                     clone.setAttribute('data-marquee-clone', '');
                     clone.setAttribute('aria-hidden', 'true');
                     track.appendChild(clone);
                 }
+                guard += 1;
             }
 
             track.style.setProperty('--set-width', `${setWidth}px`);
             track.style.setProperty('--marquee-duration', `${setWidth / speed}s`);
         };
 
-        // Wait for logo images to load, since their width feeds the math
-        const imgs = Array.from(track.querySelectorAll('img'));
-        let pending = imgs.filter((img) => !img.complete).length;
+        let rerunTimer: number | undefined;
 
-        if (pending === 0) {
-            setup();
-        } else {
-            imgs.forEach((img) => {
-                if (img.complete) {
-                    return;
-                }
+        const scheduleSetup = () => {
+            window.clearTimeout(rerunTimer);
+            rerunTimer = window.setTimeout(setup, 200);
+        };
 
-                img.addEventListener('load', () => {
-                    pending -= 1;
+        // Run setup once immediately
+        setup();
 
-                    if (pending === 0) {
-                        setup();
-                    }
-                }, {once: true});
+        // Schedule setup to run again when images load
+        track.querySelectorAll('img').forEach((img) => {
+            if (img.complete) {
+                return;
+            }
 
-                img.addEventListener('error', () => {
-                    pending -= 1;
+            img.addEventListener('load', scheduleSetup, {once: true});
+            img.addEventListener('error', scheduleSetup, {once: true});
+        });
 
-                    if (pending === 0) {
-                        setup();
-                    }
-                }, {once: true});
-            });
-        }
+        // Schedule setup to run again when the window loads
+        window.addEventListener('load', scheduleSetup);
 
-        let resizeTimer: number | undefined;
+        // Schedule setup to run again when the track's size changes
+        new ResizeObserver(scheduleSetup).observe(track.parentElement ?? track);
 
-        // Recompute on resize so speed and seamlessness hold across orientations
-        window.addEventListener('resize', () => {
-            window.clearTimeout(resizeTimer);
-            resizeTimer = window.setTimeout(setup, 200);
+        // Schedule setup to run again when the theme changes
+        new MutationObserver(scheduleSetup).observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ['data-theme'],
         });
     })();
 
