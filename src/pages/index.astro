@@ -517,24 +517,23 @@ const schema = {
 </Base>
 
 <script>
-    // Provider marquee: constant on-screen speed at any width
     (() => {
         const track = document.querySelector<HTMLElement>('[data-marquee]');
 
+        // If the track doesn't exist, don't try to run the marquee animation
         if (!track) {
             return;
         }
 
         const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+        // If the user prefers reduced motion, don't want to run the marquee animation at all
         if (prefersReduced) {
             return;
         }
 
-        const speed = 25; // pixels per second, tune to taste
+        const speed = 25; // pixels per second
 
-        // The original, untouched logo set. Captured once so re-runs always
-        // clone from the pristine list, never from previously added clones.
         const original = Array.from(track.querySelectorAll('[data-marquee-set]'))
             .map((el) => el.cloneNode(true) as HTMLElement);
 
@@ -542,20 +541,18 @@ const schema = {
             nodes.reduce((sum, el) => sum + el.getBoundingClientRect().width, 0);
 
         const setup = () => {
-            // Reset to exactly the original set, dropping any prior clones
+            // Remove any existing clones before recalculating
             track.querySelectorAll('[data-marquee-clone]').forEach((n) => n.remove());
 
             const setWidth = setWidthOf(
                 Array.from(track.querySelectorAll('[data-marquee-set]')) as HTMLElement[],
             );
 
+            // If the set width is 0, we can't calculate a duration, so just return early
             if (setWidth === 0) {
                 return;
             }
 
-            // Translating left by one set width must never expose empty space, so
-            // the whole track has to be at least the viewport PLUS one set wide.
-            // Append whole clone sets until it is, then one extra set for safety.
             const target = window.innerWidth + setWidth * 2;
 
             while (track.scrollWidth < target) {
@@ -614,26 +611,31 @@ const schema = {
     const dialogImg = document.getElementById('lightbox-img') as HTMLImageElement | null;
 
     if (dialog && dialogImg) {
+        // Add click event listeners to all shot triggers to open the lightbox dialog
         document.querySelectorAll<HTMLButtonElement>('.shot-trigger').forEach((trigger) => {
             trigger.addEventListener('click', () => {
                 const full = trigger.dataset.full;
 
+                // If the full image URL is not set, don't try to open the dialog
                 if (!full) {
                     return;
                 }
 
+                // Set the dialog image's src and alt attributes, then show the dialog
                 dialogImg.src = full;
                 dialogImg.alt = trigger.querySelector('img')?.alt ?? '';
                 dialog.showModal();
             });
         });
 
+        // Add a click event listener to the dialog to close it when clicking outside the image
         dialog.addEventListener('click', (event) => {
             if (event.target !== dialogImg) {
                 dialog.close();
             }
         });
 
+        // Add a keydown event listener to the dialog to close it when pressing the Escape key
         dialog.addEventListener('close', () => {
             dialogImg.src = '';
         });
