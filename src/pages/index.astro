@@ -53,8 +53,8 @@ const features = [
         body: 'Dangerous downloads, fake stores, and fraud are stopped as soon as you visit them.',
     },
     {
-        title: 'Up to 22 checks, not just one',
-        body: 'Your browser checks with one threat list. Osprey checks up to 22 at once for every website you visit.',
+        title: 'Up to 21 checks, not just one',
+        body: 'Your browser checks with one threat list. Osprey checks up to 21 different sources at once for every website you visit.',
     },
     {
         title: 'Cannot read your screen',
@@ -107,7 +107,7 @@ const comparison = [
     },
     {
         feature: 'Checks more than one source',
-        osprey: '22 sources',
+        osprey: '21 sources',
         builtin: '1 source',
         malwarebytes: '1 source',
         bitdefender: '1 source'
@@ -172,6 +172,22 @@ const comparison = [
 
 const faqs = [
     {
+        q: 'How do I use Osprey? What do I do after it\'s installed?',
+        a: 'Once installed, Osprey will automatically start protecting you. You don\'t need to do anything else. It will check every website you visit against the threat intelligence providers you have enabled, and block any that are dangerous.',
+    },
+    {
+        q: 'What do the settings under \'Protection Providers\' do? Should I touch them?',
+        a: 'You can leave them alone. Every provider is enabled by default, and Osprey will check every website you visit against all of them. You can turn any of them off if you want, or add your own API keys for some providers. A protection provider is just a third-party service that provides threat intelligence to Osprey. Threat intelligence refers to information about malicious websites, phishing pages, scams, and other online threats.',
+    },
+    {
+        q: 'Can I turn one of the protection providers off?',
+        a: 'Yes, any of them, whenever you like. Click the Osprey icon, choose Open Settings, and switch off the ones you do not want. The default settings are recommended for most users, but you can customize them to your needs. You can also add your own API keys for some providers if you have them.',
+    },
+    {
+        q: 'Do I need Osprey if my browser already has protection?',
+        a: 'Yes. Your browser\'s built-in protection is a good start, but it only checks against one source of threat intelligence, which misses a lot of new phishing websites. Osprey checks every website you visit against up to 21 different sources, so it can catch more threats and block them before they load.',
+    },
+    {
         q: 'Will it slow my computer down?',
         a: 'No. Osprey is built to be as lightweight as possible. It doesn\'t stop pages from loading, and it checks every website in a fraction of a second. You won\'t notice any difference to your browsing speed.',
     },
@@ -181,7 +197,7 @@ const faqs = [
     },
     {
         q: 'What if it blocks a website I know is fine?',
-        a: 'You can add the website to your list of exclusions, click through the \'Continue anyway\' button, or turn off the protection provider that blocked it. You can also take some time to report it as a false positive. You are in control of your browsing experience.',
+        a: 'You can add the website to your list of exclusions, click through the \'Continue anyway\' button, or turn off the protection provider that blocked it. You can also take some time to report it as a false positive.',
     },
     {
         q: 'Does it work in private or incognito windows?',
@@ -196,24 +212,12 @@ const faqs = [
         a: 'Osprey sends the URL of the page you are visiting to our private proxy server, which checks it against the threat intelligence providers. Since every provider only sees the proxy server\'s IP address, there\'s no way for them to know who you are or what you are looking at. Osprey does not log your browsing history, and the proxy server does not log your IP address.',
     },
     {
-        q: 'Does it block ads on websites like AdBlock?',
+        q: 'Can I replace my ad blocker with Osprey?',
         a: 'No. Osprey does not block ads. It only blocks websites that are dangerous, and it does not modify any page contents. You can keep your ad blocker installed alongside Osprey.',
     },
     {
         q: 'Will it cause issues with my antivirus or my ad blocker?',
         a: 'No. Osprey does a different job from both and is built to sit alongside them. Keep everything you already have. You do not need to turn anything off.',
-    },
-    {
-        q: 'What does it keep on my computer?',
-        a: 'Your settings, and a short-lived note of websites it recently checked so it does not have to ask twice. It all stays on your machine, and uninstalling Osprey removes it.',
-    },
-    {
-        q: 'Can I turn one of the protection providers off?',
-        a: 'Yes, any of them, whenever you like. Click the Osprey icon, choose Open Settings, and switch off the ones you do not want. Nothing is forced on you.',
-    },
-    {
-        q: 'Can I use it at work, or install it across my company?',
-        a: 'Yes. It is free for business use, and an IT administrator can install it across an organisation and lock the settings so nobody can switch protection off.',
     },
     {
         q: 'How can I deploy Osprey across an organization?',
@@ -237,7 +241,7 @@ const schema = {
             applicationSubCategory: 'Browser Extension',
             operatingSystem: 'Chrome, Firefox, Edge',
             description:
-                'Osprey is a free, open-source browser extension that blocks phishing, malware, scams, and other dangerous websites before they load. It checks every site you visit against 22 threat intelligence providers through a privacy-preserving proxy that hides your IP address.',
+                'Osprey is a free, open-source browser extension that blocks phishing, malware, scams, and other dangerous websites before they load. It checks every site you visit against 21 different threat intelligence providers through a privacy-preserving proxy that hides your IP address.',
             url: 'https://osprey.ac/',
             downloadUrl: 'https://osprey.ac/download/',
             softwareVersion: '2.0.4.3',
@@ -252,7 +256,7 @@ const schema = {
                 'Blocks phishing and fake login pages',
                 'Blocks malware and malicious websites',
                 'Blocks scams and online fraud',
-                'Checks 22 threat intelligence providers, not one',
+                'Checks 21 different threat intelligence providers, not one',
                 'Cannot read page content: no host permissions',
                 'No account, no ads, no premium tier',
             ],
