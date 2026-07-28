@@ -1263,6 +1263,17 @@ html[data-browser="edge"] .download-card[data-browser="edge"] .download-badge {
 }
 
 /*
+ * Mailing address blocks in the Contact sections. Browsers italicise <address>
+ * by default, which reads as emphasis it does not need, so reset it to match
+ * the surrounding body text.
+ */
+.legal address {
+    font-style: normal;
+    line-height: 1.6;
+    color: var(--text-muted);
+}
+
+/*
  * The all-caps disclaimer and liability blocks in the Terms. They have to stay
  * capitalised for legal conspicuousness, but at full body weight they read as
  * shouting, so they are set smaller and muted.
@@ -1278,16 +1289,29 @@ html[data-browser="edge"] .download-card[data-browser="edge"] .download-badge {
 -------------------------------------------------- */
 .site-footer {
     border-top: 1px solid var(--border);
-    padding: 1.5rem 0;
+    padding: 2.5rem 0 2rem;
     color: var(--text-muted);
     font-size: 0.9rem;
 }
 
+.footer-cols {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+    gap: 2rem;
+}
+
+.footer-col h2 {
+    margin: 0 0 0.75rem;
+    font-size: 0.9rem;
+    color: var(--text);
+}
+
+/* Footer links stack in a column now, so the old inline row gap is replaced by
+   per-link vertical spacing. */
 .site-footer nav {
     display: flex;
-    flex-wrap: wrap;
-    gap: 1.25rem;
-    margin-bottom: 0.75rem;
+    flex-direction: column;
+    gap: 0.5rem;
 }
 
 .site-footer nav a {
@@ -1298,8 +1322,27 @@ html[data-browser="edge"] .download-card[data-browser="edge"] .download-badge {
     color: var(--accent-ink);
 }
 
+.site-footer address {
+    font-style: normal;
+    line-height: 1.7;
+}
+
 .site-footer p {
-    margin: 0.25rem 0;
+    margin: 0.5rem 0 0;
+}
+
+.footer-bottom {
+    margin-top: 2rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--border);
+}
+
+.footer-bottom p {
+    margin: 0 0 0.35rem;
+}
+
+.footer-bottom p:last-child {
+    margin-bottom: 0;
 }
 
 @media (max-width: 40rem) {
