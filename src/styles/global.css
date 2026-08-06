@@ -19,24 +19,13 @@
     --accent-light: #ffcd4a;
     --accent-faint: rgba(243, 186, 34, 0.1);
 
-    /* Accent used as text/links. On the dark surfaces the brand yellow reads
-       fine, so it is just the accent. Light mode overrides it with a deeper
-       gold that keeps enough contrast on white. */
     --accent-ink: var(--accent);
-
-    /* Rest colour for the body contact links (the email + "issue on GitHub"
-       link in the "Something not working?" message). White on dark so the
-       underline reads clearly; light mode makes it plain black. */
     --contact-ink: var(--text);
 
     /* Status */
     --safe: #5CD77D;
     --danger: #E7B3B3;
 
-    /* Yellow store buttons. The label and the logo carry separate shadows: a
-       filled glyph and a solid logo mark do not need the same weight to read.
-       A11y: the label shadow is darkened (0.6 alpha) so white text keeps >=4.5:1
-       contrast against the shadow colour composited over the yellow button. */
     --btn-icon-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
 
     --font: 'Segoe UI', system-ui, sans-serif;
@@ -44,8 +33,6 @@
     --max-width: 60rem;
     --text-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
 
-    /* Soft drop shadow for buttons and screenshots. Kept subtle on the dark
-       surfaces; light mode overrides it with a lighter grey cast. */
     --shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
     --shadow-hover: 0 5px 14px rgba(0, 0, 0, 0.6);
 
@@ -88,12 +75,6 @@ html {
     scroll-behavior: smooth;
 }
 
-/*
- * Nothing is shown until the theme has been resolved. The inline head script
- * sets data-theme before first paint, so this only ever hides content for the
- * gap before that script runs (visually none). The <noscript> block in the head
- * reveals the page for browsers with scripting off, which fall back to dark.
- */
 html:not([data-theme]) body {
     visibility: hidden;
 }
@@ -133,14 +114,6 @@ a:hover {
     text-decoration: underline;
 }
 
-/* Body contact links: the email and the "create an issue on GitHub" link that
-   sit together in the "Something not working?" message (and the contact emails
-   in the legal pages). Rest colour is the old brand yellow in dark mode and
-   plain black in light mode. On hover both turn the same muted gold the footer
-   nav uses. A11y: they are underlined at rest so they are distinguishable from
-   the surrounding paragraph text without relying on colour alone. The footer's
-   own links are unaffected: .site-footer nav out-specifies these selectors, and
-   the footer email is explicitly kept undecorated below. */
 a[href^="mailto:"],
 a[href*="/issues/new"],
 a.contact-link {
@@ -155,8 +128,6 @@ a.contact-link:hover {
     text-decoration: underline;
 }
 
-/* Footer email stays gray and undecorated at rest, matching the other footer
-   links. The :not(:hover) scope ensures the hover underline still fires. */
 .site-footer nav a[href^="mailto:"]:not(:hover) {
     text-decoration: none;
 }
@@ -211,8 +182,6 @@ code {
     border-bottom: 1px solid var(--border);
 }
 
-/* Brand hard left, nav hard right. Both sit inside .wrap, so they align with
-   the outer edges of the screenshot grid below. */
 .header-inner {
     display: flex;
     align-items: center;
@@ -228,8 +197,6 @@ code {
     gap: 0.85rem;
     color: var(--text);
     font-size: 1.2rem;
-    /* 600 to match the h1. No text-shadow: at this size the blur smears under
-       the strokes and reads as extra weight rather than depth. */
     font-weight: 600;
 }
 
@@ -250,15 +217,15 @@ code {
     gap: 1.75rem;
 }
 
+.nav-icons {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
 /* --------------------------------------------------
    Theme toggle
 -------------------------------------------------- */
-/*
- * One button holding both icons. Which one shows is decided in CSS off
- * html[data-theme], so switching themes never runs JS to swap an icon: dark
- * shows the sun (tap for light), light shows the moon (tap for dark). The
- * hidden icon is display:none, so an inline SVG costs nothing to keep around.
- */
 .theme-toggle {
     display: inline-flex;
     align-items: center;
@@ -315,8 +282,6 @@ html[data-theme="light"] .theme-toggle .icon-sun {
     font-size: 1rem;
     font-weight: 600;
     cursor: pointer;
-    /* A11y: darker shadow so white label text keeps >=4.5:1 against the shadow
-       composited over the yellow button. */
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
     box-shadow: var(--shadow);
 }
@@ -351,18 +316,6 @@ html[data-theme="light"] .theme-toggle .icon-sun {
     margin: 0 auto 2rem;
 }
 
-/* Store buttons. Deliberately neutral rather than accent-yellow, so the
-   browser logo is what identifies the button. */
-/*
- * The same two-column grid as .shots below (1fr 1fr, 1.25rem gap), so the two
- * rows share a column boundary. The store button is pushed to the end of column
- * one and the GitHub button to the start of column two, which lands their inner
- * edges exactly on the inner edges of the two screenshots. Matching the grid
- * rather than hand-tuning widths means the alignment holds at any viewport.
- *
- * Hidden store buttons are display:none, so they occupy no grid cell and the
- * visible one always lands in column one.
- */
 .install-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -405,51 +358,22 @@ html[data-theme="light"] .theme-toggle .icon-sun {
     background-color: var(--surface-raised);
 }
 
-/*
- * Store buttons are hidden by default and revealed only for the browser the
- * visitor is actually using. Hiding is the CSS default rather than something JS
- * applies afterwards, so the buttons never paint and then disappear.
- *
- * The inline script in index.astro stamps data-browser onto <html> before the
- * buttons are parsed. The <noscript> block below covers the case where it never
- * runs at all.
- */
-/*
- * Appearance applies to every store button, wherever it appears, so the download
- * page and the homepage look identical.
- */
 .install-btn[data-browser] {
     background-color: var(--accent);
     border-color: var(--accent);
     color: #282828;
 }
 
-/*
- * Visibility is a homepage concern only. The homepage shows one button, chosen
- * by the browser; the download page shows all three on purpose. Scoping this to
- * .install-row is what keeps the download page's buttons from being hidden,
- * since that page never sets html[data-browser].
- */
 .install-row .install-btn[data-browser] {
     display: none;
 }
 
-/*
- * Scoped to .install-row. The download page shows every store button on purpose,
- * and it never sets html[data-browser], so an unscoped rule hid all three there.
- */
 html[data-browser="chrome"] .install-row .install-btn[data-browser="chrome"],
 html[data-browser="firefox"] .install-row .install-btn[data-browser="firefox"],
 html[data-browser="edge"] .install-row .install-btn[data-browser="edge"] {
     display: inline-flex;
 }
 
-/*
- * Store logos are drawn with background-image rather than <img>. An <img> is
- * downloaded even when its parent is display:none, so the old markup fetched
- * chrome.svg, firefox.svg and edge.svg on every visit and showed one of them.
- * A background-image on a hidden element is never requested.
- */
 .install-row .install-btn[data-browser]::before {
     content: '';
     width: 24px;
@@ -473,11 +397,6 @@ html[data-browser="edge"] .install-row .install-btn[data-browser="edge"] {
     background-image: url('../assets/edge.svg');
 }
 
-/*
- * The GitHub button is always visible, so this saves no request. It is a
- * background for consistency: every logo in the install row is now painted the
- * same way, and .install-btn carries no <img> at all.
- */
 .install-row .install-btn-github::before {
     content: '';
     width: 24px;
@@ -489,8 +408,6 @@ html[data-browser="edge"] .install-row .install-btn[data-browser="edge"] {
     background-size: contain;
 }
 
-/* The GitHub mark is a solid white SVG, drawn for the dark button. On the light
-   surface white is invisible, so invert it to black. */
 html[data-theme="light"] .install-row .install-btn-github::before {
     filter: invert(1);
 }
@@ -740,10 +657,6 @@ html[data-theme="light"] .install-row .install-btn-github::before {
 }
 
 /* --------------------------------------------------
-   Steps
--------------------------------------------------- */
-
-/* --------------------------------------------------
    Prose (plain body text, e.g. the origin story)
 -------------------------------------------------- */
 .prose {
@@ -765,8 +678,6 @@ html[data-theme="light"] .install-row .install-btn-github::before {
 /* --------------------------------------------------
    Trust line (floats under the screenshots, no section box)
 -------------------------------------------------- */
-/* Same two-column grid as .install-row / .shots: rating ends at the left
-   screenshot's right edge, user count starts at the right screenshot's left. */
 .trust-line {
     margin: -1.5rem 0 4.0rem;
     display: grid;
@@ -843,7 +754,6 @@ html[data-theme="light"] .install-row .install-btn-github::before {
     color: var(--text-dim);
 }
 
-/* The mask fades logos in and out at the edges instead of a hard cut. */
 .marquee {
     overflow: hidden;
     -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
@@ -856,14 +766,6 @@ html[data-theme="light"] .install-row .install-btn-github::before {
     padding: 0;
     display: flex;
     width: max-content;
-    /*
-     * --set-width is the pixel width of ONE copy of the logo list, measured and
-     * set by the script in index.astro. Translating by exactly that distance
-     * lands on an identical copy, so the loop is seamless at any screen size.
-     * --marquee-duration is set alongside it so the speed (px/sec) is constant
-     * regardless of how wide the track is. Fallbacks keep it moving before the
-     * script runs.
-     */
     animation: marquee-scroll var(--marquee-duration, 40s) linear infinite;
 }
 
@@ -874,13 +776,6 @@ html[data-theme="light"] .install-row .install-btn-github::before {
     align-items: center;
 }
 
-/*
- * Each provider ships two logo files, one tuned for the light page and one for
- * the dark page. Both are in the markup; the one that does not match the active
- * theme is display:none, so it is dropped from the layout (and, being lazy and
- * hidden, is not fetched). Switching data-theme swaps which file shows with no
- * script involved.
- */
 .marquee-item img {
     height: 48px;
     width: auto;
@@ -898,11 +793,14 @@ html[data-theme="dark"] .marquee-item .logo-light {
 }
 
 @keyframes marquee-scroll {
-    from { transform: translateX(0); }
-    to   { transform: translateX(calc(var(--set-width, 50%) * -1)); }
+    from {
+        transform: translateX(0);
+    }
+    to {
+        transform: translateX(calc(var(--set-width, 50%) * -1));
+    }
 }
 
-/* Respect users who ask for less motion: freeze the strip. */
 @media (prefers-reduced-motion: reduce) {
     .marquee-track {
         animation: none;
@@ -983,7 +881,6 @@ html[data-theme="dark"] .marquee-item .logo-light {
     font-size: 0.95rem;
 }
 
-/* The Osprey column is the point of the table, so it is lifted out. */
 .compare .col-osprey {
     background-color: var(--surface);
     color: var(--text);
@@ -997,7 +894,6 @@ html[data-theme="dark"] .marquee-item .logo-light {
     border-top-right-radius: var(--radius);
 }
 
-/* Words, not just colours or ticks, so the meaning survives without sight. */
 .compare .yes {
     color: var(--safe);
     font-weight: 600;
@@ -1039,14 +935,6 @@ html[data-theme="dark"] .marquee-item .logo-light {
     padding: 1.75rem 1.25rem 1.5rem;
 }
 
-/* The visitor's own browser. Highlighted, but every card stays usable: people
-   do install extensions for a machine they are not sitting at. */
-/*
- * The visitor's card is highlighted and pulled to the front in CSS, keyed off
- * html[data-browser] which is set in <head> before first paint. This used to be
- * done by a deferred script, which meant the badge appeared a frame late and
- * flickered.
- */
 html[data-browser="chrome"] .download-card[data-browser="chrome"],
 html[data-browser="firefox"] .download-card[data-browser="firefox"],
 html[data-browser="edge"] .download-card[data-browser="edge"] {
@@ -1061,9 +949,6 @@ html[data-browser="edge"] .download-card[data-browser="edge"] {
     margin: 0;
     padding: 0.15rem 0.6rem;
     background-color: var(--accent);
-    /* A11y: this label is small and its background is always the yellow accent,
-       where white text is only 1.77:1. Dark text gives ~10:1 in both themes; a
-       text-shadow can't be relied on to carry contrast at this size. */
     color: #282828;
     border-radius: 999px;
     font-size: 0.7rem;
@@ -1072,17 +957,12 @@ html[data-browser="edge"] .download-card[data-browser="edge"] {
     text-transform: uppercase;
 }
 
-/* Hidden by default: only the visitor's own card shows one. */
 html[data-browser="chrome"] .download-card[data-browser="chrome"] .download-badge,
 html[data-browser="firefox"] .download-card[data-browser="firefox"] .download-badge,
 html[data-browser="edge"] .download-card[data-browser="edge"] .download-badge {
     display: block;
 }
 
-/*
- * The SVG is inlined into the HTML, so it paints with the page instead of
- * arriving in a later request. The box is fixed here so there is no reflow.
- */
 .download-logo {
     display: block;
     width: 48px;
@@ -1183,8 +1063,6 @@ html[data-browser="edge"] .download-card[data-browser="edge"] .download-badge {
     margin-bottom: 0;
 }
 
-/* Threat list. The accent bar on the left is the only decoration, and it is
-   doing real work: it reads as a row of things being stopped. */
 .blocks {
     list-style: none;
     margin: 0;
@@ -1248,8 +1126,6 @@ html[data-browser="edge"] .download-card[data-browser="edge"] .download-badge {
 /* --------------------------------------------------
    Legal pages (privacy, terms)
 -------------------------------------------------- */
-/* A11y: links sit inside running paragraphs here, so underline them to stay
-   distinguishable from the surrounding text without relying on colour alone. */
 .legal a {
     text-decoration: underline;
 }
@@ -1262,22 +1138,12 @@ html[data-browser="edge"] .download-card[data-browser="edge"] .download-badge {
     margin-bottom: 0.35rem;
 }
 
-/*
- * Mailing address blocks in the Contact sections. Browsers italicise <address>
- * by default, which reads as emphasis it does not need, so reset it to match
- * the surrounding body text.
- */
 .legal address {
     font-style: normal;
     line-height: 1.6;
     color: var(--text-muted);
 }
 
-/*
- * The all-caps disclaimer and liability blocks in the Terms. They have to stay
- * capitalised for legal conspicuousness, but at full body weight they read as
- * shouting, so they are set smaller and muted.
- */
 .legal-caps {
     font-size: 0.9rem;
     line-height: 1.7;
@@ -1306,8 +1172,6 @@ html[data-browser="edge"] .download-card[data-browser="edge"] .download-badge {
     color: var(--text);
 }
 
-/* Footer links stack in a column now, so the old inline row gap is replaced by
-   per-link vertical spacing. */
 .site-footer nav {
     display: flex;
     flex-direction: column;
@@ -1346,7 +1210,6 @@ html[data-browser="edge"] .download-card[data-browser="edge"] .download-badge {
 }
 
 @media (max-width: 40rem) {
-
     .hero h1 {
         font-size: 1.65rem;
     }
