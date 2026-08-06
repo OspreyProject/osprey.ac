@@ -102,6 +102,10 @@ const steps = [
 
 const rating = 4.9;
 
+const yesIcon = `<svg class="cmp-icon yes" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="Yes"><path d="M4 12.5 9 17.5 20 6.5"/></svg>`;
+
+const noIcon = `<svg class="cmp-icon no" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="No"><circle cx="12" cy="12" r="9"/><line x1="5.6" y1="5.6" x2="18.4" y2="18.4"/></svg>`;
+
 const partnerLogos = [
     {light: alphamountainLight, dark: alphamountainDark, name: 'AlphaMountain', width: 227},
     {light: bforeaiLight, dark: bforeaiDark, name: 'BforeAI PreCrime', width: 168},
@@ -119,10 +123,10 @@ const comparison = [
     },
     {
         feature: 'Checks more than one source',
-        osprey: '21 sources',
-        builtin: '1 source',
-        malwarebytes: '1 source',
-        bitdefender: '1 source'
+        osprey: 'yes',
+        builtin: 'no',
+        malwarebytes: 'no',
+        bitdefender: 'no'
     },
     {
         feature: 'Open-source and auditable',
@@ -161,6 +165,7 @@ const comparison = [
     },
     {
         feature: 'Blocks >90% on OpenPhish',
+        featureLink: {text: 'OpenPhish', href: 'https://openphish.com/phishing_feeds.html'},
         osprey: 'yes',
         builtin: 'no',
         malwarebytes: 'yes',
@@ -409,6 +414,7 @@ const schema = {
             {
                 features.map((feature) => (
                         <li class="feature">
+                            <img class="feature-icon" src={feature.icon.src} alt="" width="32" height="32"/>
                             <h3>{feature.title}</h3>
                             <p>{feature.body}</p>
                         </li>
@@ -480,19 +486,31 @@ const schema = {
                 {
                     comparison.map((row) => (
                             <tr>
-                                <th scope="row">{row.feature}</th>
+                                <th scope="row">
+                                    {row.featureLink ? (
+                                            <>
+                                                {row.feature.split(row.featureLink.text)[0]}
+                                                <a class="contact-link"
+                                                   href={row.featureLink.href}>{row.featureLink.text}</a>
+                                                {row.feature.split(row.featureLink.text)[1]}
+                                            </>
+                                    ) : row.feature}
+                                </th>
                                 <td class="col-osprey">
-                                    {row.osprey === 'yes' ? <span class="yes">Yes</span> :
+                                    {row.osprey === 'yes' ?
+                                            <Fragment set:html={yesIcon}/> :
                                             <span class="val">{row.osprey}</span>}
                                 </td>
                                 <td>
-                                    {row.builtin === 'yes' ? <span class="yes">Yes</span> : row.builtin === 'no' ?
-                                            <span class="no">No</span> : <span class="val">{row.builtin}</span>}
+                                    {row.builtin === 'yes' ?
+                                            <Fragment set:html={yesIcon}/> : row.builtin === 'no' ?
+                                                    <Fragment set:html={noIcon}/> :
+                                                    <span class="val">{row.builtin}</span>}
                                 </td>
                                 <td>
                                     {row.malwarebytes === 'yes' ?
-                                            <span class="yes">Yes</span> : row.malwarebytes === 'no' ?
-                                                    <span class="no">No</span> :
+                                            <Fragment set:html={yesIcon}/> : row.malwarebytes === 'no' ?
+                                                    <Fragment set:html={noIcon}/> :
                                                     <span class="val">{row.malwarebytes}</span>}
                                 </td>
                                 <td>
