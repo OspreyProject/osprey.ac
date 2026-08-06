@@ -639,10 +639,13 @@ html[data-theme="light"] .install-row .install-btn-github::before {
 }
 
 .feature {
-    background-color: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
     padding: 1.15rem 1.25rem;
+}
+
+.feature-icon {
+    width: 2rem;
+    height: 2rem;
+    margin-bottom: 0.6rem;
 }
 
 .feature h3 {
