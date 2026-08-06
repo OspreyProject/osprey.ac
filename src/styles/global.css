@@ -257,6 +257,33 @@ html[data-theme="light"] .theme-toggle .icon-sun {
     display: none;
 }
 
+/* --------------------------------------------------
+   Support (Ko-fi) link
+-------------------------------------------------- */
+.support-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    padding: 0;
+    border-radius: var(--radius);
+    color: var(--text-muted);
+    line-height: 0;
+}
+
+.site-nav .support-link:hover {
+    color: #FF5A16;
+    background-color: var(--surface-hover);
+    text-decoration: none;
+}
+
+.support-link svg {
+    display: block;
+    width: 20px;
+    height: 20px;
+}
+
 .site-nav a {
     color: var(--text-muted);
     font-size: 0.95rem;
@@ -897,9 +924,13 @@ html[data-theme="dark"] .marquee-item .logo-light {
     border-top-right-radius: var(--radius);
 }
 
+.compare td svg {
+    display: inline-block;
+    vertical-align: middle;
+}
+
 .compare .yes {
     color: var(--safe);
-    font-weight: 600;
 }
 
 .compare .no {
