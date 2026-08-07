@@ -534,20 +534,23 @@ const schema = {
                 }
             }, 6000);
 
+            // Dynamically load Turnstile to prevent multiple injections during client-side routing
+            if (typeof window.turnstile === 'undefined' && !document.getElementById('turnstile-api-script')) {
+                const script = document.createElement('script');
+                script.id = 'turnstile-api-script';
+                script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?onload=onloadTurnstileCallback&render=explicit';
+                script.async = true;
+                script.defer = true;
+                script.setAttribute('data-cfasync', 'false');
+                document.head.appendChild(script);
+            } else if (typeof window.turnstile !== 'undefined') {
+                // If it already exists from a previous page visit, trigger the render immediately
+                window.onloadTurnstileCallback();
+            }
+
             refreshButton();
         })();
     </script>
-
-    <!--
-      Load Turnstile exactly once. The onload parameter calls onloadTurnstileCallback (defined
-      above) when render is ready. data-cfasync="false" tells Cloudflare Rocket Loader to leave
-      this script alone; Rocket Loader re-driving it is a common cause of the "Turnstile already
-      has been loaded" warning. Keep this the ONLY api.js include on the page.
-    -->
-    <script is:inline
-            data-cfasync="false"
-            src="https://challenges.cloudflare.com/turnstile/v0/api.js?onload=onloadTurnstileCallback&render=explicit"
-            async defer></script>
 
     <style>
         .check-head {
