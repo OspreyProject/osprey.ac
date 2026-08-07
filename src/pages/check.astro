@@ -146,9 +146,9 @@ const providers = [
 
 const groups = ['Official Partners', 'DNS Servers', 'Threat Feeds'];
 
-const title = 'Check a URL for Malware, Phishing & Scams';
+const title = 'Free Website Safety Checker – Malware, Phishing, & Scams';
 const description =
-    'Scan any website or link for malware, phishing, scams, and other threats. Osprey\'s free URL checker shows if a site is safe to open, with no account required.';
+    'Scan any URL or link for viruses, malware, and phishing. Osprey\'s free link scanner tool checks website reputation so you can see if a link is safe to open.';
 
 const faqs = [
     {
@@ -161,15 +161,23 @@ const faqs = [
     },
     {
         q: 'How do I tell if a link is phishing or a scam?',
-        a: 'Phishing and scam pages are often brand new and built to imitate a real login page or store. Osprey checks anti-phishing feeds and newly registered domain lists, so a link that copies your bank or a shop is more likely to be flagged here. A clean result is not a guarantee, so still read the address bar carefully and never enter passwords on a page you reached from an unexpected message.',
+        a: 'Phishing and scam pages are often brand new and built to imitate a real login page or store. Osprey acts as a scam website detector by checking anti-phishing feeds and newly registered domain lists, so a link that copies your bank is more likely to be flagged here. A clean result is not a guarantee, so still read the address bar carefully.',
     },
     {
-        q: 'How does Osprey check a website\'s reputation?',
-        a: 'Each scan asks every security provider listed above, including official partners, public DNS filters, and open threat feeds, whether they have seen the domain used for anything harmful. Their combined answer is the site\'s reputation. Because the check runs through Osprey\'s proxy, the providers only see the proxy rather than you.',
+        q: 'Is there a website reputation score?',
+        a: 'Rather than giving a single website reputation score, this web reputation check shows you exactly which security vendors flag the domain. Because the check runs through Osprey\'s proxy, the providers only see the proxy rather than you.',
+    },
+    {
+        q: 'How can I check link legitimacy and detect spam?',
+        a: 'You can check a link for spam and verify link legitimacy by running it through our free scam checker. We aggregate data from threat feeds to identify domains frequently used in spam campaigns and deceptive advertising.',
+    },
+    {
+        q: 'Is this link scanner tool safe to use?',
+        a: 'Yes. When you use this link scanner tool to run a virus scan on a link, our servers process the request. Your browser never connects directly to the suspicious destination, keeping your device safe from potentially malicious code.',
     },
     {
         q: 'How is this different from VirusTotal?',
-        a: 'VirusTotal is a broad aggregator of antivirus engines and is well suited to inspecting files and URLs in depth. Osprey\'s checker is narrower by design: it runs the exact set of URL and domain providers that block sites live in your browser, so a result here tells you how Osprey itself would treat the page. It is free, needs no account, and does not log your browsing.',
+        a: 'VirusTotal is a broad aggregator of antivirus engines and is well suited to inspecting files and URLs in depth. Osprey\'s checker is narrower by design: it runs the exact set of URL and domain providers that block sites live in your browser, so a result here tells you how Osprey itself would treat the page.',
     },
     {
         q: 'Is the URL scanner free?',
@@ -183,22 +191,22 @@ const schema = {
         {
             '@type': 'WebApplication',
             '@id': 'https://osprey.ac/check/#app',
-            name: 'Osprey URL Checker',
-            alternateName: 'Osprey Link & Website Safety Checker',
+            name: 'Osprey Website Safety Checker',
+            alternateName: 'Osprey Link & URL Safety Checker',
             applicationCategory: 'SecurityApplication',
             applicationSubCategory: 'URL Scanner',
             operatingSystem: 'Any',
             url: 'https://osprey.ac/check/',
             description:
-                'Free tool to scan any website or link for phishing, malware, scams, and other threats using the same security providers as the Osprey browser extension.',
+                'Scan any URL or link for viruses, malware, and phishing. Osprey\'s free link scanner tool checks website reputation so you can see if a link is safe to open.',
             isAccessibleForFree: true,
             browserRequirements: 'Requires JavaScript.',
             featureList: [
-                'Check a URL for malware and viruses',
-                'Check a link for phishing and scams',
-                'See if a website is safe before you open it',
-                'Website reputation from multiple security providers',
-                'Free with no account required',
+                "Check a URL or link for malware and viruses",
+                "Check link legitimacy and detect phishing or scams",
+                "See if a website is safe before you open it",
+                "Website reputation score and security provider reports",
+                "Free online link scanner with no account required"
             ],
             offers: {'@type': 'Offer', price: '0', priceCurrency: 'USD'},
             isPartOf: {'@id': 'https://osprey.ac/#software'},
@@ -228,11 +236,15 @@ const schema = {
     ></script>
 
     <section class="check-head">
-        <h1>Check a URL</h1>
+        <h1>Website Safety Checker</h1>
         <p class="lede">
-            Scan any website or link for malware, phishing, scams, and other threats.
+            Scan any website or link for malware, phishing, scams, and security risks.
             <br>
-            The <a href="/download/" class="contact-link">Osprey extension</a> does this for you automatically in
+            Use our link scanner to check URL safety & reputation, scan links for scams, and see if a website is
+            secure <i>before</i> you click on it.
+            <br>
+            <br>
+            The <a href="/download/" class="contact-link">Osprey extension</a> does this for you <i>automatically</i> in
             real-time.
         </p>
     </section>

@@ -291,9 +291,26 @@ html[data-theme="light"] .theme-toggle .icon-sun {
     font-weight: 600;
 }
 
+.site-nav a.has-badge {
+    display: inline-flex;
+    align-items: center;
+}
+
 .site-nav a:hover {
     color: var(--accent-ink);
     text-decoration: none;
+}
+
+.badge-new {
+    background-color: #E52424;
+    color: #ffffff;
+    border-radius: 999px;
+    padding: 0.15rem 0.4rem;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    margin-left: 0.4rem;
+    line-height: 1.2;
 }
 
 /* --------------------------------------------------
@@ -1197,6 +1214,7 @@ html[data-browser="edge"] .download-card[data-browser="edge"] .download-badge {
 
 .check-head h1 {
     font-size: 2.15rem;
+    margin: 0 0 0.75rem;
 }
 
 .check-head .lede {
