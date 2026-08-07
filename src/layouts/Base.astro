@@ -51,7 +51,8 @@ const siteSchema = {
 
             try {
                 saved = localStorage.getItem('theme');
-            } catch (ignored) {
+            } catch {
+                // ignored
             }
 
             const theme = (saved === 'light' || saved === 'dark')
@@ -70,7 +71,8 @@ const siteSchema = {
 
                 try {
                     localStorage.setItem('theme', next);
-                } catch (ignored) {
+                } catch {
+                    // ignored
                 }
             });
         })();
@@ -136,6 +138,7 @@ const siteSchema = {
         }
 
         const triggers = ['scroll', 'pointerdown', 'keydown', 'touchstart'];
+
         triggers.forEach((event) =>
             window.addEventListener(event, loadGtag, {once: true, passive: true})
         );
