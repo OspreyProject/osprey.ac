@@ -9,24 +9,9 @@ const logos = import.meta.glob<ImageMetadata>('../assets/providers/*.avif', {
 const logo = (name: string): string => logos[`../assets/providers/${name}.avif`]?.src ?? '';
 
 const providers = [
-    {
-        id: 'alphamountain',
-        name: 'AlphaMountain',
-        icon: 'alphamountain',
-        group: 'Official Partners'
-    },
-    {
-        id: 'bforeai',
-        name: 'BforeAI PreCrime',
-        icon: 'bforeai',
-        group: 'Official Partners'
-    },
-    {
-        id: 'chainpatrol',
-        name: 'ChainPatrol',
-        icon: 'chainpatrol',
-        group: 'Official Partners'
-    },
+    {id: 'alphamountain', name: 'AlphaMountain', icon: 'alphamountain', group: 'Official Partners'},
+    {id: 'bforeai', name: 'BforeAI PreCrime', icon: 'bforeai', group: 'Official Partners'},
+    {id: 'chainpatrol', name: 'ChainPatrol', icon: 'chainpatrol', group: 'Official Partners'},
     {id: 'izoologic', name: 'iZOOlogic', icon: 'izoologic', group: 'Official Partners'},
     {id: 'precisionsec', name: 'PrecisionSec', icon: 'precisionsec', group: 'Official Partners'},
     {id: 'adguard-dns', name: 'AdGuard DNS', icon: 'adguard', group: 'Security Filters'},
@@ -194,6 +179,7 @@ const schema = {
             }
 
             let widgetId = null;
+            let renderAttempts = 0;
 
             function onTurnstileToken(token) {
                 captchaToken = token || '';
@@ -213,31 +199,55 @@ const schema = {
             }
 
             function renderTurnstile() {
-                // Render at most once, and only once the API is fully ready. window.turnstile
-                // can exist before its render method is attached, so both checks are required.
-                if (widgetId !== null || !window.turnstile || typeof window.turnstile.render !== 'function') {
-                    return;
+                // Already rendered.
+                if (widgetId !== null) {
+                    return true;
+                }
+
+                // The API (or its render method) is not ready yet.
+                if (!window.turnstile || typeof window.turnstile.render !== 'function') {
+                    return false;
                 }
 
                 const container = document.getElementById('turnstile');
-                widgetId = window.turnstile.render(container, {
-                    sitekey: container.dataset.sitekey,
-                    theme: 'auto',
-                    callback: onTurnstileToken,
-                    'expired-callback': onTurnstileExpired,
-                    'error-callback': onTurnstileError,
-                });
+
+                if (!container) {
+                    return false;
+                }
+
+                try {
+                    widgetId = window.turnstile.render(container, {
+                        sitekey: container.dataset.sitekey,
+                        theme: 'auto',
+                        callback: onTurnstileToken,
+                        'expired-callback': onTurnstileExpired,
+                        'error-callback': onTurnstileError,
+                    });
+                    return widgetId !== undefined && widgetId !== null;
+                } catch (err) {
+                    // Surface the reason instead of failing silently. If a second copy of
+                    // Turnstile already claimed this container, stop retrying.
+                    console.error('[check] Turnstile render failed:', err);
+                    widgetId = null;
+                    return true;
+                }
             }
 
-            // The api.js script below is loaded once with ?onload=onloadTurnstileCallback, so
-            // Turnstile calls this exactly when render is ready. This must be defined before the
-            // script runs. Do not call turnstile.ready() here: it throws when api.js is async.
+            // The api.js script is loaded with ?onload=onloadTurnstileCallback, so Turnstile
+            // calls this when render is ready. Defined before the script runs. Do not call
+            // turnstile.ready() here: it throws when api.js is async.
             window.onloadTurnstileCallback = renderTurnstile;
 
-            // Cover the case where the API is somehow already present and ready when this runs.
-            if (window.turnstile && typeof window.turnstile.render === 'function') {
-                renderTurnstile();
-            }
+            // Fallback for environments where the onload callback does not fire (for example
+            // when a second copy of api.js wins the race). Poll briefly and render as soon as
+            // any Turnstile instance exposes render, then stop.
+            const renderPoll = setInterval(function () {
+                renderAttempts++;
+
+                if (renderTurnstile() || renderAttempts > 40) {
+                    clearInterval(renderPoll);
+                }
+            }, 250);
 
             function looksLikeUrl(value) {
                 let parsed;
