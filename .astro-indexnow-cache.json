@@ -1,10 +1,10 @@
 {
   "version": 1,
   "entries": {
-    "https://osprey.ac/check": "sha256:2b73c593558c84325ce7c13b2d3875b8f319929893391fb33dd1994c541b16e5",
-    "https://osprey.ac/download": "sha256:a1938c9000abf64e18f407febde832aaac5bc0f6a03d6965775d1fa81d954d5d",
-    "https://osprey.ac/": "sha256:d490016bba52226ea1418ea3aff6a76adad2d4202321fd62099c98f22f9428d5",
-    "https://osprey.ac/privacy": "sha256:074a22eb5e254372fdd269789320c8d4d0250bb40ff1d676958e785e05f56189",
-    "https://osprey.ac/terms": "sha256:19db28be565890328c73497f3019cad6d630198325608db7df64ff0fff104796"
+    "https://osprey.ac/check": "sha256:9f8d02ae4c5263ad17319cd021336ff2edb2e1a30c87c374b2263f69cb7775d1",
+    "https://osprey.ac/download": "sha256:3c0d489e021568036cc7df9376212b9348d097c95a6c209aead394d6c128924d",
+    "https://osprey.ac/": "sha256:660278dc2e0e0f6d1f7f516f03ca4ee0b21330d7fa428a3b33522791ecc84014",
+    "https://osprey.ac/privacy": "sha256:c6eb4612f2a8d6c7b68498e5e9056b836d3e00cca9f76c2e63e28a1a887ff529",
+    "https://osprey.ac/terms": "sha256:fbd0d9f7ea6f2e61a0e92ab06f2806e91861fb44f9a5ddf0a214aa293e45c9a6"
   }
 }
