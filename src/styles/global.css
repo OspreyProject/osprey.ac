@@ -1277,7 +1277,7 @@ html[data-browser="edge"] .download-card[data-browser="edge"] .download-badge {
     font-size: 0.85rem;
     color: var(--text-muted);
     text-align: center;
-    margin: 1rem 0 0;
+    margin: 2.5rem 0 0;
 }
 
 .scan-error {
