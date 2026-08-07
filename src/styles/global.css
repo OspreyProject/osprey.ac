@@ -1190,8 +1190,16 @@ html[data-browser="edge"] .download-card[data-browser="edge"] .download-badge {
 .check-head {
     text-align: center;
     max-width: 42rem;
-    margin: 0 auto 1.75rem;
+    margin: 0 auto 2.5rem;
     padding-top: 2rem;
+}
+
+.check-head h1 {
+    font-size: 2.15rem;
+}
+
+.check-head .lede {
+    font-size: 1.2rem;
 }
 
 .scan-form {
@@ -1224,12 +1232,31 @@ html[data-browser="edge"] .download-card[data-browser="edge"] .download-badge {
 
 .scan-button {
     flex: 0 0 auto;
+    background-color: var(--accent);
+    border-color: var(--accent);
+    color: #282828;
+}
+
+.scan-button:hover {
+    background-color: var(--accent-hover);
+    border-color: var(--accent-hover);
+}
+
+.scan-button:active {
+    background-color: var(--accent-active);
+    border-color: var(--accent-active);
 }
 
 .scan-button:disabled {
     opacity: 0.55;
     cursor: not-allowed;
     box-shadow: none;
+}
+
+.scan-terms {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin: 0.75rem 0 0;
 }
 
 .scan-error {
@@ -1506,7 +1533,8 @@ html[data-browser="edge"] .download-card[data-browser="edge"] .download-badge {
 }
 
 @media (max-width: 40rem) {
-    .hero h1 {
+    .hero h1,
+    .check-head h1 {
         font-size: 1.65rem;
     }
 
