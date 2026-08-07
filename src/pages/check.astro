@@ -141,6 +141,12 @@ const schema = {
         </div>
 
         <p id="scan-error" class="scan-error" role="alert" hidden></p>
+        <p id="captcha-note" class="captcha-note" role="status" hidden></p>
+
+        <p class="scan-terms">
+            By scanning a URL, you agree to our <a href="/privacy/">Privacy Policy
+        </a> and <a href="/terms/">Terms of Service</a>.
+        </p>
 
         <div
                 id="cf-turnstile"
@@ -151,13 +157,6 @@ const schema = {
                 data-callback="onSuccess"
                 data-expired-callback="onExpired"
         ></div>
-
-        <p id="captcha-note" class="captcha-note" role="status" hidden></p>
-
-        <p class="scan-terms">
-            By scanning a URL, you agree to our <a href="/privacy/">Privacy Policy
-        </a> and <a href="/terms/">Terms of Service</a>.
-        </p>
     </form>
 
     <section id="summary" class="summary" hidden aria-live="polite">
@@ -517,7 +516,7 @@ const schema = {
 
                 // Verify the captcha token is present, throw the captcha note if not.
                 if (!captchaToken) {
-                    showCaptchaNote('Please complete the captcha before scanning.');
+                    showCaptchaNote('Please wait a moment before scanning this URL.');
                     return;
                 }
 
