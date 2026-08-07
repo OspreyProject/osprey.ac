@@ -1,6 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
-const effective = '28 July 2026';
+const effective = '7 August 2026';
 
 const permissions = [
     {
@@ -58,8 +58,10 @@ const localData = [
         <p>
             Osprey: Browser Protection is operated by Osprey Project LLC, a California limited liability company
             ("Osprey Project LLC", "we", "us", or "our"). We are committed to protecting your privacy. This Privacy
-            Policy explains what data is processed when you use the Osprey browser extension and its supporting proxy
-            service, and how it is handled.
+            Policy explains what data is processed when you use the Osprey website
+            at <a href="https://osprey.ac" class="contact-link">osprey.ac</a>, including the website safety checker
+            at <a href="https://osprey.ac/check/" class="contact-link">osprey.ac/check</a>, the Osprey browser
+            extension, and its supporting proxy service, and how it is handled.
         </p>
 
         <p>
@@ -67,7 +69,7 @@ const localData = [
             details are listed in the Contact section at the end of this page.
         </p>
 
-        <p>Osprey consists of two components:</p>
+        <p>The Osprey protection system consists of two main components:</p>
 
         <ul>
             <li>The <strong>browser extension</strong>, which runs locally on your device</li>
@@ -102,6 +104,39 @@ const localData = [
                 with no external calls per request
             </li>
         </ul>
+
+        <h2>The website and safety checker page</h2>
+        <p>
+            The Osprey website at <a href="https://osprey.ac" class="contact-link">osprey.ac</a> provides information
+            about the project and a website safety checker page
+            at <a href="https://osprey.ac/check/" class="contact-link">osprey.ac/check</a>. The website does not require
+            an account and does not use advertising or cross-site tracking cookies.
+        </p>
+        <p>
+            The website safety checker page lets you submit a single link to be scanned on demand. When you submit a
+            link, it is sent to the proxy server and checked against the same providers, and with the same protections,
+            described in "How URL checking works" above. Providers see requests only from the proxy's IP address rather
+            than yours, results may be served from the proxy's cache, and query parameters are stripped before a URL
+            reaches an API-based provider.
+        </p>
+        <p>
+            A link you submit on the website safety checker page is used only to return a result to you and is subject
+            to the same limited operational and false-positive monitoring described elsewhere in this policy. It is not
+            used to build a profile of you, and it is not sold to any third party.
+        </p>
+
+        <h2>Bot protection (Cloudflare Turnstile)</h2>
+        <p>
+            To protect the website safety checker page from automated abuse, we use Cloudflare Turnstile. Turnstile runs
+            in invisible mode, so it normally completes without any action from you. To tell humans and bots apart,
+            Cloudflare processes certain information from your browser and device when the check page loads and when you
+            submit a link.
+        </p>
+        <p>
+            Cloudflare's handling of that information is governed by the
+            <a href="https://www.cloudflare.com/en-gb/turnstile-privacy-policy/" class="contact-link">Cloudflare
+                Turnstile Privacy Addendum</a>.
+        </p>
 
         <h2>Your IP address</h2>
         <p>
@@ -197,8 +232,7 @@ const localData = [
         </p>
         <address>
             Osprey Project LLC<br/>
-            PMB6007<br/>
-            4225 Executive Square, Suite 600<br/>
+            4225 Executive Square, Suite 600, PMB 6007<br/>
             La Jolla, CA 92037<br/>
             United States
         </address>
