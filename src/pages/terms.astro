@@ -1,12 +1,13 @@
 ---
 import Base from '../layouts/Base.astro';
-const effective = '28 July 2026';
+const effective = '7 August 2026';
 
 const acceptableUse = [
     'violate applicable law;',
     'interfere with or disrupt the Service or its infrastructure;',
     'bypass security controls or rate limits;',
     'send abusive, excessive, or malformed automated traffic;',
+    'submit links to the URL check page in an automated, bulk, or abusive manner, or to harass, defame, or harm others;',
     'use the hosted Service or its APIs to operate, resell, or support a commercial product or service without prior written permission; or',
     'use the Service to support harmful, fraudulent, or abusive activity.',
 ];
@@ -24,10 +25,12 @@ const acceptableUse = [
 
         <p>
             These Terms of Service ("Terms") are an agreement between you and Osprey Project LLC, a California limited
-            liability company ("Osprey Project LLC", "we", "us", or "our"). They govern your use of the Osprey website,
-            the hosted Osprey proxy service at <a href="https://api.osprey.ac" class="contact-link">api.osprey.ac</a>,
-            and related hosted materials or services made available by us that are not expressly governed by a separate
-            open-source license (collectively, the "Service").
+            liability company ("Osprey Project LLC", "we", "us", or "our"). They govern your use of the Osprey website
+            at <a href="https://osprey.ac" class="contact-link">osprey.ac</a>, including the website safety checker page
+            at <a href="https://osprey.ac/check/" class="contact-link">osprey.ac/check</a>, the hosted Osprey proxy
+            service at <a href="https://api.osprey.ac" class="contact-link">api.osprey.ac</a>, and related hosted
+            materials or services made available by us that are not expressly governed by a separate open-source license
+            (collectively, the "Service").
         </p>
         <p>
             By using the Service, you agree to these Terms. If you do not agree, please do not use the Service.
@@ -40,6 +43,14 @@ const acceptableUse = [
         </p>
         <p>
             Osprey is meant to supplement your own judgment and other security tools, not replace them.
+        </p>
+        <p>
+            The Osprey website also provides a website safety checker page at
+            <a href="https://osprey.ac/check/" class="contact-link">osprey.ac/check</a>, where you may submit an
+            individual link to have it scanned against the same providers used by the extension. Links you submit on the
+            website safety checker page are sent to the hosted proxy service and processed as described in our
+            <a href="/privacy/" class="contact-link">Privacy Policy</a>. Results are provided for your information only
+            and are subject to Section 5 (No guarantee of detection).
         </p>
 
         <h2>2. Open-source software</h2>
@@ -101,6 +112,11 @@ const acceptableUse = [
             The Service may rely on third-party threat intelligence, DNS filtering, hosting, network, security,
             monitoring, or infrastructure providers. We are not responsible for outages, errors, policy changes, or
             inaccuracies caused by third-party services.
+        </p>
+        <p>
+            The website safety checker page is protected by Cloudflare Turnstile to prevent automated abuse. How
+            Cloudflare processes information for this purpose is described in
+            our <a href="/privacy/" class="contact-link">Privacy Policy</a>.
         </p>
 
         <h2>8. Privacy</h2>
@@ -171,8 +187,7 @@ const acceptableUse = [
         </p>
         <address>
             Osprey Project LLC<br/>
-            PMB6007<br/>
-            4225 Executive Square, Suite 600<br/>
+            4225 Executive Square, Suite 600, PMB 6007<br/>
             La Jolla, CA 92037<br/>
             United States
         </address>
