@@ -8,16 +8,9 @@ const links = [
         label: 'Download'
     },
     {
-        href: 'https://github.com/OspreyProject/Osprey/releases',
-        label: 'Changelog'
-    },
-    {
-        href: 'https://status.osprey.ac',
-        label: 'Status'
-    },
-    {
         href: '/check/',
-        label: 'Check URL'
+        label: 'Website Safety Checker',
+        isNew: true
     },
 ];
 ---
@@ -39,7 +32,12 @@ const links = [
         </a>
 
         <nav class="site-nav" aria-label="Primary">
-            {links.map((link) => <a href={link.href}>{link.label}</a>)}
+            {links.map((link) => (
+                    <a href={link.href} class={link.isNew ? 'has-badge' : ''}>
+                        {link.label}
+                        {link.isNew && <span class="badge-new">NEW</span>}
+                    </a>
+            ))}
 
             <div class="nav-icons">
                 <a
