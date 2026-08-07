@@ -53,7 +53,7 @@ const schema = {
 <Base title={title} description={description} schema={schema}>
     <link rel="preconnect" href="https://challenges.cloudflare.com"/>
     <script
-            src="https://challenges.cloudflare.com/turnstile/v0/api.js"
+            src="https://challenges.cloudflare.com/turnstile/v0/api.js?onload=onloadTurnstileCallback&render=explicit"
             async
             defer
     ></script>
@@ -89,13 +89,7 @@ const schema = {
 
         <p id="scan-error" class="scan-error" role="alert" hidden></p>
 
-        <div
-                class="cf-turnstile"
-                data-sitekey="0x4AAAAAAEIwxP1XUsXc5UsE"
-                data-theme="light"
-                data-size="normal"
-                data-callback="onSuccess"
-        ></div>
+        <div id="turnstile" data-sitekey="0x4AAAAAAEIwxP1XUsXc5UsE"></div>
 
         <p id="captcha-note" class="captcha-note" role="status" hidden></p>
     </form>
@@ -628,7 +622,7 @@ const schema = {
             margin: 0.6rem 0 0;
         }
 
-        #cf-turnstile {
+        #turnstile {
             margin-top: 1rem;
             min-height: 65px;
         }
