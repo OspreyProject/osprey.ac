@@ -9,25 +9,139 @@ const logos = import.meta.glob<ImageMetadata>('../assets/providers/*.avif', {
 const logo = (name: string): string => logos[`../assets/providers/${name}.avif`]?.src ?? '';
 
 const providers = [
-    {id: 'alphamountain', name: 'AlphaMountain', icon: 'alphamountain', group: 'Official Partners'},
-    {id: 'bforeai', name: 'BforeAI PreCrime', icon: 'bforeai', group: 'Official Partners'},
-    {id: 'chainpatrol', name: 'ChainPatrol', icon: 'chainpatrol', group: 'Official Partners'},
-    {id: 'izoologic', name: 'iZOOlogic', icon: 'izoologic', group: 'Official Partners'},
-    {id: 'precisionsec', name: 'PrecisionSec', icon: 'precisionsec', group: 'Official Partners'},
-    {id: 'adguard-dns', name: 'AdGuard DNS', icon: 'adguard', group: 'DNS Servers'},
-    {id: 'cloudflare', name: 'Cloudflare', icon: 'cloudflare', group: 'DNS Servers'},
-    {id: 'control-d', name: 'Control D', icon: 'controld', group: 'DNS Servers'},
-    {id: 'quad9', name: 'Quad9', icon: 'quad9', group: 'DNS Servers'},
-    {id: 'switch-ch', name: 'Switch.ch', icon: 'switchch', group: 'DNS Servers'},
-    {id: 'aa419', name: 'Artists Against 419', icon: 'aa419', group: 'Threat Feeds'},
-    {id: 'openphish', name: 'OpenPhish', icon: 'openphish', group: 'Threat Feeds'},
-    {id: 'phishunt-io', name: 'Phishunt.io', icon: 'phishuntio', group: 'Threat Feeds'},
-    {id: 'red-flag-domains', name: 'Red Flag Domains', icon: 'red-flag-domains', group: 'Threat Feeds'},
-    {id: 'sinking-yachts', name: 'SinkingYachts', icon: 'sinking-yachts', group: 'Threat Feeds'},
-    {id: 'threatfox', name: 'THREATfox', icon: 'urlhaus', group: 'Threat Feeds'},
-    {id: 'urlhaus', name: 'URLhaus', icon: 'urlhaus', group: 'Threat Feeds'},
-    {id: 'urlabuse', name: 'URLAbuse', icon: 'urlabuse', group: 'Threat Feeds'},
-    {id: 'validin', name: 'Validin', icon: 'validin', group: 'Threat Feeds'},
+    {
+        id: 'alphamountain',
+        name: 'AlphaMountain',
+        icon: 'alphamountain',
+        group: 'Official Partners',
+        url: 'https://alphamountain.ai/?utm_source=osprey'
+    },
+    {
+        id: 'bforeai',
+        name: 'BforeAI PreCrime',
+        icon: 'bforeai',
+        group: 'Official Partners',
+        url: 'https://bfore.ai/?utm_source=osprey'
+    },
+    {
+        id: 'chainpatrol',
+        name: 'ChainPatrol',
+        icon: 'chainpatrol',
+        group: 'Official Partners',
+        url: 'https://chainpatrol.io/?utm_source=osprey'
+    },
+    {
+        id: 'izoologic',
+        name: 'iZOOlogic',
+        icon: 'izoologic',
+        group: 'Official Partners',
+        url: 'https://izoologic.com/?utm_source=osprey'
+    },
+    {
+        id: 'precisionsec',
+        name: 'PrecisionSec',
+        icon: 'precisionsec',
+        group: 'Official Partners',
+        url: 'https://precisionsec.com/?utm_source=osprey'
+    },
+    {
+        id: 'adguard-dns',
+        name: 'AdGuard DNS',
+        icon: 'adguard',
+        group: 'DNS Servers',
+        url: 'https://adguard-dns.io/?utm_source=osprey'
+    },
+    {
+        id: 'cloudflare',
+        name: 'Cloudflare',
+        icon: 'cloudflare',
+        group: 'DNS Servers',
+        url: 'https://one.one.one.one/?utm_source=osprey',
+    },
+    {
+        id: 'control-d',
+        name: 'Control D',
+        icon: 'controld',
+        group: 'DNS Servers',
+        url: 'https://controld.com/?utm_source=osprey'
+    },
+    {
+        id: 'quad9',
+        name: 'Quad9',
+        icon: 'quad9',
+        group: 'DNS Servers',
+        url: 'https://quad9.net/?utm_source=osprey'
+    },
+    {
+        id: 'switch-ch',
+        name: 'Switch.ch',
+        icon: 'switchch',
+        group: 'DNS Servers',
+        url: 'https://www.switch.ch/en/dns-firewall/?utm_source=osprey',
+    },
+    {
+        id: 'aa419',
+        name: 'Artists Against 419',
+        icon: 'aa419',
+        group: 'Threat Feeds',
+        url: 'https://db.aa419.org/?utm_source=osprey',
+    },
+    {
+        id: 'openphish',
+        name: 'OpenPhish',
+        icon: 'openphish',
+        group: 'Threat Feeds',
+        url: 'https://openphish.com/?utm_source=osprey',
+    },
+    {
+        id: 'phishunt-io',
+        name: 'Phishunt.io',
+        icon: 'phishuntio',
+        group: 'Threat Feeds',
+        url: 'https://phishunt.io/?utm_source=osprey',
+    },
+    {
+        id: 'red-flag-domains',
+        name: 'Red Flag Domains',
+        icon: 'red-flag-domains',
+        group: 'Threat Feeds',
+        url: 'https://red.flag.domains/?utm_source=osprey'
+    },
+    {
+        id: 'sinking-yachts',
+        name: 'SinkingYachts',
+        icon: 'sinking-yachts',
+        group: 'Threat Feeds',
+        url: 'https://sinking.yachts/?utm_source=osprey'
+    },
+    {
+        id: 'threatfox',
+        name: 'THREATfox',
+        icon: 'urlhaus',
+        group: 'Threat Feeds',
+        url: 'https://threatfox.abuse.ch/?utm_source=osprey'
+    },
+    {
+        id: 'urlhaus',
+        name: 'URLhaus',
+        icon: 'urlhaus',
+        group: 'Threat Feeds',
+        url: 'https://urlhaus.abuse.ch/?utm_source=osprey'
+    },
+    {
+        id: 'urlabuse',
+        name: 'URLAbuse',
+        icon: 'urlabuse',
+        group: 'Threat Feeds',
+        url: 'https://urlabuse.com/?utm_source=osprey'
+    },
+    {
+        id: 'validin',
+        name: 'Validin',
+        icon: 'validin',
+        group: 'Threat Feeds',
+        url: 'https://validin.com/?utm_source=osprey'
+    },
 ];
 
 const groups = ['Official Partners', 'DNS Servers', 'Threat Feeds'];
@@ -174,11 +288,12 @@ const schema = {
                                 <li class="provider-card" data-provider={p.id} data-state="idle">
                                     <img class="provider-logo" src={logo(p.icon)} alt="" width="28" height="28"
                                          loading="lazy"/>
-                                    <span class="provider-name">{p.name}</span>
+                                    <a class="provider-name" href={p.url} target="_blank"
+                                       rel="noopener noreferrer">{p.name}</a>
                                     <span class="provider-status">
-                                <span class="status-dot"></span>
-                                <span class="status-label">Idle</span>
-                            </span>
+                                        <span class="status-dot"></span>
+                                        <span class="status-label">Idle</span>
+                                    </span>
                                 </li>
                         ))}
                     </ul>
