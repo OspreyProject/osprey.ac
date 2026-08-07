@@ -141,7 +141,7 @@ const schema = {
         report option inside the Osprey extension to contact the relevant provider.
     </p>
 
-    <script is:inline>
+    <script is:inline data-cfasync="false">
         (function () {
             // The single backend aggregator endpoint. The page never calls the
             // individual provider endpoints directly. The backend verifies the
@@ -530,11 +530,12 @@ const schema = {
 
     <!--
       Load Turnstile exactly once. The onload parameter calls onloadTurnstileCallback (defined
-      above) when render is ready. Keep this the ONLY api.js include on the page: a second copy,
-      here or in a layout or component, is what triggers the "Turnstile already has been loaded"
-      warning.
+      above) when render is ready. data-cfasync="false" tells Cloudflare Rocket Loader to leave
+      this script alone; Rocket Loader re-driving it is a common cause of the "Turnstile already
+      has been loaded" warning. Keep this the ONLY api.js include on the page.
     -->
     <script is:inline
+            data-cfasync="false"
             src="https://challenges.cloudflare.com/turnstile/v0/api.js?onload=onloadTurnstileCallback&render=explicit"
             async defer></script>
 
