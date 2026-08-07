@@ -213,8 +213,9 @@ const schema = {
             }
 
             function renderTurnstile() {
-                // Render at most once, even if the script somehow loads again.
-                if (widgetId !== null || !window.turnstile) {
+                // Render at most once, and only once the API is fully ready. window.turnstile
+                // can exist before its render method is attached, so both checks are required.
+                if (widgetId !== null || !window.turnstile || typeof window.turnstile.render !== 'function') {
                     return;
                 }
 
@@ -228,25 +229,36 @@ const schema = {
                 });
             }
 
+            // Turnstile invokes this once its API (including render) is ready. It must be
+            // defined before the script loads so the onload URL parameter can reach it.
+            window.onloadTurnstileCallback = renderTurnstile;
+
             // Load the Turnstile script once and render explicitly. Guarding against a
-            // second injection avoids the "Turnstile already has been loaded" warning
-            // when the page is restored from cache, re-rendered, or hot reloaded.
+            // second injection avoids the "Turnstile already has been loaded" warning when
+            // the page is restored from cache, re-rendered, or hot reloaded.
             (function loadTurnstile() {
-                if (window.turnstile) {
+                // Already fully loaded: render now.
+                if (window.turnstile && typeof window.turnstile.render === 'function') {
                     renderTurnstile();
                     return;
                 }
 
+                // Present but not ready yet: queue until the API finishes initializing.
+                if (window.turnstile && typeof window.turnstile.ready === 'function') {
+                    window.turnstile.ready(renderTurnstile);
+                    return;
+                }
+
+                // A load is already in flight; the onload callback will fire when ready.
                 if (document.getElementById('cf-turnstile-script')) {
                     return;
                 }
 
                 const script = document.createElement('script');
                 script.id = 'cf-turnstile-script';
-                script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
+                script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?onload=onloadTurnstileCallback&render=explicit';
                 script.async = true;
                 script.defer = true;
-                script.onload = renderTurnstile;
                 document.head.appendChild(script);
             })();
 
