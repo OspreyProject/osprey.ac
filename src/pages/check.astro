@@ -52,8 +52,8 @@ const schema = {
 
 <Base title={title} description={description} schema={schema}>
     <link rel="preconnect" href="https://challenges.cloudflare.com"/>
-    <script
-            src="https://challenges.cloudflare.com/turnstile/v0/api.js?onload=onloadTurnstileCallback&render=explicit"
+    <script is:inline
+            src="https://challenges.cloudflare.com/turnstile/v0/api.js"
             async
             defer
     ></script>
@@ -89,7 +89,15 @@ const schema = {
 
         <p id="scan-error" class="scan-error" role="alert" hidden></p>
 
-        <div id="turnstile" data-sitekey="0x4AAAAAAEIwxP1XUsXc5UsE"></div>
+        <div
+                id="cf-turnstile"
+                class="cf-turnstile"
+                data-sitekey="0x4AAAAAAEIwxP1XUsXc5UsE"
+                data-size="normal"
+                data-theme="auto"
+                data-callback="onSuccess"
+                data-expired-callback="onExpired"
+        ></div>
 
         <p id="captcha-note" class="captcha-note" role="status" hidden></p>
     </form>
@@ -128,6 +136,24 @@ const schema = {
     </p>
 
     <script is:inline data-cfasync="false">
+        // Global variables for Turnstile state
+        let captchaToken = '';
+
+        // Expose callbacks globally so the Turnstile iframe can reach them
+        window.onSuccess = function (token) {
+            captchaToken = token;
+            const captchaNote = document.getElementById('captcha-note');
+
+            if (captchaNote) {
+                captchaNote.hidden = true;
+                captchaNote.textContent = '';
+            }
+        };
+
+        window.onExpired = function () {
+            captchaToken = '';
+        };
+
         (function () {
             // The single backend aggregator endpoint. The page never calls the
             // individual provider endpoints directly. The backend verifies the
@@ -165,90 +191,12 @@ const schema = {
             };
 
             const blocking = new Set(['phishing', 'malicious', 'suspicious', 'newly_registered', 'dynamic_dns']);
-
-            let captchaToken = '';
             let scanning = false;
 
             function showCaptchaNote(message) {
                 captchaNote.textContent = message;
                 captchaNote.hidden = false;
             }
-
-            function hideCaptchaNote() {
-                captchaNote.hidden = true;
-                captchaNote.textContent = '';
-            }
-
-            let widgetId = null;
-            let renderAttempts = 0;
-
-            function onTurnstileToken(token) {
-                captchaToken = token || '';
-                hideCaptchaNote();
-                refreshButton();
-            }
-
-            function onTurnstileExpired() {
-                captchaToken = '';
-                refreshButton();
-            }
-
-            function onTurnstileError() {
-                captchaToken = '';
-                showCaptchaNote('The captcha could not load. Turn off any ad or privacy blockers for this page, then reload.');
-                refreshButton();
-            }
-
-            function renderTurnstile() {
-                // Already rendered.
-                if (widgetId !== null) {
-                    return true;
-                }
-
-                // The API (or its render method) is not ready yet.
-                if (!window.turnstile || typeof window.turnstile.render !== 'function') {
-                    return false;
-                }
-
-                const container = document.getElementById('turnstile');
-
-                if (!container) {
-                    return false;
-                }
-
-                try {
-                    widgetId = window.turnstile.render(container, {
-                        sitekey: container.dataset.sitekey,
-                        theme: 'auto',
-                        callback: onTurnstileToken,
-                        'expired-callback': onTurnstileExpired,
-                        'error-callback': onTurnstileError,
-                    });
-                    return widgetId !== undefined && widgetId !== null;
-                } catch (err) {
-                    // Surface the reason instead of failing silently. If a second copy of
-                    // Turnstile already claimed this container, stop retrying.
-                    console.error('[check] Turnstile render failed:', err);
-                    widgetId = null;
-                    return true;
-                }
-            }
-
-            // The api.js script is loaded with ?onload=onloadTurnstileCallback, so Turnstile
-            // calls this when render is ready. Defined before the script runs. Do not call
-            // turnstile.ready() here: it throws when api.js is async.
-            window.onloadTurnstileCallback = renderTurnstile;
-
-            // Fallback for environments where the onload callback does not fire (for example
-            // when a second copy of api.js wins the race). Poll briefly and render as soon as
-            // any Turnstile instance exposes render, then stop.
-            const renderPoll = setInterval(function () {
-                renderAttempts++;
-
-                if (renderTurnstile() || renderAttempts > 40) {
-                    clearInterval(renderPoll);
-                }
-            }, 250);
 
             function looksLikeUrl(value) {
                 let parsed;
@@ -363,24 +311,9 @@ const schema = {
                 }
             }
 
-            function resetCaptcha() {
-                captchaToken = '';
-
-                if (window.turnstile && widgetId !== null) {
-                    try {
-                        window.turnstile.reset(widgetId);
-                    } catch {
-                        // ignored
-                    }
-                }
-            }
-
             function endScan() {
                 scanning = false;
                 button.textContent = 'Scan';
-
-                // The captcha token is single use, so require a fresh one per scan.
-                resetCaptcha();
                 refreshButton();
             }
 
@@ -495,8 +428,9 @@ const schema = {
                     return;
                 }
 
+                // Verify the captcha token is present, throw the captcha note if not.
                 if (!captchaToken) {
-                    showError('Please complete the captcha first.');
+                    showCaptchaNote('Please complete the captcha before scanning.');
                     return;
                 }
 
@@ -524,31 +458,14 @@ const schema = {
                     });
                 } finally {
                     endScan();
+
+                    // Reset the token state and the widget for subsequent scans
+                    captchaToken = '';
+                    if (window.turnstile) {
+                        window.turnstile.reset();
+                    }
                 }
             });
-
-            // If the Turnstile script has not loaded after a few seconds, it was most
-            // likely blocked. Surface a note rather than leaving an empty gap.
-            setTimeout(function () {
-                if (!window.turnstile && !captchaToken) {
-                    showCaptchaNote('The captcha could not load. Turn off any ad or privacy blockers for this page, then reload.');
-                }
-            }, 6000);
-
-            // 1. If Turnstile is already fully loaded (e.g., navigating back via View Transitions), render immediately
-            if (window.turnstile && typeof window.turnstile.render === 'function') {
-                window.onloadTurnstileCallback();
-            }
-
-            // 2. Otherwise, check if the script is missing from the DOM entirely and inject it
-            else if (!document.querySelector('script[src*="turnstile/v0/api.js"]')) {
-                const script = document.createElement('script');
-                script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?onload=onloadTurnstileCallback&render=explicit';
-                script.async = true;
-                script.defer = true;
-                script.setAttribute('data-cfasync', 'false');
-                document.head.appendChild(script);
-            }
 
             refreshButton();
         })();
@@ -622,7 +539,7 @@ const schema = {
             margin: 0.6rem 0 0;
         }
 
-        #turnstile {
+        #cf-turnstile {
             margin-top: 1rem;
             min-height: 65px;
         }
