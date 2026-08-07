@@ -32,19 +32,74 @@ const providers = [
 
 const groups = ['Official Partners', 'DNS Servers', 'Threat Feeds'];
 
-const title = 'Check a URL | Osprey: Browser Protection';
+const title = 'Check a URL for Malware, Phishing & Scams';
 const description =
-    'Scan any link against the same security providers Osprey uses to block phishing, malware, and scams. Free, no account required.';
+    'Scan any website or link for malware, phishing, scams, and other threats. Osprey\'s free URL checker shows if a site is safe to open, with no account required.';
+
+const faqs = [
+    {
+        q: 'How do I check if a website or link is safe?',
+        a: 'Paste the full address into the box above and select Scan. Osprey checks the link against the same phishing, malware, and scam sources it uses to protect your browser, then shows what each provider reports. If every provider returns a clean result, the site is very likely safe to open. If one or more flag it, treat the link with caution.',
+    },
+    {
+        q: 'Can I scan a URL for viruses and malware?',
+        a: 'Yes. The scanner checks each URL against threat feeds and reputation services that track malware, malicious downloads, and compromised sites. A flagged result means at least one provider considers the page dangerous, so you should avoid it. This checks the address and its reputation, not the contents of a file you have already downloaded.',
+    },
+    {
+        q: 'How do I tell if a link is phishing or a scam?',
+        a: 'Phishing and scam pages are often brand new and built to imitate a real login page or store. Osprey checks anti-phishing feeds and newly registered domain lists, so a link that copies your bank or a shop is more likely to be flagged here. A clean result is not a guarantee, so still read the address bar carefully and never enter passwords on a page you reached from an unexpected message.',
+    },
+    {
+        q: 'How does Osprey check a website\'s reputation?',
+        a: 'Each scan asks every security provider listed above, including official partners, public DNS filters, and open threat feeds, whether they have seen the domain used for anything harmful. Their combined answer is the site\'s reputation. Because the check runs through Osprey\'s proxy, the providers only see the proxy rather than you.',
+    },
+    {
+        q: 'How is this different from VirusTotal?',
+        a: 'VirusTotal is a broad aggregator of antivirus engines and is well suited to inspecting files and URLs in depth. Osprey\'s checker is narrower by design: it runs the exact set of URL and domain providers that block sites live in your browser, so a result here tells you how Osprey itself would treat the page. It is free, needs no account, and does not log your browsing.',
+    },
+    {
+        q: 'Is the URL scanner free?',
+        a: 'Yes. Checking a link is completely free and does not require an account or any personal details. It uses the same protection that ships with the free, open-source Osprey extension.',
+    },
+];
 
 const schema = {
+    '@context': 'https://schema.org',
     '@graph': [
         {
             '@type': 'WebApplication',
-            name: 'Osprey URL Check',
+            '@id': 'https://osprey.ac/check/#app',
+            name: 'Osprey URL Checker',
+            alternateName: 'Osprey Link & Website Safety Checker',
             applicationCategory: 'SecurityApplication',
+            applicationSubCategory: 'URL Scanner',
             operatingSystem: 'Any',
             url: 'https://osprey.ac/check/',
+            description:
+                'Free tool to scan any website or link for phishing, malware, scams, and other threats using the same security providers as the Osprey browser extension.',
+            isAccessibleForFree: true,
+            browserRequirements: 'Requires JavaScript.',
+            featureList: [
+                'Check a URL for malware and viruses',
+                'Check a link for phishing and scams',
+                'See if a website is safe before you open it',
+                'Website reputation from multiple security providers',
+                'Free with no account required',
+            ],
             offers: {'@type': 'Offer', price: '0', priceCurrency: 'USD'},
+            isPartOf: {'@id': 'https://osprey.ac/#software'},
+        },
+        {
+            '@type': 'FAQPage',
+            '@id': 'https://osprey.ac/check/#faq',
+            mainEntity: faqs.map((faq) => ({
+                '@type': 'Question',
+                name: faq.q,
+                acceptedAnswer: {
+                    '@type': 'Answer',
+                    text: faq.a,
+                },
+            })),
         },
     ],
 };
@@ -61,9 +116,10 @@ const schema = {
     <section class="check-head">
         <h1>Check a URL</h1>
         <p class="lede">
-            Scan any link against the same security providers Osprey uses while you browse.
-            Results come straight from each provider, so a clean scan here means Osprey would
-            let the page load and a flagged scan means it would block it.
+            Scan any website or link for phishing, malware, and scams using the same security
+            providers Osprey uses while you browse. Results come straight from each provider, so
+            a clean scan here means Osprey would let the page load and a flagged scan means it
+            would block it.
         </p>
     </section>
 
@@ -108,7 +164,7 @@ const schema = {
         <span id="summary-url" class="summary-url"></span>
     </section>
 
-    <section class="results" aria-label="Provider results">
+    <section id="results" class="results" aria-label="Provider results" hidden>
         {groups.map((group) => (
                 <div class="result-group" data-group={group}>
                     <h2 class="group-title">{group}</h2>
@@ -129,11 +185,25 @@ const schema = {
         ))}
     </section>
 
-    <p class="disclaimer">
+    <p id="disclaimer" class="disclaimer" hidden>
         Verdicts are provided by third party security vendors and may be cached for a short time.
         A clean result is not a guarantee of safety. If you believe a verdict is wrong, use the
         report option inside the Osprey extension to contact the relevant provider.
     </p>
+
+    <section class="band">
+        <h2 class="band-title">Common questions</h2>
+        <div class="prose">
+            {
+                faqs.map((faq) => (
+                        <details class="faq">
+                            <summary>{faq.q}</summary>
+                            <p>{faq.a}</p>
+                        </details>
+                ))
+            }
+        </div>
+    </section>
 
     <script is:inline data-cfasync="false">
         // Global variables for Turnstile state
@@ -169,6 +239,8 @@ const schema = {
             const summaryText = document.getElementById('summary-text');
             const summaryUrl = document.getElementById('summary-url');
             const captchaNote = document.getElementById('captcha-note');
+            const results = document.getElementById('results');
+            const disclaimer = document.getElementById('disclaimer');
             const cards = new Map();
 
             document.querySelectorAll('.provider-card').forEach(function (card) {
@@ -442,6 +514,9 @@ const schema = {
                 input.value = url;
                 summaryUrl.textContent = url;
 
+                results.hidden = false;
+                disclaimer.hidden = false;
+
                 resetGrid();
                 updateSummary(0, cards.size, false);
 
@@ -470,268 +545,4 @@ const schema = {
             refreshButton();
         })();
     </script>
-
-    <style>
-        .check-head {
-            text-align: center;
-            max-width: 42rem;
-            margin: 0 auto 1.75rem;
-        }
-
-        .lede {
-            color: var(--text-muted);
-            font-size: 1.05rem;
-            margin: 0.5rem 0 0;
-        }
-
-        .sr-only {
-            position: absolute;
-            width: 1px;
-            height: 1px;
-            padding: 0;
-            margin: -1px;
-            overflow: hidden;
-            clip: rect(0, 0, 0, 0);
-            border: 0;
-        }
-
-        .scan-form {
-            max-width: 42rem;
-            margin: 0 auto;
-        }
-
-        .scan-row {
-            display: flex;
-            gap: 0.5rem;
-        }
-
-        .url-input {
-            flex: 1;
-            min-width: 0;
-            padding: 0.7rem 0.85rem;
-            font-size: 1rem;
-            font-family: var(--font);
-            color: var(--text);
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 5px;
-        }
-
-        .url-input:focus {
-            outline: none;
-            border-color: var(--accent);
-            box-shadow: 0 0 0 2px var(--accent-faint);
-        }
-
-        .scan-button {
-            flex: 0 0 auto;
-        }
-
-        .scan-button:disabled {
-            opacity: 0.55;
-            cursor: not-allowed;
-            box-shadow: none;
-        }
-
-        .scan-error {
-            color: var(--danger);
-            font-size: 0.92rem;
-            margin: 0.6rem 0 0;
-        }
-
-        #cf-turnstile {
-            margin-top: 1rem;
-            min-height: 65px;
-        }
-
-        .captcha-note {
-            color: var(--text-muted);
-            font-size: 0.9rem;
-            margin: 0.5rem 0 0;
-        }
-
-        .summary {
-            max-width: 42rem;
-            margin: 1.75rem auto 0;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            padding: 0.85rem 1rem;
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-        }
-
-        .summary-badge {
-            flex: 0 0 auto;
-            font-weight: 700;
-            font-size: 0.95rem;
-            padding: 0.25rem 0.6rem;
-            border-radius: 999px;
-            background: var(--surface-raised);
-            color: var(--text);
-        }
-
-        .summary-badge[data-tone="safe"] {
-            background: var(--safe);
-            color: #ffffff;
-        }
-
-        .summary-badge[data-tone="danger"] {
-            background: var(--danger);
-            color: #ffffff;
-        }
-
-        .summary-text {
-            font-weight: 600;
-        }
-
-        .summary-url {
-            color: var(--text-muted);
-            font-size: 0.9rem;
-            margin-left: auto;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            max-width: 40%;
-        }
-
-        .results {
-            max-width: 42rem;
-            margin: 1.5rem auto 0;
-        }
-
-        .result-group + .result-group {
-            margin-top: 1.5rem;
-        }
-
-        .group-title {
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            letter-spacing: 0.06em;
-            color: var(--text-muted);
-            margin: 0 0 0.6rem;
-            font-weight: 600;
-        }
-
-        .provider-grid {
-            list-style: none;
-            margin: 0;
-            padding: 0;
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
-            gap: 0.5rem;
-        }
-
-        .provider-card {
-            display: flex;
-            align-items: center;
-            gap: 0.6rem;
-            padding: 0.6rem 0.75rem;
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-        }
-
-        .provider-logo {
-            flex: 0 0 auto;
-            width: 28px;
-            height: 28px;
-            object-fit: contain;
-            border-radius: 5px;
-            background: #ffffff;
-            padding: 3px;
-        }
-
-        .provider-name {
-            font-size: 0.95rem;
-            font-weight: 500;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
-        .provider-status {
-            margin-left: auto;
-            display: flex;
-            align-items: center;
-            gap: 0.4rem;
-            flex: 0 0 auto;
-            font-size: 0.88rem;
-            font-weight: 600;
-            color: var(--text-muted);
-        }
-
-        .status-dot {
-            width: 9px;
-            height: 9px;
-            border-radius: 50%;
-            background: var(--border);
-            flex: 0 0 auto;
-        }
-
-        .provider-card[data-tone="safe"] .status-label {
-            color: var(--safe);
-        }
-
-        .provider-card[data-tone="safe"] .status-dot {
-            background: var(--safe);
-        }
-
-        .provider-card[data-tone="danger"] .status-label {
-            color: var(--danger);
-        }
-
-        .provider-card[data-tone="danger"] .status-dot {
-            background: var(--danger);
-        }
-
-        .provider-card[data-tone="warn"] .status-label {
-            color: var(--accent-ink);
-        }
-
-        .provider-card[data-tone="warn"] .status-dot {
-            background: var(--accent);
-        }
-
-        .provider-card[data-state="waiting"] .status-dot {
-            border: 2px solid var(--border);
-            border-top-color: var(--accent);
-            background: transparent;
-            animation: spin 0.7s linear infinite;
-        }
-
-        .provider-card[data-state="idle"] {
-            opacity: 0.7;
-        }
-
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-            .provider-card[data-state="waiting"] .status-dot {
-                animation: none;
-            }
-        }
-
-        .disclaimer {
-            max-width: 42rem;
-            margin: 2rem auto 0;
-            font-size: 0.85rem;
-            color: var(--text-muted);
-        }
-
-        @media (max-width: 32rem) {
-            .summary-url {
-                display: none;
-            }
-
-            .provider-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
 </Base>
