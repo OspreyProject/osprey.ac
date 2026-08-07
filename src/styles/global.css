@@ -677,7 +677,7 @@ html[data-theme="light"] .install-row .install-btn-github::before {
 }
 
 html[data-theme="light"] .feature-icon {
-    filter: none;
+    filter: brightness(1) invert(0);
 }
 
 .feature h3 {
