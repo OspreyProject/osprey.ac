@@ -1200,6 +1200,7 @@ html[data-browser="edge"] .download-card[data-browser="edge"] .download-badge {
 
 .check-head .lede {
     font-size: 1.2rem;
+    margin-top: 4px;
 }
 
 .scan-form {
@@ -1256,7 +1257,8 @@ html[data-browser="edge"] .download-card[data-browser="edge"] .download-badge {
 .scan-terms {
     font-size: 0.85rem;
     color: var(--text-muted);
-    margin: 0.75rem 0 0;
+    text-align: center;
+    margin: 2.5rem 0 0;
 }
 
 .scan-error {
@@ -1266,14 +1268,8 @@ html[data-browser="edge"] .download-card[data-browser="edge"] .download-badge {
 }
 
 #cf-turnstile {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    border: 0;
+    margin-top: 1rem;
+    min-height: 65px;
 }
 
 .captcha-note {
