@@ -414,7 +414,8 @@ const schema = {
             {
                 features.map((feature) => (
                         <li class="feature">
-                            <img class="feature-icon" src={feature.icon.src} alt="" width="32" height="32"/>
+                            <img class="feature-icon" src={feature.icon.src} alt="" width="32" height="32"
+                                 loading="lazy"/>
                             <h3>{feature.title}</h3>
                             <p>{feature.body}</p>
                         </li>
