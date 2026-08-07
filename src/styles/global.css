@@ -1274,7 +1274,7 @@ html[data-browser="edge"] .download-card[data-browser="edge"] .download-badge {
 }
 
 .captcha-note {
-    color: var(--text-muted);
+    color: var(--danger);
     font-size: 0.9rem;
     margin: 0.5rem 0 0;
 }
@@ -1385,6 +1385,13 @@ html[data-browser="edge"] .download-card[data-browser="edge"] .download-badge {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    color: var(--text);
+    text-decoration: underline;
+}
+
+a.provider-name:hover {
+    color: var(--accent-ink);
+    text-decoration: underline;
 }
 
 .provider-status {
