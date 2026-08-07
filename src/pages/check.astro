@@ -32,12 +32,6 @@ const providers = [
 
 const groups = ['Official Partners', 'Security Filters', 'Feeds'];
 
-// Turnstile site key. Set PUBLIC_TURNSTILE_SITEKEY in your environment to override per deploy.
-// For local development, use Cloudflare's always-passing test key '1x00000000000000000000AA',
-// which renders on any hostname. The production key only renders on the domains listed in the
-// widget's Hostname Management in the Cloudflare dashboard.
-const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITEKEY ?? '0x4AAAAAAEIwxP1XUsXc5UsE';
-
 const title = 'Check a URL | Osprey: Browser Protection';
 const description =
     'Scan any link against the same security providers Osprey uses to block phishing, malware, and scams. Free, no account required.';
@@ -57,6 +51,13 @@ const schema = {
 ---
 
 <Base title={title} description={description} schema={schema}>
+    <link rel="preconnect" href="https://challenges.cloudflare.com"/>
+    <script
+            src="https://challenges.cloudflare.com/turnstile/v0/api.js"
+            async
+            defer
+    ></script>
+
     <section class="check-head">
         <h1>Check a URL</h1>
         <p class="lede">
@@ -88,7 +89,13 @@ const schema = {
 
         <p id="scan-error" class="scan-error" role="alert" hidden></p>
 
-        <div id="turnstile" data-sitekey={turnstileSiteKey}></div>
+        <div
+                class="cf-turnstile"
+                data-sitekey="0x4AAAAAAEIwxP1XUsXc5UsE"
+                data-theme="light"
+                data-size="normal"
+                data-callback="onSuccess"
+        ></div>
 
         <p id="captcha-note" class="captcha-note" role="status" hidden></p>
     </form>
@@ -197,57 +204,6 @@ const schema = {
                 showCaptchaNote('The captcha could not load. Turn off any ad or privacy blockers for this page, then reload.');
                 refreshButton();
             }
-
-            function renderTurnstile() {
-                // Already rendered.
-                if (widgetId !== null) {
-                    return true;
-                }
-
-                // The API (or its render method) is not ready yet.
-                if (!window.turnstile || typeof window.turnstile.render !== 'function') {
-                    return false;
-                }
-
-                const container = document.getElementById('turnstile');
-
-                if (!container) {
-                    return false;
-                }
-
-                try {
-                    widgetId = window.turnstile.render(container, {
-                        sitekey: container.dataset.sitekey,
-                        theme: 'auto',
-                        callback: onTurnstileToken,
-                        'expired-callback': onTurnstileExpired,
-                        'error-callback': onTurnstileError,
-                    });
-                    return widgetId !== undefined && widgetId !== null;
-                } catch (err) {
-                    // Surface the reason instead of failing silently. If a second copy of
-                    // Turnstile already claimed this container, stop retrying.
-                    console.error('[check] Turnstile render failed:', err);
-                    widgetId = null;
-                    return true;
-                }
-            }
-
-            // The api.js script is loaded with ?onload=onloadTurnstileCallback, so Turnstile
-            // calls this when render is ready. Defined before the script runs. Do not call
-            // turnstile.ready() here: it throws when api.js is async.
-            window.onloadTurnstileCallback = renderTurnstile;
-
-            // Fallback for environments where the onload callback does not fire (for example
-            // when a second copy of api.js wins the race). Poll briefly and render as soon as
-            // any Turnstile instance exposes render, then stop.
-            const renderPoll = setInterval(function () {
-                renderAttempts++;
-
-                if (renderTurnstile() || renderAttempts > 40) {
-                    clearInterval(renderPoll);
-                }
-            }, 250);
 
             function looksLikeUrl(value) {
                 let parsed;
@@ -534,21 +490,6 @@ const schema = {
                 }
             }, 6000);
 
-            // 1. If Turnstile is already fully loaded (e.g., navigating back via View Transitions), render immediately
-            if (window.turnstile && typeof window.turnstile.render === 'function') {
-                window.onloadTurnstileCallback();
-            }
-
-            // 2. Otherwise, check if the script is missing from the DOM entirely and inject it
-            else if (!document.querySelector('script[src*="turnstile/v0/api.js"]')) {
-                const script = document.createElement('script');
-                script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?onload=onloadTurnstileCallback&render=explicit';
-                script.async = true;
-                script.defer = true;
-                script.setAttribute('data-cfasync', 'false');
-                document.head.appendChild(script);
-            }
-
             refreshButton();
         })();
     </script>
@@ -621,7 +562,7 @@ const schema = {
             margin: 0.6rem 0 0;
         }
 
-        #turnstile {
+        #cf-turnstile {
             margin-top: 1rem;
             min-height: 65px;
         }
