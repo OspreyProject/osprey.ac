@@ -220,7 +220,6 @@ const schema = {
                 }
 
                 const container = document.getElementById('turnstile');
-
                 widgetId = window.turnstile.render(container, {
                     sitekey: container.dataset.sitekey,
                     theme: 'auto',
@@ -230,38 +229,15 @@ const schema = {
                 });
             }
 
-            // Turnstile invokes this once its API (including render) is ready. It must be
-            // defined before the script loads so the onload URL parameter can reach it.
+            // The api.js script below is loaded once with ?onload=onloadTurnstileCallback, so
+            // Turnstile calls this exactly when render is ready. This must be defined before the
+            // script runs. Do not call turnstile.ready() here: it throws when api.js is async.
             window.onloadTurnstileCallback = renderTurnstile;
 
-            // Load the Turnstile script once and render explicitly. Guarding against a
-            // second injection avoids the "Turnstile already has been loaded" warning when
-            // the page is restored from cache, re-rendered, or hot reloaded.
-            (function loadTurnstile() {
-                // Already fully loaded: render now.
-                if (window.turnstile && typeof window.turnstile.render === 'function') {
-                    renderTurnstile();
-                    return;
-                }
-
-                // Present but not ready yet: queue until the API finishes initializing.
-                if (window.turnstile && typeof window.turnstile.ready === 'function') {
-                    window.turnstile.ready(renderTurnstile);
-                    return;
-                }
-
-                // A load is already in flight; the onload callback will fire when ready.
-                if (document.getElementById('cf-turnstile-script')) {
-                    return;
-                }
-
-                const script = document.createElement('script');
-                script.id = 'cf-turnstile-script';
-                script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?onload=onloadTurnstileCallback&render=explicit';
-                script.async = true;
-                script.defer = true;
-                document.head.appendChild(script);
-            })();
+            // Cover the case where the API is somehow already present and ready when this runs.
+            if (window.turnstile && typeof window.turnstile.render === 'function') {
+                renderTurnstile();
+            }
 
             function looksLikeUrl(value) {
                 let parsed;
@@ -551,6 +527,16 @@ const schema = {
             refreshButton();
         })();
     </script>
+
+    <!--
+      Load Turnstile exactly once. The onload parameter calls onloadTurnstileCallback (defined
+      above) when render is ready. Keep this the ONLY api.js include on the page: a second copy,
+      here or in a layout or component, is what triggers the "Turnstile already has been loaded"
+      warning.
+    -->
+    <script is:inline
+            src="https://challenges.cloudflare.com/turnstile/v0/api.js?onload=onloadTurnstileCallback&render=explicit"
+            async defer></script>
 
     <style>
         .check-head {
