@@ -53,6 +53,7 @@ html[data-theme="light"] {
     --text-muted: #505358;
     --text-dim: #525252;
     --accent-ink: #947100;
+    --suspicious-ink: #8A6A00;
     --contact-ink: var(--text);
     --safe: #008022;
     --danger: #E00000;
@@ -1308,12 +1309,12 @@ html[data-browser="edge"] .download-card[data-browser="edge"] .download-badge {
 }
 
 .summary-badge[data-tone="safe"] {
-    background: var(--safe);
+    background: #008022;
     color: #ffffff;
 }
 
 .summary-badge[data-tone="danger"] {
-    background: var(--danger);
+    background: #E00000;
     color: #ffffff;
 }
 
@@ -1422,7 +1423,7 @@ html[data-browser="edge"] .download-card[data-browser="edge"] .download-badge {
 }
 
 .provider-card[data-tone="warn"] .status-label {
-    color: var(--accent-ink);
+    color: var(--suspicious-ink);
 }
 
 .provider-card[data-tone="warn"] .status-dot {
