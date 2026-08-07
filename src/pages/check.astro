@@ -47,6 +47,10 @@ const providers = [
 
 const groups = ['Official Partners', 'Security Filters', 'Feeds'];
 
+// Turnstile site key. Set PUBLIC_TURNSTILE_SITEKEY in your environment to override per deploy.
+// For local development, use Cloudflare's always-passing test key '1x00000000000000000000AA',
+// which renders on any hostname. The production key only renders on the domains listed in the
+// widget's Hostname Management in the Cloudflare dashboard.
 const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITEKEY ?? '0x4AAAAAAEIwxP1XUsXc5UsE';
 
 const title = 'Check a URL | Osprey: Browser Protection';
@@ -99,16 +103,7 @@ const schema = {
 
         <p id="scan-error" class="scan-error" role="alert" hidden></p>
 
-        <div
-                id="turnstile"
-                class="cf-turnstile"
-                data-sitekey={turnstileSiteKey}
-                data-theme="auto"
-                data-callback="onTurnstileSuccess"
-                data-expired-callback="onTurnstileExpired"
-                data-error-callback="onTurnstileError"
-        >
-        </div>
+        <div id="turnstile" data-sitekey={turnstileSiteKey}></div>
 
         <p id="captcha-note" class="captcha-note" role="status" hidden></p>
     </form>
@@ -145,8 +140,6 @@ const schema = {
         A clean result is not a guarantee of safety. If you believe a verdict is wrong, use the
         report option inside the Osprey extension to contact the relevant provider.
     </p>
-
-    <script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 
     <script is:inline>
         (function () {
@@ -200,22 +193,62 @@ const schema = {
                 captchaNote.textContent = '';
             }
 
-            // Turnstile fires these globals. They live on window so the widget
-            // script can reach them.
-            window.onTurnstileSuccess = function (token) {
+            let widgetId = null;
+
+            function onTurnstileToken(token) {
                 captchaToken = token || '';
                 hideCaptchaNote();
                 refreshButton();
-            };
-            window.onTurnstileExpired = function () {
+            }
+
+            function onTurnstileExpired() {
                 captchaToken = '';
                 refreshButton();
-            };
-            window.onTurnstileError = function () {
+            }
+
+            function onTurnstileError() {
                 captchaToken = '';
                 showCaptchaNote('The captcha could not load. Turn off any ad or privacy blockers for this page, then reload.');
                 refreshButton();
-            };
+            }
+
+            function renderTurnstile() {
+                // Render at most once, even if the script somehow loads again.
+                if (widgetId !== null || !window.turnstile) {
+                    return;
+                }
+
+                const container = document.getElementById('turnstile');
+                widgetId = window.turnstile.render(container, {
+                    sitekey: container.dataset.sitekey,
+                    theme: 'auto',
+                    callback: onTurnstileToken,
+                    'expired-callback': onTurnstileExpired,
+                    'error-callback': onTurnstileError,
+                });
+            }
+
+            // Load the Turnstile script once and render explicitly. Guarding against a
+            // second injection avoids the "Turnstile already has been loaded" warning
+            // when the page is restored from cache, re-rendered, or hot reloaded.
+            (function loadTurnstile() {
+                if (window.turnstile) {
+                    renderTurnstile();
+                    return;
+                }
+
+                if (document.getElementById('cf-turnstile-script')) {
+                    return;
+                }
+
+                const script = document.createElement('script');
+                script.id = 'cf-turnstile-script';
+                script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
+                script.async = true;
+                script.defer = true;
+                script.onload = renderTurnstile;
+                document.head.appendChild(script);
+            })();
 
             function looksLikeUrl(value) {
                 let parsed;
@@ -333,9 +366,9 @@ const schema = {
             function resetCaptcha() {
                 captchaToken = '';
 
-                if (window.turnstile && typeof window.turnstile.reset === 'function') {
+                if (window.turnstile && widgetId !== null) {
                     try {
-                        window.turnstile.reset();
+                        window.turnstile.reset(widgetId);
                     } catch {
                         // ignored
                     }
