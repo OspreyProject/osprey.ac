@@ -47,6 +47,8 @@ const providers = [
 
 const groups = ['Official Partners', 'Security Filters', 'Feeds'];
 
+const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITEKEY ?? '0x4AAAAAAEIwxP1XUsXc5UsE';
+
 const title = 'Check a URL | Osprey: Browser Protection';
 const description =
     'Scan any link against the same security providers Osprey uses to block phishing, malware, and scams. Free, no account required.';
@@ -100,13 +102,15 @@ const schema = {
         <div
                 id="turnstile"
                 class="cf-turnstile"
-                data-sitekey="0x4AAAAAAEIwxP1XUsXc5UsE"
+                data-sitekey={turnstileSiteKey}
                 data-theme="auto"
                 data-callback="onTurnstileSuccess"
                 data-expired-callback="onTurnstileExpired"
-                data-error-callback="onTurnstileExpired"
+                data-error-callback="onTurnstileError"
         >
         </div>
+
+        <p id="captcha-note" class="captcha-note" role="status" hidden></p>
     </form>
 
     <section id="summary" class="summary" hidden aria-live="polite">
@@ -159,6 +163,7 @@ const schema = {
             const summaryBadge = document.getElementById('summary-badge');
             const summaryText = document.getElementById('summary-text');
             const summaryUrl = document.getElementById('summary-url');
+            const captchaNote = document.getElementById('captcha-note');
             const cards = new Map();
 
             document.querySelectorAll('.provider-card').forEach(function (card) {
@@ -185,14 +190,30 @@ const schema = {
             let captchaToken = '';
             let scanning = false;
 
+            function showCaptchaNote(message) {
+                captchaNote.textContent = message;
+                captchaNote.hidden = false;
+            }
+
+            function hideCaptchaNote() {
+                captchaNote.hidden = true;
+                captchaNote.textContent = '';
+            }
+
             // Turnstile fires these globals. They live on window so the widget
             // script can reach them.
             window.onTurnstileSuccess = function (token) {
                 captchaToken = token || '';
+                hideCaptchaNote();
                 refreshButton();
             };
             window.onTurnstileExpired = function () {
                 captchaToken = '';
+                refreshButton();
+            };
+            window.onTurnstileError = function () {
+                captchaToken = '';
+                showCaptchaNote('The captcha could not load. Turn off any ad or privacy blockers for this page, then reload.');
                 refreshButton();
             };
 
@@ -247,8 +268,10 @@ const schema = {
             }
 
             function refreshButton() {
-                const ready = !scanning && Boolean(captchaToken) && looksLikeUrl(normalizedInput());
-                button.disabled = !ready;
+                // The button is enabled once the URL is valid. The captcha token is
+                // enforced at submit time so a slow or blocked widget never leaves the
+                // button permanently greyed out with no explanation.
+                button.disabled = scanning || !looksLikeUrl(normalizedInput());
             }
 
             function showError(message) {
@@ -471,6 +494,14 @@ const schema = {
                 }
             });
 
+            // If the Turnstile script has not loaded after a few seconds, it was most
+            // likely blocked. Surface a note rather than leaving an empty gap.
+            setTimeout(function () {
+                if (!window.turnstile && !captchaToken) {
+                    showCaptchaNote('The captcha could not load. Turn off any ad or privacy blockers for this page, then reload.');
+                }
+            }, 6000);
+
             refreshButton();
         })();
     </script>
@@ -546,6 +577,12 @@ const schema = {
         #turnstile {
             margin-top: 1rem;
             min-height: 65px;
+        }
+
+        .captcha-note {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin: 0.5rem 0 0;
         }
 
         .summary {
