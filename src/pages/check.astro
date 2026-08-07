@@ -1,0 +1,735 @@
+---
+import Base from '../layouts/Base.astro';
+
+const logos = import.meta.glob<ImageMetadata>('../assets/providers/*.avif', {
+    eager: true,
+    import: 'default',
+});
+
+const logo = (name: string): string => logos[`../assets/providers/${name}.avif`]?.src ?? '';
+
+const providers = [
+    {
+        id: 'alphamountain',
+        name: 'AlphaMountain',
+        icon: 'alphamountain',
+        group: 'Official Partners'
+    },
+    {
+        id: 'bforeai',
+        name: 'BforeAI PreCrime',
+        icon: 'bforeai',
+        group: 'Official Partners'
+    },
+    {
+        id: 'chainpatrol',
+        name: 'ChainPatrol',
+        icon: 'chainpatrol',
+        group: 'Official Partners'
+    },
+    {id: 'izoologic', name: 'iZOOlogic', icon: 'izoologic', group: 'Official Partners'},
+    {id: 'precisionsec', name: 'PrecisionSec', icon: 'precisionsec', group: 'Official Partners'},
+    {id: 'adguard-dns', name: 'AdGuard DNS', icon: 'adguard', group: 'Security Filters'},
+    {id: 'cloudflare', name: 'Cloudflare', icon: 'cloudflare', group: 'Security Filters'},
+    {id: 'control-d', name: 'Control D', icon: 'controld', group: 'Security Filters'},
+    {id: 'quad9', name: 'Quad9', icon: 'quad9', group: 'Security Filters'},
+    {id: 'switch-ch', name: 'Switch.ch', icon: 'switchch', group: 'Security Filters'},
+    {id: 'aa419', name: 'Artists Against 419', icon: 'aa419', group: 'Feeds'},
+    {id: 'openphish', name: 'OpenPhish', icon: 'openphish', group: 'Feeds'},
+    {id: 'phishunt-io', name: 'Phishunt.io', icon: 'phishuntio', group: 'Feeds'},
+    {id: 'red-flag-domains', name: 'Red Flag Domains', icon: 'red-flag-domains', group: 'Feeds'},
+    {id: 'sinking-yachts', name: 'SinkingYachts', icon: 'sinking-yachts', group: 'Feeds'},
+    {id: 'threatfox', name: 'THREATfox', icon: 'urlhaus', group: 'Feeds'},
+    {id: 'urlhaus', name: 'URLhaus', icon: 'urlhaus', group: 'Feeds'},
+    {id: 'urlabuse', name: 'URLAbuse', icon: 'urlabuse', group: 'Feeds'},
+    {id: 'validin', name: 'Validin', icon: 'validin', group: 'Feeds'},
+];
+
+const groups = ['Official Partners', 'Security Filters', 'Feeds'];
+
+const title = 'Check a URL | Osprey: Browser Protection';
+const description =
+    'Scan any link against the same security providers Osprey uses to block phishing, malware, and scams. Free, no account required.';
+
+const schema = {
+    '@graph': [
+        {
+            '@type': 'WebApplication',
+            name: 'Osprey URL Check',
+            applicationCategory: 'SecurityApplication',
+            operatingSystem: 'Any',
+            url: 'https://osprey.ac/check/',
+            offers: {'@type': 'Offer', price: '0', priceCurrency: 'USD'},
+        },
+    ],
+};
+---
+
+<Base title={title} description={description} schema={schema}>
+    <section class="check-head">
+        <h1>Check a URL</h1>
+        <p class="lede">
+            Scan any link against the same security providers Osprey uses while you browse.
+            Results come straight from each provider, so a clean scan here means Osprey would
+            let the page load and a flagged scan means it would block it.
+        </p>
+    </section>
+
+    <form id="scan-form" class="scan-form" novalidate>
+        <label class="sr-only" for="url-input">URL to scan</label>
+        <div class="scan-row">
+            <input
+                    id="url-input"
+                    class="url-input"
+                    type="url"
+                    name="url"
+                    inputmode="url"
+                    autocomplete="off"
+                    autocapitalize="none"
+                    spellcheck="false"
+                    placeholder="https://example.com"
+                    aria-describedby="scan-error"
+            />
+            <button id="scan-button" class="btn scan-button" type="submit" disabled>
+                Scan
+            </button>
+        </div>
+
+        <p id="scan-error" class="scan-error" role="alert" hidden></p>
+
+        <div
+                id="turnstile"
+                class="cf-turnstile"
+                data-sitekey="0x4AAAAAAEIwxP1XUsXc5UsE"
+                data-theme="auto"
+                data-callback="onTurnstileSuccess"
+                data-expired-callback="onTurnstileExpired"
+                data-error-callback="onTurnstileExpired"
+        >
+        </div>
+    </form>
+
+    <section id="summary" class="summary" hidden aria-live="polite">
+        <span id="summary-badge" class="summary-badge"></span>
+        <span id="summary-text" class="summary-text"></span>
+        <span id="summary-url" class="summary-url"></span>
+    </section>
+
+    <section class="results" aria-label="Provider results">
+        {groups.map((group) => (
+                <div class="result-group" data-group={group}>
+                    <h2 class="group-title">{group}</h2>
+                    <ul class="provider-grid">
+                        {providers.filter((p) => p.group === group).map((p) => (
+                                <li class="provider-card" data-provider={p.id} data-state="idle">
+                                    <img class="provider-logo" src={logo(p.icon)} alt="" width="28" height="28"
+                                         loading="lazy"/>
+                                    <span class="provider-name">{p.name}</span>
+                                    <span class="provider-status">
+                                <span class="status-dot"></span>
+                                <span class="status-label">Idle</span>
+                            </span>
+                                </li>
+                        ))}
+                    </ul>
+                </div>
+        ))}
+    </section>
+
+    <p class="disclaimer">
+        Verdicts are provided by third party security vendors and may be cached for a short time.
+        A clean result is not a guarantee of safety. If you believe a verdict is wrong, use the
+        report option inside the Osprey extension to contact the relevant provider.
+    </p>
+
+    <script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+
+    <script is:inline>
+        (function () {
+            // The single backend aggregator endpoint. The page never calls the
+            // individual provider endpoints directly. The backend verifies the
+            // captcha, rate limits, caches, and fans out server side.
+            const endpoint = 'https://api.osprey.ac/check';
+
+            const form = document.getElementById('scan-form');
+            const input = document.getElementById('url-input');
+            const button = document.getElementById('scan-button');
+            const errorEl = document.getElementById('scan-error');
+            const summary = document.getElementById('summary');
+            const summaryBadge = document.getElementById('summary-badge');
+            const summaryText = document.getElementById('summary-text');
+            const summaryUrl = document.getElementById('summary-url');
+            const cards = new Map();
+
+            document.querySelectorAll('.provider-card').forEach(function (card) {
+                cards.set(card.getAttribute('data-provider'), card);
+            });
+
+            // How each provider result string maps to a visible state. These
+            // strings match OspreyProtectionResult in the client.
+            const states = {
+                waiting: {label: 'Waiting', tone: 'waiting'},
+                allowed: {label: 'Safe', tone: 'safe'},
+                known_safe: {label: 'Safe', tone: 'safe'},
+                phishing: {label: 'Phishing', tone: 'danger'},
+                malicious: {label: 'Malicious', tone: 'danger'},
+                suspicious: {label: 'Suspicious', tone: 'warn'},
+                newly_registered: {label: 'Newly Registered', tone: 'warn'},
+                dynamic_dns: {label: 'Dynamic DNS', tone: 'warn'},
+                failed: {label: 'Unavailable', tone: 'muted'},
+                idle: {label: 'Idle', tone: 'idle'},
+            };
+
+            const blocking = new Set(['phishing', 'malicious', 'suspicious', 'newly_registered', 'dynamic_dns']);
+
+            let captchaToken = '';
+            let scanning = false;
+
+            // Turnstile fires these globals. They live on window so the widget
+            // script can reach them.
+            window.onTurnstileSuccess = function (token) {
+                captchaToken = token || '';
+                refreshButton();
+            };
+            window.onTurnstileExpired = function () {
+                captchaToken = '';
+                refreshButton();
+            };
+
+            function looksLikeUrl(value) {
+                let parsed;
+
+                try {
+                    parsed = new URL(value);
+                } catch (e) {
+                    return false;
+                }
+
+                if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') {
+                    return false;
+                }
+
+                const host = parsed.hostname.toLowerCase();
+
+                if (!host || host.indexOf('.') === -1) {
+                    return false;
+                }
+
+                // Reject local and private hosts the same way the client does
+                if (host === 'localhost' || host.endsWith('.local')) {
+                    return false;
+                }
+
+                if (/^\d+\.\d+\.\d+\.\d+$/.test(host)) {
+                    const p = host.split('.').map(Number);
+                    if (p[0] === 10 || p[0] === 127 || p[0] === 0 ||
+                        (p[0] === 169 && p[1] === 254) ||
+                        (p[0] === 172 && p[1] >= 16 && p[1] <= 31) ||
+                        (p[0] === 192 && p[1] === 168)) {
+                        return false;
+                    }
+                }
+                return true;
+            }
+
+            function normalizedInput() {
+                let value = input.value.trim();
+
+                if (!value) {
+                    return '';
+                }
+
+                // Allow bare domains by assuming https, matching common scanners
+                if (!/^https?:\/\//i.test(value)) {
+                    value = 'https://' + value;
+                }
+                return value;
+            }
+
+            function refreshButton() {
+                const ready = !scanning && Boolean(captchaToken) && looksLikeUrl(normalizedInput());
+                button.disabled = !ready;
+            }
+
+            function showError(message) {
+                errorEl.textContent = message;
+                errorEl.hidden = false;
+            }
+
+            function clearError() {
+                errorEl.hidden = true;
+                errorEl.textContent = '';
+            }
+
+            function setCardState(id, state) {
+                const card = cards.get(id);
+
+                if (!card) {
+                    return;
+                }
+
+                const info = states[state] || states.failed;
+                card.setAttribute('data-state', state);
+                card.setAttribute('data-tone', info.tone);
+                const label = card.querySelector('.status-label');
+
+                if (label) {
+                    label.textContent = info.label;
+                }
+            }
+
+            function resetGrid() {
+                cards.forEach(function (card, id) {
+                    setCardState(id, 'waiting');
+                });
+            }
+
+            function updateSummary(flagged, total, finished) {
+                summary.hidden = false;
+
+                if (!finished) {
+                    summaryBadge.textContent = '...';
+                    summaryBadge.setAttribute('data-tone', 'waiting');
+                    summaryText.textContent = 'Scanning ' + total + ' security providers';
+                    return;
+                }
+
+                summaryBadge.textContent = flagged + ' / ' + total;
+
+                if (flagged > 0) {
+                    summaryBadge.setAttribute('data-tone', 'danger');
+                    summaryText.textContent = flagged === 1
+                        ? '1 provider flagged this URL'
+                        : flagged + ' providers flagged this URL';
+                } else {
+                    summaryBadge.setAttribute('data-tone', 'safe');
+                    summaryText.textContent = 'No providers flagged this URL';
+                }
+            }
+
+            function resetCaptcha() {
+                captchaToken = '';
+
+                if (window.turnstile && typeof window.turnstile.reset === 'function') {
+                    try {
+                        window.turnstile.reset();
+                    } catch {
+                        // ignored
+                    }
+                }
+            }
+
+            function endScan() {
+                scanning = false;
+                button.textContent = 'Scan';
+
+                // The captcha token is single use, so require a fresh one per scan.
+                resetCaptcha();
+                refreshButton();
+            }
+
+            function handleResult(providerId, result, seen) {
+                const state = states[result] ? result : 'failed';
+                setCardState(providerId, state);
+                seen.add(providerId);
+            }
+
+            async function readStream(response, total, seen) {
+                const reader = response.body.getReader();
+                const decoder = new TextDecoder();
+                let buffer = '';
+                let flagged = 0;
+
+                while (true) {
+                    const chunk = await reader.read();
+
+                    if (chunk.done) {
+                        break;
+                    }
+
+                    buffer += decoder.decode(chunk.value, {stream: true});
+                    let newline = buffer.indexOf('\n');
+
+                    while (newline !== -1) {
+                        const line = buffer.slice(0, newline).trim();
+                        buffer = buffer.slice(newline + 1);
+                        newline = buffer.indexOf('\n');
+
+                        if (!line) {
+                            continue;
+                        }
+
+                        let event;
+
+                        try {
+                            event = JSON.parse(line);
+                        } catch {
+                            continue;
+                        }
+
+                        if (event.type === 'result') {
+                            handleResult(event.provider, event.result, seen);
+
+                            if (blocking.has(event.result)) {
+                                flagged++;
+                            }
+
+                            updateSummary(flagged, total, false);
+                        } else if (event.type === 'error') {
+                            showError(event.message || 'The scan could not be completed.');
+                        }
+                    }
+                }
+                return flagged;
+            }
+
+            async function runScan(url) {
+                const response = await fetch(endpoint, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json', 'Accept': 'application/x-ndjson'},
+                    body: JSON.stringify({url: url, token: captchaToken}),
+                });
+
+                if (response.status === 429) {
+                    throw new Error('Too many scans from your network. Please wait a moment and try again.');
+                }
+
+                if (response.status === 403) {
+                    throw new Error('The captcha could not be verified. Please solve it again.');
+                }
+
+                if (response.status === 400) {
+                    throw new Error('That URL could not be scanned. Check the address and try again.');
+                }
+
+                if (!response.ok || !response.body) {
+                    throw new Error('The scan service is unavailable right now. Please try again later.');
+                }
+
+                const total = cards.size;
+                const seen = new Set();
+                const flagged = await readStream(response, total, seen);
+
+                // Any provider that never reported is shown as unavailable
+                cards.forEach(function (_card, id) {
+                    if (!seen.has(id)) {
+                        setCardState(id, 'failed');
+                    }
+                });
+
+                updateSummary(flagged, total, true);
+            }
+
+            input.addEventListener('input', function () {
+                clearError();
+                refreshButton();
+            });
+
+            form.addEventListener('submit', async function (event) {
+                event.preventDefault();
+
+                if (scanning) {
+                    return;
+                }
+
+                const url = normalizedInput();
+
+                if (!looksLikeUrl(url)) {
+                    showError('Enter a full http or https URL, for example https://example.com');
+                    return;
+                }
+
+                if (!captchaToken) {
+                    showError('Please complete the captcha first.');
+                    return;
+                }
+
+                clearError();
+
+                scanning = true;
+                button.disabled = true;
+                button.textContent = 'Scanning';
+                input.value = url;
+                summaryUrl.textContent = url;
+
+                resetGrid();
+                updateSummary(0, cards.size, false);
+
+                try {
+                    await runScan(url);
+                } catch (err) {
+                    showError(err && err.message ? err.message : 'The scan could not be completed.');
+                    summary.hidden = true;
+
+                    cards.forEach(function (card, id) {
+                        if (card.getAttribute('data-state') === 'waiting') {
+                            setCardState(id, 'idle');
+                        }
+                    });
+                } finally {
+                    endScan();
+                }
+            });
+
+            refreshButton();
+        })();
+    </script>
+
+    <style>
+        .check-head {
+            text-align: center;
+            max-width: 42rem;
+            margin: 0 auto 1.75rem;
+        }
+
+        .lede {
+            color: var(--text-muted);
+            font-size: 1.05rem;
+            margin: 0.5rem 0 0;
+        }
+
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            border: 0;
+        }
+
+        .scan-form {
+            max-width: 42rem;
+            margin: 0 auto;
+        }
+
+        .scan-row {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .url-input {
+            flex: 1;
+            min-width: 0;
+            padding: 0.7rem 0.85rem;
+            font-size: 1rem;
+            font-family: var(--font);
+            color: var(--text);
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 5px;
+        }
+
+        .url-input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 2px var(--accent-faint);
+        }
+
+        .scan-button {
+            flex: 0 0 auto;
+        }
+
+        .scan-button:disabled {
+            opacity: 0.55;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .scan-error {
+            color: var(--danger);
+            font-size: 0.92rem;
+            margin: 0.6rem 0 0;
+        }
+
+        #turnstile {
+            margin-top: 1rem;
+            min-height: 65px;
+        }
+
+        .summary {
+            max-width: 42rem;
+            margin: 1.75rem auto 0;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.85rem 1rem;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+        }
+
+        .summary-badge {
+            flex: 0 0 auto;
+            font-weight: 700;
+            font-size: 0.95rem;
+            padding: 0.25rem 0.6rem;
+            border-radius: 999px;
+            background: var(--surface-raised);
+            color: var(--text);
+        }
+
+        .summary-badge[data-tone="safe"] {
+            background: var(--safe);
+            color: #ffffff;
+        }
+
+        .summary-badge[data-tone="danger"] {
+            background: var(--danger);
+            color: #ffffff;
+        }
+
+        .summary-text {
+            font-weight: 600;
+        }
+
+        .summary-url {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-left: auto;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            max-width: 40%;
+        }
+
+        .results {
+            max-width: 42rem;
+            margin: 1.5rem auto 0;
+        }
+
+        .result-group + .result-group {
+            margin-top: 1.5rem;
+        }
+
+        .group-title {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--text-muted);
+            margin: 0 0 0.6rem;
+            font-weight: 600;
+        }
+
+        .provider-grid {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+            gap: 0.5rem;
+        }
+
+        .provider-card {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            padding: 0.6rem 0.75rem;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+        }
+
+        .provider-logo {
+            flex: 0 0 auto;
+            width: 28px;
+            height: 28px;
+            object-fit: contain;
+            border-radius: 5px;
+            background: #ffffff;
+            padding: 3px;
+        }
+
+        .provider-name {
+            font-size: 0.95rem;
+            font-weight: 500;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .provider-status {
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            flex: 0 0 auto;
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        .status-dot {
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+            background: var(--border);
+            flex: 0 0 auto;
+        }
+
+        .provider-card[data-tone="safe"] .status-label {
+            color: var(--safe);
+        }
+
+        .provider-card[data-tone="safe"] .status-dot {
+            background: var(--safe);
+        }
+
+        .provider-card[data-tone="danger"] .status-label {
+            color: var(--danger);
+        }
+
+        .provider-card[data-tone="danger"] .status-dot {
+            background: var(--danger);
+        }
+
+        .provider-card[data-tone="warn"] .status-label {
+            color: var(--accent-ink);
+        }
+
+        .provider-card[data-tone="warn"] .status-dot {
+            background: var(--accent);
+        }
+
+        .provider-card[data-state="waiting"] .status-dot {
+            border: 2px solid var(--border);
+            border-top-color: var(--accent);
+            background: transparent;
+            animation: spin 0.7s linear infinite;
+        }
+
+        .provider-card[data-state="idle"] {
+            opacity: 0.7;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .provider-card[data-state="waiting"] .status-dot {
+                animation: none;
+            }
+        }
+
+        .disclaimer {
+            max-width: 42rem;
+            margin: 2rem auto 0;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        @media (max-width: 32rem) {
+            .summary-url {
+                display: none;
+            }
+
+            .provider-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</Base>
