@@ -205,6 +205,57 @@ const schema = {
                 refreshButton();
             }
 
+            function renderTurnstile() {
+                // Already rendered.
+                if (widgetId !== null) {
+                    return true;
+                }
+
+                // The API (or its render method) is not ready yet.
+                if (!window.turnstile || typeof window.turnstile.render !== 'function') {
+                    return false;
+                }
+
+                const container = document.getElementById('turnstile');
+
+                if (!container) {
+                    return false;
+                }
+
+                try {
+                    widgetId = window.turnstile.render(container, {
+                        sitekey: container.dataset.sitekey,
+                        theme: 'auto',
+                        callback: onTurnstileToken,
+                        'expired-callback': onTurnstileExpired,
+                        'error-callback': onTurnstileError,
+                    });
+                    return widgetId !== undefined && widgetId !== null;
+                } catch (err) {
+                    // Surface the reason instead of failing silently. If a second copy of
+                    // Turnstile already claimed this container, stop retrying.
+                    console.error('[check] Turnstile render failed:', err);
+                    widgetId = null;
+                    return true;
+                }
+            }
+
+            // The api.js script is loaded with ?onload=onloadTurnstileCallback, so Turnstile
+            // calls this when render is ready. Defined before the script runs. Do not call
+            // turnstile.ready() here: it throws when api.js is async.
+            window.onloadTurnstileCallback = renderTurnstile;
+
+            // Fallback for environments where the onload callback does not fire (for example
+            // when a second copy of api.js wins the race). Poll briefly and render as soon as
+            // any Turnstile instance exposes render, then stop.
+            const renderPoll = setInterval(function () {
+                renderAttempts++;
+
+                if (renderTurnstile() || renderAttempts > 40) {
+                    clearInterval(renderPoll);
+                }
+            }, 250);
+
             function looksLikeUrl(value) {
                 let parsed;
 
@@ -489,6 +540,21 @@ const schema = {
                     showCaptchaNote('The captcha could not load. Turn off any ad or privacy blockers for this page, then reload.');
                 }
             }, 6000);
+
+            // 1. If Turnstile is already fully loaded (e.g., navigating back via View Transitions), render immediately
+            if (window.turnstile && typeof window.turnstile.render === 'function') {
+                window.onloadTurnstileCallback();
+            }
+
+            // 2. Otherwise, check if the script is missing from the DOM entirely and inject it
+            else if (!document.querySelector('script[src*="turnstile/v0/api.js"]')) {
+                const script = document.createElement('script');
+                script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?onload=onloadTurnstileCallback&render=explicit';
+                script.async = true;
+                script.defer = true;
+                script.setAttribute('data-cfasync', 'false');
+                document.head.appendChild(script);
+            }
 
             refreshButton();
         })();
