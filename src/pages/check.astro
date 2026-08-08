@@ -152,20 +152,12 @@ const schema = {
     </form>
 
     <section id="summary" class="summary" hidden aria-live="polite">
-        <div class="summary-head">
-            <span id="summary-badge" class="summary-badge"></span>
-            <span id="summary-text" class="summary-text"></span>
-        </div>
-        <dl class="summary-meta">
-            <div class="summary-row" id="summary-url-row" hidden>
-                <dt class="summary-label">URL</dt>
-                <dd id="summary-url" class="summary-url"></dd>
-            </div>
-            <div class="summary-row" id="summary-age-row" hidden>
-                <dt class="summary-label">Last Scan</dt>
-                <dd id="summary-age" class="summary-age"></dd>
-            </div>
-        </dl>
+        <span id="summary-badge" class="summary-badge"></span>
+        <span id="summary-text" class="summary-text"></span>
+        <span id="summary-url-label" class="summary-label" hidden>URL</span>
+        <span id="summary-url" class="summary-url" hidden></span>
+        <span id="summary-age-label" class="summary-label" hidden>Last Scan</span>
+        <span id="summary-age" class="summary-age" hidden></span>
     </section>
 
     <section id="results" class="results" aria-label="Provider results" hidden>
@@ -255,9 +247,26 @@ const schema = {
             const summaryBadge = document.getElementById('summary-badge');
             const summaryText = document.getElementById('summary-text');
             const summaryUrl = document.getElementById('summary-url');
+            const summaryUrlLabel = document.getElementById('summary-url-label');
             const summaryAge = document.getElementById('summary-age');
-            const summaryUrlRow = document.getElementById('summary-url-row');
-            const summaryAgeRow = document.getElementById('summary-age-row');
+            const summaryAgeLabel = document.getElementById('summary-age-label');
+
+            function setSummaryUrl(value) {
+                summaryUrl.textContent = value;
+                summaryUrl.hidden = false;
+                summaryUrlLabel.hidden = false;
+            }
+
+            function setSummaryAge(fromMillis) {
+                summaryAge.textContent = relativeTime(fromMillis);
+                summaryAge.hidden = false;
+                summaryAgeLabel.hidden = false;
+            }
+
+            function hideSummaryAge() {
+                summaryAge.hidden = true;
+                summaryAgeLabel.hidden = true;
+            }
             const captchaNote = document.getElementById('captcha-note');
             const results = document.getElementById('results');
             const disclaimer = document.getElementById('disclaimer');
@@ -534,9 +543,8 @@ const schema = {
                 button.disabled = true;
                 button.textContent = 'Scanning';
                 input.value = url;
-                summaryUrl.textContent = url;
-                summaryUrlRow.hidden = false;
-                summaryAgeRow.hidden = true;
+                setSummaryUrl(url);
+                hideSummaryAge();
 
                 results.hidden = false;
                 disclaimer.hidden = false;
@@ -546,6 +554,7 @@ const schema = {
 
                 try {
                     await runScan(url, forceNext);
+                    setSummaryAge(Date.now());
                 } catch (err) {
                     showError(err && err.message ? err.message : 'The scan could not be completed.');
                     summary.hidden = true;
@@ -591,7 +600,7 @@ const schema = {
                         return value === 1 ? 'a ' + name + ' ago' : value + ' ' + name + 's ago';
                     }
                 }
-                return 'moments ago';
+                return 'just now';
             }
 
             function setNoindex() {
@@ -630,12 +639,10 @@ const schema = {
                 disclaimer.hidden = false;
                 updateSummary(typeof data.flagged === 'number' ? data.flagged : flagged, total, true);
 
-                summaryUrl.textContent = data.url || input.value;
-                summaryUrlRow.hidden = false;
+                setSummaryUrl(data.url || input.value);
 
                 if (data.lastScanned) {
-                    summaryAge.textContent = relativeTime(data.lastScanned);
-                    summaryAgeRow.hidden = false;
+                    setSummaryAge(data.lastScanned);
                 }
 
                 // Offer a fresh scan of the same URL. The forced scan still requires a captcha.

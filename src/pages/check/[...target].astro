@@ -105,23 +105,15 @@ const schema = {
         <h1>Is {target} safe?</h1>
 
         <section class="summary" aria-live="off">
-            <div class="summary-head">
-                <span class="summary-badge" data-tone="danger">{record.flagged} / {record.total}</span>
-                <span class="summary-text">
-                    {(record.flagged === 1 ? '1 provider' : `${record.flagged} providers`)
-                        + ` flagged this URL as ${primaryLabel.toLowerCase()}`}
-                </span>
-            </div>
-            <dl class="summary-meta">
-                <div class="summary-row">
-                    <dt class="summary-label">URL</dt>
-                    <dd class="summary-url">{record.url}</dd>
-                </div>
-                <div class="summary-row">
-                    <dt class="summary-label">Last Scan</dt>
-                    <dd class="summary-age">{fmt(record.lastScanned)}</dd>
-                </div>
-            </dl>
+            <span class="summary-badge" data-tone="danger">{record.flagged} / {record.total}</span>
+            <span class="summary-text">
+                {(record.flagged === 1 ? '1 provider' : `${record.flagged} providers`)
+                    + ` flagged this URL as ${primaryLabel.toLowerCase()}`}
+            </span>
+            <span class="summary-label">URL</span>
+            <span class="summary-url">{record.url}</span>
+            <span class="summary-label">Last Scan</span>
+            <span class="summary-age">{fmt(record.lastScanned)}</span>
         </section>
 
         <p>

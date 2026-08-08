@@ -1295,9 +1295,11 @@ html[data-browser="edge"] .download-card[data-browser="edge"] .download-badge {
 .summary {
     max-width: 42rem;
     margin: 1.75rem auto 0;
-    display: flex;
-    flex-direction: column;
-    gap: 0.6rem;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    column-gap: 0.75rem;
+    row-gap: 0.4rem;
     padding: 0.85rem 1rem;
     border-radius: var(--radius);
 }
@@ -1306,19 +1308,14 @@ html[data-browser="edge"] .download-card[data-browser="edge"] .download-badge {
     display: none;
 }
 
-.summary-head {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    flex-wrap: wrap;
-}
-
 .check-faq {
     max-width: 42rem;
     margin: 0 auto;
 }
 
 .summary-badge {
+    grid-column: 1;
+    justify-self: start;
     flex: 0 0 auto;
     font-weight: 700;
     font-size: 0.95rem;
@@ -1339,30 +1336,16 @@ html[data-browser="edge"] .download-card[data-browser="edge"] .download-badge {
 }
 
 .summary-text {
+    grid-column: 2;
     font-weight: 600;
-}
-
-.summary-meta {
-    display: flex;
-    flex-direction: column;
-    gap: 0.3rem;
-    margin: 0;
-}
-
-.summary-row {
-    display: flex;
-    gap: 0.5rem;
-    margin: 0;
-    font-size: 0.9rem;
-}
-
-.summary-row[hidden] {
-    display: none;
 }
 
 .summary-label {
+    grid-column: 1;
+    justify-self: end;
     flex: 0 0 auto;
     font-weight: 600;
+    font-size: 0.9rem;
     color: var(--text);
 }
 
@@ -1370,12 +1353,23 @@ html[data-browser="edge"] .download-card[data-browser="edge"] .download-badge {
     content: ':';
 }
 
+.summary-label[hidden] {
+    display: none;
+}
+
 .summary-url,
 .summary-age {
+    grid-column: 2;
     margin: 0;
     min-width: 0;
+    font-size: 0.9rem;
     color: var(--text-muted);
     overflow-wrap: anywhere;
+}
+
+.summary-url[hidden],
+.summary-age[hidden] {
+    display: none;
 }
 
 .results {
