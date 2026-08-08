@@ -1374,7 +1374,7 @@ html[data-browser="edge"] .download-card[data-browser="edge"] .download-badge {
 
 .results {
     max-width: 42rem;
-    margin: 3rem auto 0;
+    margin: 2rem auto 0;
 }
 
 .result-group + .result-group {
