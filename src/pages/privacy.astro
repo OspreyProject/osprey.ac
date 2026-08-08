@@ -98,12 +98,42 @@ const localData = [
         <p>When a URL does reach a provider, the data sent depends on the provider type:</p>
         <ul>
             <li><strong>DNS-based providers</strong> receive only the hostname, never the full URL or path</li>
-            <li><strong>API-based providers</strong> receive the full URL with query parameters stripped</li>
+            <li><strong>API-based providers</strong> receive the full URL with query parameters stripped, aside from the
+                limited exceptions described in "Retained query parameters"
+            </li>
             <li>
                 <strong>Local threat intelligence lists</strong> are checked entirely in-memory on the proxy server,
                 with no external calls per request
             </li>
         </ul>
+
+        <h2>Retained query parameters</h2>
+        <p>
+            As a narrow, hard-coded exception to the query stripping described above, a small and fixed set of links
+            keep specific query parameters. For these links the parameters identify which resource is being checked
+            rather than tracking you, and removing them would either make the address meaningless or cause unrelated
+            targets to look identical, which would weaken checking. In each case only the named parameters are kept and
+            every other parameter is discarded. The exceptions are:
+        </p>
+        <ul>
+            <li>
+                <code>drive.google.com/uc</code> keeps <code>export</code> and <code>id</code>, which identify the
+                Google Drive file being downloaded
+            </li>
+            <li>
+                <code>drive.usercontent.google.com/download</code> keeps <code>id</code> and <code>export</code>, which
+                identify the Google Drive file being downloaded
+            </li>
+            <li>
+                <code>google.com/share.google</code> keeps <code>q</code>, which identifies the shared query
+            </li>
+        </ul>
+        <p>
+            These exceptions apply consistently wherever a URL is normalized: when the extension checks a link, when the
+            website safety checker page checks a link, in the durable scan store, and in false-positive monitoring. The
+            retained parameters are the only query data kept for these links, and no other query parameters are
+            transmitted, stored, or logged.
+        </p>
 
         <h2>The website and safety checker page</h2>
         <p>
@@ -117,7 +147,7 @@ const localData = [
             link, it is sent to the proxy server and checked against the same providers, and with the same protections,
             described in "How URL checking works" above. Providers see requests only from the proxy's IP address rather
             than yours, results may be served from the proxy's cache, and query parameters are stripped before a URL
-            reaches an API-based provider.
+            reaches an API-based provider, aside from the limited exceptions described in "Retained query parameters".
         </p>
         <p>
             A link you submit on the website safety checker page is subject to the same limited operational and
@@ -128,10 +158,11 @@ const localData = [
             To avoid rescanning the same link repeatedly, the proxy server keeps a durable record of the aggregate
             result for each scanned address. The stored address is normalized first: the scheme is set to https, a
             leading <code>www.</code> is removed, and the query string and fragment are dropped, so tracking parameters
-            are not retained. The path is kept, so a specific page can be recorded separately from its host. A stored
-            result is served on a later scan of the same address for up to 24 hours, after which the link is scanned
-            fresh. This record is about the link, not about you: it holds no IP address, no identifier, and nothing that
-            ties the scan to the person who ran it.
+            are not retained, apart from the resource-identifying parameters described in "Retained query parameters".
+            The path is kept, so a specific page can be recorded separately from its host. A stored result is served on
+            a later scan of the same address for up to 24 hours, after which the link is scanned fresh. This record is
+            about the link, not about you: it holds no IP address, no identifier, and nothing that ties the scan to the
+            person who ran it.
         </p>
         <p>
             When several vendors independently report a link as phishing or malicious, Osprey may publish a public page
@@ -218,8 +249,9 @@ const localData = [
             transient log entry whenever a provider returns
             a <strong>malicious</strong> or <strong>phishing</strong> verdict. Each entry records only the provider
             name, the verdict, and the same value that was checked against that provider: a hostname for DNS-based
-            providers, or the URL with query parameters stripped for URL-based providers. It never includes the query
-            string, your IP address, or any other identifier that could tie the lookup back to you.
+            providers, or the checked URL for URL-based providers. That URL has its query parameters stripped apart from
+            the resource-identifying parameters described in "Retained query parameters". It never includes your IP
+            address or any other identifier that could tie the lookup back to you.
         </p>
         <p>
             Results that come back safe are <strong>never</strong> logged. These entries exist only in memory, are not
