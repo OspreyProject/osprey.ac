@@ -1,0 +1,189 @@
+---
+import Base from '../../layouts/Base.astro';
+import {providers, groups, resultStates, blockingResults} from '../../data/providers';
+
+const logos = import.meta.glob<ImageMetadata>('../../assets/providers/*.avif', {
+    eager: true,
+    import: 'default',
+});
+
+const logo = (name: string): string => logos[`../../assets/providers/${name}.avif`]?.src ?? '';
+
+interface ScanResult {
+    url: string;
+    host: string;
+    primary: string;
+    flagged: number;
+    total: number;
+    results: Record<string, string[]>;
+    lastScanned: number;
+    firstScanned: number;
+}
+
+// Fetches the set of hard-flagged URLs that should have their own crawlable page. Only phishing and
+// malicious verdicts reach this feed, so every generated page is a genuine, unique detection rather
+// than a thin or auto-spun page. Any failure degrades to zero pages so the site still builds.
+export async function getStaticPaths() {
+    const feedUrl = import.meta.env.SCAN_FEED_URL;
+    const feedToken = import.meta.env.SCAN_FEED_TOKEN;
+
+    if (!feedUrl || !feedToken) {
+        return [];
+    }
+
+    try {
+        const response = await fetch(feedUrl, {
+            headers: {'Authorization': `Bearer ${feedToken}`, 'Accept': 'application/json'},
+        });
+
+        if (!response.ok) {
+            return [];
+        }
+
+        const body = await response.json();
+        const records: ScanResult[] = Array.isArray(body?.results) ? body.results : [];
+
+        return records
+            .filter((record) => typeof record?.url === 'string' && record.url.startsWith('https://'))
+            .map((record) => ({
+                params: {target: record.url.slice('https://'.length)},
+                props: {record},
+            }));
+    } catch {
+        return [];
+    }
+}
+
+const {record} = Astro.props;
+
+const stateFor = (id: string): string => {
+    const values = record.results?.[id];
+    return values && values.length && resultStates[values[0]] ? values[0] : 'failed';
+};
+
+const primaryLabel = resultStates[record.primary]?.label ?? 'Flagged';
+const fmt = (ms: number): string => new Date(ms).toISOString().slice(0, 10);
+
+const flaggingProviders = providers
+    .filter((p) => blockingResults.includes(stateFor(p.id)))
+    .map((p) => p.name);
+
+const target = record.url.slice('https://'.length);
+const canonicalPath = `/check/${target}/`;
+
+const title = `Safety Result for: ${target}`;
+const description = `${record.flagged} of ${record.total} security providers flagged ${target} as ${primaryLabel.toLowerCase()}. `
+    + `See which vendors reported it and when it was last checked.`;
+
+const schema = {
+    '@graph': [
+        {
+            '@type': 'WebPage',
+            '@id': `https://osprey.ac${canonicalPath}#page`,
+            url: `https://osprey.ac${canonicalPath}`,
+            name: title,
+            description,
+            dateModified: new Date(record.lastScanned).toISOString(),
+            isPartOf: {'@id': 'https://osprey.ac/#website'},
+            about: {'@type': 'Thing', name: record.url},
+        },
+        {
+            '@type': 'BreadcrumbList',
+            '@id': `https://osprey.ac${canonicalPath}#breadcrumb`,
+            itemListElement: [
+                {'@type': 'ListItem', position: 1, name: 'Link checker', item: 'https://osprey.ac/check/'},
+                {'@type': 'ListItem', position: 2, name: target, item: `https://osprey.ac${canonicalPath}`},
+            ],
+        },
+    ],
+};
+---
+
+<Base title={title} description={description} schema={schema} canonicalPath={canonicalPath}>
+    <article class="prose scan-page">
+        <p class="scan-crumb"><a href="/check/" class="contact-link">Link checker</a></p>
+        <h1>Is {target} safe?</h1>
+
+        <section class="summary" aria-live="off">
+            <span class="summary-badge" data-tone="danger">{record.flagged} / {record.total}</span>
+            <span class="summary-text">
+                {record.flagged === 1 ? '1 provider' : `${record.flagged} providers`}
+                flagged this URL as {primaryLabel.toLowerCase()}
+            </span>
+            <span class="summary-url">{record.url}</span>
+        </section>
+
+        <p>
+            Multiple third-party security vendors have reported <strong>{record.url}</strong> as
+            {primaryLabel.toLowerCase()}. This page records what those vendors returned when Osprey last
+            checked the link on {fmt(record.lastScanned)}. It was first seen on {fmt(record.firstScanned)}.
+            Treat the link as dangerous and do not enter any personal or payment details.
+        </p>
+
+        {flaggingProviders.length > 0 && (
+                <p>Flagged by: {flaggingProviders.join(', ')}.</p>
+        )}
+
+        <section class="results" aria-label="Provider results">
+            {groups.map((group) => (
+                    <div class="result-group" data-group={group}>
+                        <h2 class="group-title">{group}</h2>
+                        <ul class="provider-grid">
+                            {providers.filter((p) => p.group === group).map((p) => {
+                                const state = stateFor(p.id);
+                                const info = resultStates[state] ?? resultStates.failed;
+                                return (
+                                        <li class="provider-card" data-provider={p.id}
+                                            data-state={state} data-tone={info.tone}>
+                                            <img class="provider-logo" src={logo(p.icon)} alt="" width="28"
+                                                 height="28" loading="lazy"/>
+                                            <span class="provider-name">{p.name}</span>
+                                            <span class="provider-status">
+                                                <span class="status-dot"></span>
+                                                <span class="status-label">{info.label}</span>
+                                            </span>
+                                        </li>
+                                );
+                            })}
+                        </ul>
+                    </div>
+            ))}
+        </section>
+
+        <p class="scan-actions">
+            <a class="install-btn" href={`/check/?url=${encodeURIComponent(record.url)}`}>Scan this link again</a>
+        </p>
+
+        <p class="disclaimer">
+            Verdicts are provided by third-party security vendors and reflect their reports at the time
+            of the last check. A result may change as vendors update their data. If you own this site or
+            believe a verdict is wrong, email <a href="mailto:support@osprey.ac"
+                                                 class="contact-link">support@osprey.ac</a>
+            or contact the relevant vendor directly, and re-scan the link to refresh the result.
+        </p>
+
+        <section class="band">
+            <h2 class="band-title">Protect your browser automatically</h2>
+            <p>
+                Osprey is a free, open-source extension that checks links against these same providers
+                as you browse, and warns you before a dangerous page loads.
+                <a href="/download/" class="contact-link">Get Osprey</a>.
+            </p>
+        </section>
+    </article>
+</Base>
+
+<style>
+    .scan-crumb {
+        margin-bottom: 0.5rem;
+        font-size: 0.9rem;
+    }
+
+    .scan-page .summary {
+        margin: 1rem 0 1.5rem;
+    }
+
+    .scan-actions {
+        margin: 1.5rem 0;
+    }
+</style>

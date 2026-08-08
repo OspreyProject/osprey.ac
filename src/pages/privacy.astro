@@ -1,6 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
-const effective = '7 August 2026';
+const effective = '8 August 2026';
 
 const permissions = [
     {
@@ -120,9 +120,24 @@ const localData = [
             reaches an API-based provider.
         </p>
         <p>
-            A link you submit on the website safety checker page is used only to return a result to you and is subject
-            to the same limited operational and false-positive monitoring described elsewhere in this policy. It is not
-            used to build a profile of you, and it is not sold to any third party.
+            A link you submit on the website safety checker page is subject to the same limited operational and
+            false-positive monitoring described elsewhere in this policy. It is not used to build a profile of you, and
+            it is not sold to any third party.
+        </p>
+        <p>
+            To avoid rescanning the same link repeatedly, the proxy server keeps a durable record of the aggregate
+            result for each scanned address. The stored address is normalized first: the scheme is set to https, a
+            leading <code>www.</code> is removed, and the query string and fragment are dropped, so tracking parameters
+            are not retained. The path is kept, so a specific page can be recorded separately from its host. A stored
+            result is served on a later scan of the same address for up to 24 hours, after which the link is scanned
+            fresh. This record is about the link, not about you: it holds no IP address, no identifier, and nothing that
+            ties the scan to the person who ran it.
+        </p>
+        <p>
+            When several vendors independently report a link as phishing or malicious, Osprey may publish a public page
+            for that specific link so that others searching for it can see the warning. Only these hard, high-confidence
+            detections are published. Links that come back clean, and softer or lower-confidence signals, are never
+            published and are excluded from the sitemap and search indexing.
         </p>
 
         <h2>Bot protection (Cloudflare Turnstile)</h2>
@@ -217,6 +232,13 @@ const localData = [
             false-positive monitoring entries described above) exist only in memory and may be lost on restart.
             Aggregated operational metrics may be retained longer in Prometheus and Grafana, subject to those systems'
             retention settings.
+        </p>
+        <p>
+            The durable scan store described under "The website and safety checker page" is the one component that
+            persists across restarts. It holds only normalized link addresses and their aggregate vendor results, with
+            no IP addresses or personal identifiers. Records may be updated on a later scan or removed at our
+            discretion, and a published warning page is removed when the corresponding link no longer meets the
+            high-confidence threshold for publishing.
         </p>
 
         <h2>Changes to this policy</h2>

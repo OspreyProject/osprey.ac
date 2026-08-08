@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
+import {providers, groups} from '../data/providers';
 
 const logos = import.meta.glob<ImageMetadata>('../assets/providers/*.avif', {
     eager: true,
@@ -7,125 +8,6 @@ const logos = import.meta.glob<ImageMetadata>('../assets/providers/*.avif', {
 });
 
 const logo = (name: string): string => logos[`../assets/providers/${name}.avif`]?.src ?? '';
-
-const providers = [
-    {
-        id: 'alphamountain',
-        name: 'AlphaMountain',
-        icon: 'alphamountain',
-        group: 'Official Partners',
-    },
-    {
-        id: 'bforeai',
-        name: 'BforeAI PreCrime',
-        icon: 'bforeai',
-        group: 'Official Partners',
-    },
-    {
-        id: 'chainpatrol',
-        name: 'ChainPatrol',
-        icon: 'chainpatrol',
-        group: 'Official Partners',
-    },
-    {
-        id: 'izoologic',
-        name: 'iZOOlogic',
-        icon: 'izoologic',
-        group: 'Official Partners',
-    },
-    {
-        id: 'precisionsec',
-        name: 'PrecisionSec',
-        icon: 'precisionsec',
-        group: 'Official Partners',
-    },
-    {
-        id: 'adguard-dns',
-        name: 'AdGuard DNS',
-        icon: 'adguard',
-        group: 'DNS Servers',
-    },
-    {
-        id: 'cloudflare',
-        name: 'Cloudflare',
-        icon: 'cloudflare',
-        group: 'DNS Servers',
-    },
-    {
-        id: 'control-d',
-        name: 'Control D',
-        icon: 'controld',
-        group: 'DNS Servers',
-    },
-    {
-        id: 'quad9',
-        name: 'Quad9',
-        icon: 'quad9',
-        group: 'DNS Servers',
-    },
-    {
-        id: 'switch-ch',
-        name: 'Switch.ch',
-        icon: 'switchch',
-        group: 'DNS Servers',
-    },
-    {
-        id: 'aa419',
-        name: 'Artists Against 419',
-        icon: 'aa419',
-        group: 'Threat Feeds',
-    },
-    {
-        id: 'openphish',
-        name: 'OpenPhish',
-        icon: 'openphish',
-        group: 'Threat Feeds',
-    },
-    {
-        id: 'phishunt-io',
-        name: 'Phishunt.io',
-        icon: 'phishuntio',
-        group: 'Threat Feeds',
-    },
-    {
-        id: 'red-flag-domains',
-        name: 'Red Flag Domains',
-        icon: 'red-flag-domains',
-        group: 'Threat Feeds',
-    },
-    {
-        id: 'sinking-yachts',
-        name: 'SinkingYachts',
-        icon: 'sinking-yachts',
-        group: 'Threat Feeds',
-    },
-    {
-        id: 'threatfox',
-        name: 'THREATfox',
-        icon: 'urlhaus',
-        group: 'Threat Feeds',
-    },
-    {
-        id: 'urlhaus',
-        name: 'URLhaus',
-        icon: 'urlhaus',
-        group: 'Threat Feeds',
-    },
-    {
-        id: 'urlabuse',
-        name: 'URLAbuse',
-        icon: 'urlabuse',
-        group: 'Threat Feeds',
-    },
-    {
-        id: 'validin',
-        name: 'Validin',
-        icon: 'validin',
-        group: 'Threat Feeds',
-    },
-];
-
-const groups = ['Official Partners', 'DNS Servers', 'Threat Feeds'];
 
 const title = 'Free Website Safety Checker – Malware, Phishing, & Scams';
 const description =
@@ -388,6 +270,7 @@ const schema = {
 
             const blocking = new Set(['phishing', 'malicious', 'suspicious', 'newly_registered', 'dynamic_dns']);
             let scanning = false;
+            let forceNext = false;
 
             function showCaptchaNote(message) {
                 captchaNote.textContent = message;
@@ -399,7 +282,7 @@ const schema = {
 
                 try {
                     parsed = new URL(value);
-                } catch (e) {
+                } catch {
                     return false;
                 }
 
@@ -420,6 +303,7 @@ const schema = {
 
                 if (/^\d+\.\d+\.\d+\.\d+$/.test(host)) {
                     const p = host.split('.').map(Number);
+
                     if (p[0] === 10 || p[0] === 127 || p[0] === 0 ||
                         (p[0] === 169 && p[1] === 254) ||
                         (p[0] === 172 && p[1] >= 16 && p[1] <= 31) ||
@@ -568,11 +452,11 @@ const schema = {
                 return flagged;
             }
 
-            async function runScan(url) {
+            async function runScan(url, force) {
                 const response = await fetch(endpoint, {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json', 'Accept': 'application/x-ndjson'},
-                    body: JSON.stringify({url: url, token: captchaToken}),
+                    body: JSON.stringify({url: url, token: captchaToken, force: force === true}),
                 });
 
                 if (response.status === 429) {
@@ -645,7 +529,7 @@ const schema = {
                 updateSummary(0, cards.size, false);
 
                 try {
-                    await runScan(url);
+                    await runScan(url, forceNext);
                 } catch (err) {
                     showError(err && err.message ? err.message : 'The scan could not be completed.');
                     summary.hidden = true;
@@ -656,6 +540,7 @@ const schema = {
                         }
                     });
                 } finally {
+                    forceNext = false;
                     endScan();
 
                     // Reset the token state and the widget for subsequent scans
@@ -666,6 +551,110 @@ const schema = {
                 }
             });
 
+            // Deep-link support. When the page is opened as /check/?url=..., look up any stored result
+            // for that URL and render it without scanning, then offer a fresh scan. A query-string view
+            // is canonicalised to /check/ and marked noindex so only the clean tool page and the static
+            // per-URL pages are ever indexed.
+            const resultEndpoint = 'https://api.osprey.ac/result';
+
+            function relativeTime(fromMillis) {
+                const seconds = Math.max(1, Math.round((Date.now() - fromMillis) / 1000));
+
+                const units = [
+                    ['year', 31536000],
+                    ['month', 2592000],
+                    ['day', 86400],
+                    ['hour', 3600],
+                    ['minute', 60],
+                ];
+
+                for (const [name, size] of units) {
+                    const value = Math.floor(seconds / size);
+
+                    if (value >= 1) {
+                        return value === 1 ? 'a ' + name + ' ago' : value + ' ' + name + 's ago';
+                    }
+                }
+                return 'moments ago';
+            }
+
+            function setNoindex() {
+                const canonical = document.querySelector('link[rel="canonical"]');
+
+                if (canonical) {
+                    canonical.setAttribute('href', 'https://osprey.ac/check/');
+                }
+
+                let robots = document.querySelector('meta[name="robots"]');
+
+                if (!robots) {
+                    robots = document.createElement('meta');
+                    robots.setAttribute('name', 'robots');
+                    document.head.appendChild(robots);
+                }
+
+                robots.setAttribute('content', 'noindex, follow');
+            }
+
+            function renderStored(data) {
+                const total = data.total || cards.size;
+                let flagged = 0;
+
+                cards.forEach(function (_card, id) {
+                    const values = data.results && data.results[id];
+                    const state = values && values.length && states[values[0]] ? values[0] : 'failed';
+                    setCardState(id, state);
+
+                    if (blocking.has(state)) {
+                        flagged++;
+                    }
+                });
+
+                results.hidden = false;
+                disclaimer.hidden = false;
+                updateSummary(typeof data.flagged === 'number' ? data.flagged : flagged, total, true);
+
+                if (data.lastScanned) {
+                    summaryText.textContent += ' - last checked ' + relativeTime(data.lastScanned);
+                }
+
+                // Offer a fresh scan of the same URL. The forced scan still requires a captcha.
+                forceNext = true;
+                button.textContent = 'Scan again';
+            }
+
+            async function preloadFromQuery() {
+                const target = new URLSearchParams(window.location.search).get('url');
+
+                if (!target) {
+                    return;
+                }
+
+                setNoindex();
+                input.value = target;
+                refreshButton();
+
+                try {
+                    const response = await fetch(resultEndpoint + '?url=' + encodeURIComponent(target), {
+                        headers: {'Accept': 'application/json'},
+                    });
+
+                    if (!response.ok) {
+                        return;
+                    }
+
+                    const data = await response.json();
+
+                    if (data && data.found) {
+                        summaryUrl.textContent = data.url || target;
+                        renderStored(data);
+                    }
+                } catch {
+                    // A lookup failure is non-fatal: the form stays ready for a manual scan.
+                }
+            }
+
+            preloadFromQuery();
             refreshButton();
         })();
     </script>

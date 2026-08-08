@@ -7,10 +7,18 @@ interface Props {
     title: string;
     description: string;
     schema?: object;
+    robots?: string;
+    canonicalPath?: string;
 }
 
-const {title, description, schema} = Astro.props;
-const canonical = new URL(Astro.url.pathname, Astro.site);
+const {
+    title,
+    description,
+    schema,
+    robots = 'index, follow, max-image-preview:large, max-snippet:-1',
+    canonicalPath,
+} = Astro.props;
+const canonical = new URL(canonicalPath ?? Astro.url.pathname, Astro.site);
 const ogImage = new URL('/og-image.png', Astro.site);
 
 const siteSchema = {
@@ -89,7 +97,7 @@ const siteSchema = {
     <link rel="icon" href="/favicon.png" type="image/png"/>
     <link rel="apple-touch-icon" href="/apple-touch-icon.png"/>
 
-    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1"/>
+    <meta name="robots" content={robots}/>
 
     <meta property="og:site_name" content="Osprey"/>
     <meta property="og:title" content={title}/>
