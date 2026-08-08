@@ -1296,14 +1296,21 @@ html[data-browser="edge"] .download-card[data-browser="edge"] .download-badge {
     max-width: 42rem;
     margin: 1.75rem auto 0;
     display: flex;
-    align-items: center;
-    gap: 0.75rem;
+    flex-direction: column;
+    gap: 0.6rem;
     padding: 0.85rem 1rem;
     border-radius: var(--radius);
 }
 
 .summary[hidden] {
     display: none;
+}
+
+.summary-head {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
 }
 
 .check-faq {
@@ -1335,14 +1342,40 @@ html[data-browser="edge"] .download-card[data-browser="edge"] .download-badge {
     font-weight: 600;
 }
 
-.summary-url {
-    color: var(--text-muted);
+.summary-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    margin: 0;
+}
+
+.summary-row {
+    display: flex;
+    gap: 0.5rem;
+    margin: 0;
     font-size: 0.9rem;
-    margin-left: auto;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    max-width: 40%;
+}
+
+.summary-row[hidden] {
+    display: none;
+}
+
+.summary-label {
+    flex: 0 0 auto;
+    font-weight: 600;
+    color: var(--text);
+}
+
+.summary-label::after {
+    content: ':';
+}
+
+.summary-url,
+.summary-age {
+    margin: 0;
+    min-width: 0;
+    color: var(--text-muted);
+    overflow-wrap: anywhere;
 }
 
 .results {
@@ -1475,10 +1508,6 @@ html[data-browser="edge"] .download-card[data-browser="edge"] .download-badge {
 }
 
 @media (max-width: 32rem) {
-    .summary-url {
-        display: none;
-    }
-
     .provider-grid {
         grid-template-columns: 1fr;
     }
