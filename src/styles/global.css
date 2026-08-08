@@ -1415,8 +1415,6 @@ html[data-browser="edge"] .download-card[data-browser="edge"] .download-badge {
     height: 28px;
     object-fit: contain;
     border-radius: 5px;
-    background: #ffffff;
-    padding: 3px;
 }
 
 .provider-name {
