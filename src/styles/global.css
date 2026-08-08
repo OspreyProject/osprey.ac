@@ -1317,11 +1317,8 @@ html[data-browser="edge"] .download-card[data-browser="edge"] .download-badge {
 .summary-badge {
     grid-column: 1;
     justify-self: end;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
     flex: 0 0 auto;
-    font-size: 0.88rem;
+    font-size: 1rem;
     font-weight: 600;
     color: var(--text-muted);
 }
@@ -1330,23 +1327,8 @@ html[data-browser="edge"] .download-card[data-browser="edge"] .download-badge {
     color: var(--safe);
 }
 
-.summary-badge[data-tone="safe"] .status-dot {
-    background: var(--safe);
-}
-
 .summary-badge[data-tone="danger"] .status-label {
     color: var(--danger);
-}
-
-.summary-badge[data-tone="danger"] .status-dot {
-    background: var(--danger);
-}
-
-.summary-badge[data-tone="waiting"] .status-dot {
-    border: 2px solid var(--border);
-    border-top-color: var(--accent);
-    background: transparent;
-    animation: spin 0.7s linear infinite;
 }
 
 .summary-text {
@@ -1504,10 +1486,6 @@ html[data-browser="edge"] .download-card[data-browser="edge"] .download-badge {
 
 @media (prefers-reduced-motion: reduce) {
     .provider-card[data-state="waiting"] .status-dot {
-        animation: none;
-    }
-
-    .summary-badge[data-tone="waiting"] .status-dot {
         animation: none;
     }
 }
