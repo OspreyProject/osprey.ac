@@ -147,7 +147,10 @@ const schema = {
     </form>
 
     <section id="summary" class="summary" hidden aria-live="polite">
-        <span id="summary-badge" class="summary-badge"></span>
+        <span id="summary-badge" class="summary-badge">
+            <span class="status-dot"></span>
+            <span id="summary-badge-label" class="status-label"></span>
+        </span>
         <span id="summary-text" class="summary-text"></span>
         <span id="summary-url-label" class="summary-label" hidden>URL</span>
         <span id="summary-url" class="summary-url" hidden></span>
@@ -244,6 +247,7 @@ const schema = {
             const errorEl = document.getElementById('scan-error');
             const summary = document.getElementById('summary');
             const summaryBadge = document.getElementById('summary-badge');
+            const summaryBadgeLabel = document.getElementById('summary-badge-label');
             const summaryText = document.getElementById('summary-text');
             const summaryUrl = document.getElementById('summary-url');
             const summaryUrlLabel = document.getElementById('summary-url-label');
@@ -394,20 +398,20 @@ const schema = {
                 summary.hidden = false;
 
                 if (!finished) {
-                    summaryBadge.textContent = '...';
+                    summaryBadgeLabel.textContent = 'Scanning';
                     summaryBadge.setAttribute('data-tone', 'waiting');
                     summaryText.textContent = 'Scanning ' + total + ' security providers';
                     return;
                 }
 
                 if (flagged > 0) {
-                    summaryBadge.textContent = 'Unsafe';
+                    summaryBadgeLabel.textContent = 'Unsafe';
                     summaryBadge.setAttribute('data-tone', 'danger');
                     summaryText.textContent = flagged === 1
                         ? '1 provider flagged this URL'
                         : flagged + ' providers flagged this URL';
                 } else {
-                    summaryBadge.textContent = 'Safe';
+                    summaryBadgeLabel.textContent = 'Safe';
                     summaryBadge.setAttribute('data-tone', 'safe');
                     summaryText.textContent = 'No providers flagged this URL';
                 }
