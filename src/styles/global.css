@@ -24,7 +24,7 @@
     --contact-ink: var(--text);
 
     /* Status */
-    --safe: #5CD77D;
+    --safe: #00B330;
     --danger: #FF6B6B;
 
     --btn-icon-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
@@ -1329,6 +1329,10 @@ html[data-browser="edge"] .download-card[data-browser="edge"] .download-badge {
 
 .summary-badge[data-tone="danger"] .status-label {
     color: var(--danger);
+}
+
+.summary-badge[data-tone="warn"] .status-label {
+    color: var(--suspicious-ink);
 }
 
 .summary-text {
