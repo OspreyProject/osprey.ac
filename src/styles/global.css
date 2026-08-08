@@ -24,8 +24,8 @@
     --contact-ink: var(--text);
 
     /* Status */
-    --safe: #5CD77D;
-    --danger: #E7B3B3;
+    --safe: #00B330;
+    --danger: #FF6B6B;
 
     --btn-icon-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
 
