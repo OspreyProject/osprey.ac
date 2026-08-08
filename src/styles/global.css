@@ -24,7 +24,7 @@
     --contact-ink: var(--text);
 
     /* Status */
-    --safe: #00B330;
+    --safe: #5CD77D;
     --danger: #FF6B6B;
 
     --btn-icon-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
@@ -1469,6 +1469,14 @@ html[data-browser="edge"] .download-card[data-browser="edge"] .download-badge {
 
 .provider-card[data-tone="warn"] .status-dot {
     background: var(--accent);
+}
+
+.provider-card[data-tone="muted"] .status-label {
+    color: #919C9C;
+}
+
+.provider-card[data-tone="muted"] .status-dot {
+    background: #919C9C;
 }
 
 .provider-card[data-state="waiting"] .status-dot {
