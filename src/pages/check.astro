@@ -185,7 +185,8 @@ const schema = {
     </p>
 
     <p class="scan-terms">
-        By scanning a URL, you agree to our <a href="/privacy/" class="contact-link">Privacy Policy</a> and <a href="/terms/" class="contact-link">Terms of Service</a>.
+        By scanning a URL, you agree to our <a href="/privacy/" class="contact-link">Privacy Policy</a> and <a
+            href="/terms/" class="contact-link">Terms of Service</a>.
     </p>
 
     <section class="band">
@@ -269,6 +270,7 @@ const schema = {
                 summaryAge.hidden = true;
                 summaryAgeLabel.hidden = true;
             }
+
             const captchaNote = document.getElementById('captcha-note');
             const results = document.getElementById('results');
             const disclaimer = document.getElementById('disclaimer');
@@ -294,6 +296,29 @@ const schema = {
             };
 
             const blocking = new Set(['phishing', 'malicious', 'suspicious', 'newly_registered', 'dynamic_dns']);
+
+            // Providers that warrant an "Unsafe" verdict on their own. If a single provider outside
+            // this set is the only one to flag a URL, the summary is downgraded to "Caution" instead
+            function normalizeName(value) {
+                return value.replace(/[^a-z0-9]/gi, '').toLowerCase();
+            }
+
+            const authoritative = new Set([
+                'AlphaMountain',
+                'Artists Against 419',
+                'OpenPhish',
+                'SinkingYachts',
+                'THREATfox',
+                'URLhaus',
+                'Validin',
+            ].map(normalizeName));
+
+            function providerName(id) {
+                const card = cards.get(id);
+                const el = card && card.querySelector('.provider-name');
+                return el ? el.textContent.trim() : '';
+            }
+
             let scanning = false;
             let forceNext = false;
 
@@ -393,8 +418,9 @@ const schema = {
                 });
             }
 
-            function updateSummary(flagged, total, finished) {
+            function updateSummary(flaggedIds, total, finished) {
                 summary.hidden = false;
+                const flagged = flaggedIds.length;
 
                 if (!finished) {
                     summaryBadgeLabel.textContent = 'Scanning';
@@ -404,8 +430,18 @@ const schema = {
                 }
 
                 if (flagged > 0) {
-                    summaryBadgeLabel.textContent = 'Unsafe';
-                    summaryBadge.setAttribute('data-tone', 'danger');
+                    // A single flag from a non-authoritative provider is a soft signal
+                    const caution = flagged === 1
+                        && !authoritative.has(normalizeName(providerName(flaggedIds[0])));
+
+                    if (caution) {
+                        summaryBadgeLabel.textContent = 'Caution';
+                        summaryBadge.setAttribute('data-tone', 'warn');
+                    } else {
+                        summaryBadgeLabel.textContent = 'Unsafe';
+                        summaryBadge.setAttribute('data-tone', 'danger');
+                    }
+
                     summaryText.textContent = flagged === 1
                         ? '1 provider flagged this URL'
                         : flagged + ' providers flagged this URL';
@@ -432,7 +468,7 @@ const schema = {
                 const reader = response.body.getReader();
                 const decoder = new TextDecoder();
                 let buffer = '';
-                let flagged = 0;
+                const flaggedIds = new Set();
 
                 while (true) {
                     const chunk = await reader.read();
@@ -465,16 +501,16 @@ const schema = {
                             handleResult(event.provider, event.result, seen);
 
                             if (blocking.has(event.result)) {
-                                flagged++;
+                                flaggedIds.add(event.provider);
                             }
 
-                            updateSummary(flagged, total, false);
+                            updateSummary(Array.from(flaggedIds), total, false);
                         } else if (event.type === 'error') {
                             showError(event.message || 'The scan could not be completed.');
                         }
                     }
                 }
-                return flagged;
+                return Array.from(flaggedIds);
             }
 
             async function runScan(url, force) {
@@ -552,7 +588,7 @@ const schema = {
                 disclaimer.hidden = false;
 
                 resetGrid();
-                updateSummary(0, cards.size, false);
+                updateSummary([], cards.size, false);
 
                 try {
                     await runScan(url, forceNext);
@@ -625,7 +661,7 @@ const schema = {
 
             function renderStored(data) {
                 const total = data.total || cards.size;
-                let flagged = 0;
+                const flaggedIds = [];
 
                 cards.forEach(function (_card, id) {
                     const values = data.results && data.results[id];
@@ -633,13 +669,13 @@ const schema = {
                     setCardState(id, state);
 
                     if (blocking.has(state)) {
-                        flagged++;
+                        flaggedIds.push(id);
                     }
                 });
 
                 results.hidden = false;
                 disclaimer.hidden = false;
-                updateSummary(typeof data.flagged === 'number' ? data.flagged : flagged, total, true);
+                updateSummary(flaggedIds, total, true);
 
                 setSummaryUrl(data.url || input.value);
 
