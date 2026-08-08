@@ -400,14 +400,14 @@ const schema = {
                     return;
                 }
 
-                summaryBadge.textContent = flagged + ' / ' + total;
-
                 if (flagged > 0) {
+                    summaryBadge.textContent = 'Unsafe';
                     summaryBadge.setAttribute('data-tone', 'danger');
                     summaryText.textContent = flagged === 1
                         ? '1 provider flagged this URL'
                         : flagged + ' providers flagged this URL';
                 } else {
+                    summaryBadge.textContent = 'Safe';
                     summaryBadge.setAttribute('data-tone', 'safe');
                     summaryText.textContent = 'No providers flagged this URL';
                 }
@@ -599,7 +599,7 @@ const schema = {
                         return value === 1 ? 'a ' + name + ' ago' : value + ' ' + name + 's ago';
                     }
                 }
-                return 'just now';
+                return 'Just now';
             }
 
             function setNoindex() {

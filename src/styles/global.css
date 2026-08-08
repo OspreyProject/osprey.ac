@@ -20,6 +20,7 @@
     --accent-faint: rgba(243, 186, 34, 0.1);
 
     --accent-ink: var(--accent);
+    --suspicious-ink: var(--accent);
     --contact-ink: var(--text);
 
     /* Status */
@@ -1315,7 +1316,7 @@ html[data-browser="edge"] .download-card[data-browser="edge"] .download-badge {
 
 .summary-badge {
     grid-column: 1;
-    justify-self: start;
+    justify-self: end;
     flex: 0 0 auto;
     font-weight: 700;
     font-size: 0.95rem;
