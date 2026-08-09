@@ -1,13 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
-import {providers, groups, resultStates, blockingResults} from '../../data/providers';
-
-const logos = import.meta.glob<ImageMetadata>('../../assets/providers/*.avif', {
-    eager: true,
-    import: 'default',
-});
-
-const logo = (name: string): string => logos[`../../assets/providers/${name}.avif`]?.src ?? '';
+import CheckTool from '../../components/CheckTool.astro';
+import {providers, resultStates, blockingResults} from '../../data/providers';
 
 interface ScanResult {
     url: string;
@@ -62,7 +56,6 @@ const stateFor = (id: string): string => {
 };
 
 const primaryLabel = resultStates[record.primary]?.label ?? 'Flagged';
-const fmt = (ms: number): string => new Date(ms).toISOString().slice(0, 10);
 
 const flaggingProviders = providers
     .filter((p) => blockingResults.includes(stateFor(p.id)))
@@ -100,95 +93,10 @@ const schema = {
 ---
 
 <Base title={title} description={description} schema={schema} canonicalPath={canonicalPath}>
-    <article class="prose scan-page">
-        <p class="scan-crumb"><a href="/check/" class="contact-link">Link checker</a></p>
-        <h1>Is {target} safe?</h1>
-
-        <section class="summary" aria-live="off">
-            <span class="summary-badge" data-tone="danger">
-                <span class="status-label">Unsafe</span>
-            </span>
-            <span class="summary-text">
-                {(record.flagged === 1 ? '1 provider' : `${record.flagged} providers`)
-                    + ` flagged this URL as ${primaryLabel.toLowerCase()}`}
-            </span>
-            <span class="summary-label">URL</span>
-            <span class="summary-url">{record.url}</span>
-            <span class="summary-label">Last Scan</span>
-            <span class="summary-age">{fmt(record.lastScanned)}</span>
-        </section>
-
-        <p>
-            Multiple third-party security vendors have reported <strong>{record.url}</strong> as
-            {primaryLabel.toLowerCase()}. This page records what those vendors returned when Osprey last
-            checked the link on {fmt(record.lastScanned)}. It was first seen on {fmt(record.firstScanned)}.
-            Treat the link as dangerous and do not enter any personal or payment details.
-        </p>
-
-        {flaggingProviders.length > 0 && (
-                <p>Flagged by: {flaggingProviders.join(', ')}.</p>
-        )}
-
-        <section class="results" aria-label="Provider results">
-            {groups.map((group) => (
-                    <div class="result-group" data-group={group}>
-                        <h2 class="group-title">{group}</h2>
-                        <ul class="provider-grid">
-                            {providers.filter((p) => p.group === group).map((p) => {
-                                const state = stateFor(p.id);
-                                const info = resultStates[state] ?? resultStates.failed;
-                                return (
-                                        <li class="provider-card" data-provider={p.id}
-                                            data-state={state} data-tone={info.tone}>
-                                            <img class="provider-logo" src={logo(p.icon)} alt="" width="28"
-                                                 height="28" loading="lazy"/>
-                                            <span class="provider-name">{p.name}</span>
-                                            <span class="provider-status">
-                                                <span class="status-dot"></span>
-                                                <span class="status-label">{info.label}</span>
-                                            </span>
-                                        </li>
-                                );
-                            })}
-                        </ul>
-                    </div>
-            ))}
-        </section>
-
-        <p class="scan-actions">
-            <a class="install-btn" href={`/check/?url=${encodeURIComponent(record.url)}`}>Scan this link again</a>
-        </p>
-
-        <p class="disclaimer">
-            Verdicts are provided by third-party security vendors and reflect their reports at the time
-            of the last check. A result may change as vendors update their data. If you own this site or
-            believe a verdict is wrong, email <a href="mailto:support@osprey.ac"
-                                                 class="contact-link">support@osprey.ac</a>
-            or contact the relevant vendor directly, and re-scan the link to refresh the result.
-        </p>
-
-        <section class="band">
-            <h2 class="band-title">Protect your browser automatically</h2>
-            <p>
-                Osprey is a free, open-source extension that checks links against these same providers
-                as you browse, and warns you before a dangerous page loads.
-                <a href="/download/" class="contact-link">Get Osprey</a>.
-            </p>
-        </section>
-    </article>
+    <CheckTool result={{
+        url: record.url,
+        results: record.results,
+        total: record.total,
+        lastScanned: record.lastScanned,
+    }}/>
 </Base>
-
-<style>
-    .scan-crumb {
-        margin-bottom: 0.5rem;
-        font-size: 0.9rem;
-    }
-
-    .scan-page .summary {
-        margin: 1rem 0 1.5rem;
-    }
-
-    .scan-actions {
-        margin: 1.5rem 0;
-    }
-</style>

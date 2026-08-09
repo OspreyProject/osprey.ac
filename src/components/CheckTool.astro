@@ -1,0 +1,690 @@
+---
+import {providers, groups, resultStates, blockingResults, faqs, summarize} from '../data/providers';
+
+// A stored, hard-flagged result used to pre-render a result page. When omitted, the component
+// renders the live tool in its idle state and the inline script drives it. When present, the
+// same markup is rendered in its finished state, so a result page is byte-for-byte the tool
+// page the moment a scan completes.
+interface StoredResult {
+    url: string;
+    results: Record<string, string[]>;
+    total?: number;
+    lastScanned?: number;
+}
+
+interface Props {
+    result?: StoredResult | null;
+}
+
+const {result = null} = Astro.props;
+const finished = result != null;
+
+const logos = import.meta.glob<ImageMetadata>('../assets/providers/*.avif', {
+    eager: true,
+    import: 'default',
+});
+
+const logo = (name: string): string => logos[`../assets/providers/${name}.avif`]?.src ?? '';
+
+const stateFor = (id: string): string => {
+    const values = result?.results?.[id];
+    return values && values.length && resultStates[values[0]] ? values[0] : 'failed';
+};
+
+const flaggedNames = finished
+    ? providers.filter((p) => blockingResults.includes(stateFor(p.id))).map((p) => p.name)
+    : [];
+
+const summary = finished ? summarize(flaggedNames) : null;
+const totalProviders = result?.total ?? providers.length;
+const initialUrl = finished ? result!.url : '';
+const scannedMs = result?.lastScanned ?? null;
+const fmtDate = (ms: number): string => new Date(ms).toISOString().slice(0, 10);
+---
+
+<link rel="preconnect" href="https://challenges.cloudflare.com"/>
+<script is:inline
+        src="https://challenges.cloudflare.com/turnstile/v0/api.js"
+        async
+        defer
+></script>
+
+<section class="check-head">
+    <h1>Website Safety Checker</h1>
+    <p class="lede">
+        Scan any website or link for malware, phishing, fraud, and security risks.
+        <br>
+        Use our link scanner to check URL safety & reputation, scan links for scams, and see if a website is
+        secure <i>before</i> you click on it.
+        <br>
+        <br>
+        The <a href="/download/" class="contact-link">Osprey extension</a> does this for you <i>automatically</i> in
+        real-time.
+    </p>
+</section>
+
+<form id="scan-form" class="scan-form" novalidate>
+    <label class="sr-only" for="url-input">URL to scan</label>
+    <div class="scan-row">
+        <input
+                id="url-input"
+                class="url-input"
+                type="url"
+                name="url"
+                inputmode="url"
+                autocomplete="off"
+                autocapitalize="none"
+                spellcheck="false"
+                placeholder="https://example.com"
+                aria-describedby="scan-error"
+                value={initialUrl || undefined}
+        />
+        <button id="scan-button" class="install-btn scan-button" type="submit" disabled={!finished}>
+            Scan
+        </button>
+    </div>
+
+    <p id="scan-error" class="scan-error" role="alert" hidden></p>
+    <p id="captcha-note" class="captcha-note" role="status" hidden></p>
+
+    <div
+            id="cf-turnstile"
+            class="cf-turnstile"
+            data-sitekey="0x4AAAAAAEIwxP1XUsXc5UsE"
+            data-size="normal"
+            data-theme="auto"
+            data-callback="onSuccess"
+            data-expired-callback="onExpired"
+    ></div>
+</form>
+
+<section id="summary" class="summary" aria-live="polite" hidden={!finished}>
+    <span id="summary-badge" class="summary-badge" data-tone={finished ? summary!.tone : undefined}>
+        <span id="summary-badge-label" class="status-label">{finished ? summary!.label : ''}</span>
+    </span>
+    <span id="summary-text" class="summary-text">{finished ? summary!.text : ''}</span>
+    <span id="summary-url-label" class="summary-label" hidden={!finished}>URL</span>
+    <span id="summary-url" class="summary-url" hidden={!finished}>{initialUrl}</span>
+    <span id="summary-age-label" class="summary-label" hidden={!finished}>Last Scan</span>
+    <span id="summary-age" class="summary-age" hidden={!finished}
+          data-scanned={finished && scannedMs ? String(scannedMs) : undefined}>
+        {finished && scannedMs ? fmtDate(scannedMs) : ''}
+    </span>
+</section>
+
+<section id="results" class="results" aria-label="Provider results" hidden={!finished}>
+    {groups.map((group) => (
+            <div class="result-group" data-group={group}>
+                <h2 class="group-title">{group}</h2>
+                <ul class="provider-grid">
+                    {providers.filter((p) => p.group === group).map((p) => {
+                        const state = finished ? stateFor(p.id) : 'idle';
+                        const info = resultStates[state] ?? resultStates.failed;
+                        return (
+                                <li class="provider-card" data-provider={p.id}
+                                    data-state={state} data-tone={finished ? info.tone : undefined}>
+                                    <img class="provider-logo" src={logo(p.icon)} alt="" width="28" height="28"
+                                         loading="lazy"/>
+                                    <span class="provider-name">{p.name}</span>
+                                    <span class="provider-status">
+                                        <span class="status-dot"></span>
+                                        <span class="status-label">{info.label}</span>
+                                    </span>
+                                </li>
+                        );
+                    })}
+                </ul>
+            </div>
+    ))}
+</section>
+
+<p id="disclaimer" class="disclaimer" hidden={!finished}>
+    Verdicts are provided by third party security vendors and may be cached for a short time.
+    A clean result is not a guarantee of safety. If you believe a verdict is wrong, use the
+    report option inside the Osprey extension to contact the relevant provider.
+</p>
+
+<p class="scan-terms">
+    By scanning a URL, you agree to our <a href="/privacy/" class="contact-link">Privacy Policy</a> and <a
+        href="/terms/" class="contact-link">Terms of Service</a>.
+</p>
+
+<section class="band">
+    <h2 class="band-title">Common questions</h2>
+    <div class="check-faq">
+        {
+            faqs.map((faq) => (
+                    <details class="faq">
+                        <summary>{faq.q}</summary>
+                        <p>{faq.a}</p>
+                    </details>
+            ))
+        }
+    </div>
+</section>
+
+<section class="band">
+    <h2 class="band-title">Something not working?</h2>
+    <div class="prose">
+        <p class="band-sub">
+            Email <a href="mailto:support@osprey.ac">support@osprey.ac</a> or create an issue
+            on <a href="https://github.com/OspreyProject/Osprey/issues/new/choose"
+                  aria-label="Create an issue on GitHub">GitHub</a>.
+            <br>
+            We'll get back to you as soon as we can.
+        </p>
+    </div>
+</section>
+
+<script is:inline data-cfasync="false">
+    // Global variables for Turnstile state
+    let captchaToken = '';
+
+    // Expose callbacks globally so the Turnstile iframe can reach them
+    window.onSuccess = function (token) {
+        captchaToken = token;
+        const captchaNote = document.getElementById('captcha-note');
+
+        if (captchaNote) {
+            captchaNote.hidden = true;
+            captchaNote.textContent = '';
+        }
+    };
+
+    window.onExpired = function () {
+        captchaToken = '';
+    };
+
+    (function () {
+        // The single backend aggregator endpoint. The page never calls the
+        // individual provider endpoints directly. The backend verifies the
+        // captcha, rate limits, caches, and fans out server side.
+        const endpoint = 'https://api.osprey.ac/check';
+
+        const form = document.getElementById('scan-form');
+        const input = document.getElementById('url-input');
+        const button = document.getElementById('scan-button');
+        const errorEl = document.getElementById('scan-error');
+        const summary = document.getElementById('summary');
+        const summaryBadge = document.getElementById('summary-badge');
+        const summaryBadgeLabel = document.getElementById('summary-badge-label');
+        const summaryText = document.getElementById('summary-text');
+        const summaryUrl = document.getElementById('summary-url');
+        const summaryUrlLabel = document.getElementById('summary-url-label');
+        const summaryAge = document.getElementById('summary-age');
+        const summaryAgeLabel = document.getElementById('summary-age-label');
+
+        function setSummaryUrl(value) {
+            summaryUrl.textContent = value;
+            summaryUrl.hidden = false;
+            summaryUrlLabel.hidden = false;
+        }
+
+        function setSummaryAge(fromMillis) {
+            summaryAge.textContent = relativeTime(fromMillis);
+            summaryAge.hidden = false;
+            summaryAgeLabel.hidden = false;
+        }
+
+        function hideSummaryAge() {
+            summaryAge.hidden = true;
+            summaryAgeLabel.hidden = true;
+        }
+
+        const captchaNote = document.getElementById('captcha-note');
+        const results = document.getElementById('results');
+        const disclaimer = document.getElementById('disclaimer');
+        const cards = new Map();
+
+        document.querySelectorAll('.provider-card').forEach(function (card) {
+            cards.set(card.getAttribute('data-provider'), card);
+        });
+
+        // How each provider result string maps to a visible state. These
+        // strings match OspreyProtectionResult in the client.
+        const states = {
+            waiting: {label: 'Waiting', tone: 'waiting'},
+            allowed: {label: 'Safe', tone: 'safe'},
+            known_safe: {label: 'Safe', tone: 'safe'},
+            phishing: {label: 'Phishing', tone: 'danger'},
+            malicious: {label: 'Malicious', tone: 'danger'},
+            suspicious: {label: 'Suspicious', tone: 'warn'},
+            newly_registered: {label: 'Newly Registered', tone: 'warn'},
+            dynamic_dns: {label: 'Dynamic DNS', tone: 'warn'},
+            failed: {label: 'Unavailable', tone: 'muted'},
+            idle: {label: 'Idle', tone: 'idle'},
+        };
+
+        const blocking = new Set(['phishing', 'malicious', 'suspicious', 'newly_registered', 'dynamic_dns']);
+
+        // Providers that warrant an "Unsafe" verdict on their own. If a single provider outside
+        // this set is the only one to flag a URL, the summary is downgraded to "Caution" instead
+        function normalizeName(value) {
+            return value.replace(/[^a-z0-9]/gi, '').toLowerCase();
+        }
+
+        const authoritative = new Set([
+            'AlphaMountain',
+            'Artists Against 419',
+            'OpenPhish',
+            'SinkingYachts',
+            'THREATfox',
+            'URLhaus',
+            'Validin',
+        ].map(normalizeName));
+
+        function providerName(id) {
+            const card = cards.get(id);
+            const el = card && card.querySelector('.provider-name');
+            return el ? el.textContent.trim() : '';
+        }
+
+        let scanning = false;
+        let forceNext = false;
+
+        function showCaptchaNote(message) {
+            captchaNote.textContent = message;
+            captchaNote.hidden = false;
+        }
+
+        function looksLikeUrl(value) {
+            let parsed;
+
+            try {
+                parsed = new URL(value);
+            } catch {
+                return false;
+            }
+
+            if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') {
+                return false;
+            }
+
+            const host = parsed.hostname.toLowerCase();
+
+            if (!host || host.indexOf('.') === -1) {
+                return false;
+            }
+
+            // Reject local and private hosts the same way the client does
+            if (host === 'localhost' || host.endsWith('.local')) {
+                return false;
+            }
+
+            if (/^\d+\.\d+\.\d+\.\d+$/.test(host)) {
+                const p = host.split('.').map(Number);
+
+                if (p[0] === 10 || p[0] === 127 || p[0] === 0 ||
+                    (p[0] === 169 && p[1] === 254) ||
+                    (p[0] === 172 && p[1] >= 16 && p[1] <= 31) ||
+                    (p[0] === 192 && p[1] === 168)) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        function normalizedInput() {
+            let value = input.value.trim();
+
+            if (!value) {
+                return '';
+            }
+
+            // Allow bare domains by assuming https, matching common scanners
+            if (!/^https?:\/\//i.test(value)) {
+                value = 'https://' + value;
+            }
+            return value;
+        }
+
+        function refreshButton() {
+            // The button is enabled once the URL is valid. The captcha token is
+            // enforced at submit time so a slow or blocked widget never leaves the
+            // button permanently greyed out with no explanation.
+            button.disabled = scanning || !looksLikeUrl(normalizedInput());
+        }
+
+        function showError(message) {
+            errorEl.textContent = message;
+            errorEl.hidden = false;
+        }
+
+        function clearError() {
+            errorEl.hidden = true;
+            errorEl.textContent = '';
+        }
+
+        function setCardState(id, state) {
+            const card = cards.get(id);
+
+            if (!card) {
+                return;
+            }
+
+            const info = states[state] || states.failed;
+            card.setAttribute('data-state', state);
+            card.setAttribute('data-tone', info.tone);
+            const label = card.querySelector('.status-label');
+
+            if (label) {
+                label.textContent = info.label;
+            }
+        }
+
+        function resetGrid() {
+            cards.forEach(function (card, id) {
+                setCardState(id, 'waiting');
+            });
+        }
+
+        function updateSummary(flaggedIds, total, finished) {
+            summary.hidden = false;
+            const flagged = flaggedIds.length;
+
+            if (!finished) {
+                summaryBadgeLabel.textContent = 'Scanning';
+                summaryBadge.setAttribute('data-tone', 'waiting');
+                summaryText.textContent = 'Scanning ' + total + ' security providers';
+                return;
+            }
+
+            if (flagged > 0) {
+                // A single flag from a non-authoritative provider is a soft signal
+                const caution = flagged === 1
+                    && !authoritative.has(normalizeName(providerName(flaggedIds[0])));
+
+                if (caution) {
+                    summaryBadgeLabel.textContent = 'Caution';
+                    summaryBadge.setAttribute('data-tone', 'warn');
+                } else {
+                    summaryBadgeLabel.textContent = 'Unsafe';
+                    summaryBadge.setAttribute('data-tone', 'danger');
+                }
+
+                summaryText.textContent = flagged === 1
+                    ? '1 provider flagged this URL'
+                    : flagged + ' providers flagged this URL';
+            } else {
+                summaryBadgeLabel.textContent = 'Safe';
+                summaryBadge.setAttribute('data-tone', 'safe');
+                summaryText.textContent = 'No providers flagged this URL';
+            }
+        }
+
+        function endScan() {
+            scanning = false;
+            button.textContent = 'Scan';
+            refreshButton();
+        }
+
+        function handleResult(providerId, result, seen) {
+            const state = states[result] ? result : 'failed';
+            setCardState(providerId, state);
+            seen.add(providerId);
+        }
+
+        async function readStream(response, total, seen) {
+            const reader = response.body.getReader();
+            const decoder = new TextDecoder();
+            let buffer = '';
+            const flaggedIds = new Set();
+
+            while (true) {
+                const chunk = await reader.read();
+
+                if (chunk.done) {
+                    break;
+                }
+
+                buffer += decoder.decode(chunk.value, {stream: true});
+                let newline = buffer.indexOf('\n');
+
+                while (newline !== -1) {
+                    const line = buffer.slice(0, newline).trim();
+                    buffer = buffer.slice(newline + 1);
+                    newline = buffer.indexOf('\n');
+
+                    if (!line) {
+                        continue;
+                    }
+
+                    let event;
+
+                    try {
+                        event = JSON.parse(line);
+                    } catch {
+                        continue;
+                    }
+
+                    if (event.type === 'result') {
+                        handleResult(event.provider, event.result, seen);
+
+                        if (blocking.has(event.result)) {
+                            flaggedIds.add(event.provider);
+                        }
+
+                        updateSummary(Array.from(flaggedIds), total, false);
+                    } else if (event.type === 'error') {
+                        showError(event.message || 'The scan could not be completed.');
+                    }
+                }
+            }
+            return Array.from(flaggedIds);
+        }
+
+        async function runScan(url, force) {
+            const response = await fetch(endpoint, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json', 'Accept': 'application/x-ndjson'},
+                body: JSON.stringify({url: url, token: captchaToken, force: force === true}),
+            });
+
+            if (response.status === 429) {
+                throw new Error('Too many scans from your network. Please wait a moment and try again.');
+            }
+
+            if (response.status === 403) {
+                throw new Error('The captcha could not be verified. Please solve it again.');
+            }
+
+            if (response.status === 400) {
+                throw new Error('That URL could not be scanned. Check the address and try again.');
+            }
+
+            if (!response.ok || !response.body) {
+                throw new Error('The scan service is unavailable right now. Please try again later.');
+            }
+
+            const total = cards.size;
+            const seen = new Set();
+            const flagged = await readStream(response, total, seen);
+
+            // Any provider that never reported is shown as unavailable
+            cards.forEach(function (_card, id) {
+                if (!seen.has(id)) {
+                    setCardState(id, 'failed');
+                }
+            });
+
+            updateSummary(flagged, total, true);
+        }
+
+        input.addEventListener('input', function () {
+            clearError();
+            refreshButton();
+        });
+
+        form.addEventListener('submit', async function (event) {
+            event.preventDefault();
+
+            if (scanning) {
+                return;
+            }
+
+            const url = normalizedInput();
+
+            if (!looksLikeUrl(url)) {
+                showError('Enter a full http or https URL, for example https://example.com');
+                return;
+            }
+
+            // Verify the captcha token is present, throw the captcha note if not.
+            if (!captchaToken) {
+                showCaptchaNote('Please wait a moment before scanning this URL.');
+                return;
+            }
+
+            clearError();
+
+            scanning = true;
+            button.disabled = true;
+            button.textContent = 'Scanning';
+            input.value = url;
+            setSummaryUrl(url);
+            hideSummaryAge();
+
+            results.hidden = false;
+            disclaimer.hidden = false;
+
+            resetGrid();
+            updateSummary([], cards.size, false);
+
+            try {
+                await runScan(url, forceNext);
+                setSummaryAge(Date.now());
+            } catch (err) {
+                showError(err && err.message ? err.message : 'The scan could not be completed.');
+                summary.hidden = true;
+
+                cards.forEach(function (card, id) {
+                    if (card.getAttribute('data-state') === 'waiting') {
+                        setCardState(id, 'idle');
+                    }
+                });
+            } finally {
+                forceNext = false;
+                endScan();
+
+                // Reset the token state and the widget for subsequent scans
+                captchaToken = '';
+                if (window.turnstile) {
+                    window.turnstile.reset();
+                }
+            }
+        });
+
+        // Deep-link support. When the page is opened as /check/?url=..., look up any stored result
+        // for that URL and render it without scanning, then offer a fresh scan. A query-string view
+        // is canonicalised to /check/ and marked noindex so only the clean tool page and the static
+        // per-URL pages are ever indexed.
+        const resultEndpoint = 'https://api.osprey.ac/result';
+
+        function relativeTime(fromMillis) {
+            const seconds = Math.max(1, Math.round((Date.now() - fromMillis) / 1000));
+
+            const units = [
+                ['year', 31536000],
+                ['month', 2592000],
+                ['day', 86400],
+                ['hour', 3600],
+                ['minute', 60],
+            ];
+
+            for (const [name, size] of units) {
+                const value = Math.floor(seconds / size);
+
+                if (value >= 1) {
+                    return value === 1 ? 'a ' + name + ' ago' : value + ' ' + name + 's ago';
+                }
+            }
+            return 'Just now';
+        }
+
+        function setNoindex() {
+            const canonical = document.querySelector('link[rel="canonical"]');
+
+            if (canonical) {
+                canonical.setAttribute('href', 'https://osprey.ac/check/');
+            }
+
+            let robots = document.querySelector('meta[name="robots"]');
+
+            if (!robots) {
+                robots = document.createElement('meta');
+                robots.setAttribute('name', 'robots');
+                document.head.appendChild(robots);
+            }
+
+            robots.setAttribute('content', 'noindex, follow');
+        }
+
+        function renderStored(data) {
+            const total = data.total || cards.size;
+            const flaggedIds = [];
+
+            cards.forEach(function (_card, id) {
+                const values = data.results && data.results[id];
+                const state = values && values.length && states[values[0]] ? values[0] : 'failed';
+                setCardState(id, state);
+
+                if (blocking.has(state)) {
+                    flaggedIds.push(id);
+                }
+            });
+
+            results.hidden = false;
+            disclaimer.hidden = false;
+            updateSummary(flaggedIds, total, true);
+
+            setSummaryUrl(data.url || input.value);
+
+            if (data.lastScanned) {
+                setSummaryAge(data.lastScanned);
+            }
+
+            // Offer a fresh scan of the same URL. The forced scan still requires a captcha.
+            forceNext = true;
+            button.textContent = 'Scan again';
+        }
+
+        async function preloadFromQuery() {
+            const target = new URLSearchParams(window.location.search).get('url');
+
+            if (!target) {
+                return;
+            }
+
+            setNoindex();
+            input.value = target;
+            refreshButton();
+
+            try {
+                const response = await fetch(resultEndpoint + '?url=' + encodeURIComponent(target), {
+                    headers: {'Accept': 'application/json'},
+                });
+
+                if (!response.ok) {
+                    return;
+                }
+
+                const data = await response.json();
+
+                if (data && data.found) {
+                    renderStored(data);
+                }
+            } catch {
+                // A lookup failure is non-fatal: the form stays ready for a manual scan.
+            }
+        }
+
+        // A pre-rendered result page ships its scan age as an absolute date so it is readable
+        // without scripting. Once loaded, restate it as a relative time to match the live tool.
+        if (summaryAge && summaryAge.dataset.scanned) {
+            summaryAge.textContent = relativeTime(Number(summaryAge.dataset.scanned));
+        }
+
+        preloadFromQuery();
+        refreshButton();
+    })();
+</script>
