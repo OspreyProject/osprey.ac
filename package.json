@@ -13,7 +13,8 @@
   "dependencies": {
     "@astrojs/sitemap": "^3.7.3",
     "astro": "^7.2.0",
-    "astro-indexnow": "^2.3.10"
+    "astro-indexnow": "^2.3.10",
+    "tldts": "^6.1.86"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",

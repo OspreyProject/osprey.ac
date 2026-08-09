@@ -1,7 +1,8 @@
 ---
 import Base from '../../layouts/Base.astro';
 import CheckTool from '../../components/CheckTool.astro';
-import {providers, resultStates, blockingResults} from '../../data/providers';
+import {providers, resultStates, blockingResults, isAuthoritative} from '../../data/providers';
+import {parse} from 'tldts';
 
 interface ScanResult {
     url: string;
@@ -14,9 +15,78 @@ interface ScanResult {
     firstScanned: number;
 }
 
-// Fetches the set of hard-flagged URLs that should have their own crawlable page. Only phishing and
-// malicious verdicts reach this feed, so every generated page is a genuine, unique detection rather
-// than a thin or auto-spun page. Any failure degrades to zero pages so the site still builds.
+// Publication gate, tune these two if the backend's signal density changes.
+// A domain must clear all three checks before it is allowed to mint a page.
+const hardPrimary = ['phishing', 'malicious']; // soft "warn" verdicts never earn a page
+const minAuthoritative = 2;                        // independent corroboration required
+const dwellMs = 24 * 60 * 60 * 1000;           // must stay flagged this long first
+
+// Reduces a submitted URL to its registrable domain, or null if it cannot be published.
+// The registrable domain is the only part of a URL the submitter cannot freely choose, so it
+// is the only value ever allowed into an indexable field. Paths, queries, fragments, ports,
+// userinfo, subdomain labels on domains the submitter does not own, raw IPs, and every
+// non-ASCII glyph are discarded here and can never reach a slug, title, meta, or schema value.
+function deriveDomain(rawUrl: string): string | null {
+    let parsed: URL;
+
+    try {
+        parsed = new URL(rawUrl);
+    } catch {
+        return null;
+    }
+
+    if (parsed.protocol !== 'https:') {
+        return null;
+    }
+
+    // hostname is already IDNA/punycode ASCII from the WHATWG parser, with userinfo and port
+    // stripped, so an "osprey.ac@evil.com" spoof resolves to evil.com and a unicode label
+    // resolves to its xn-- form rather than the rendered glyphs.
+    const host = parsed.hostname.toLowerCase();
+    const info = parse(host, {allowPrivateDomains: true});
+
+    if (!info.domain || info.isIp) {
+        return null;
+    }
+
+    const domain = info.domain.toLowerCase();
+
+    // Publish only plain ASCII registrable domains of two or more labels. Anything with a
+    // glyph, emoji, space, or stray character never gets here, so there is no free text left
+    // to spam into search results.
+    if (!/^[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)+$/.test(domain)) {
+        return null;
+    }
+    return domain;
+}
+
+// The provider names currently returning a blocking verdict for this record.
+function flaggingNames(results: Record<string, string[]>): string[] {
+    return providers.filter((p) => {
+        const values = results?.[p.id];
+        const state = values && values.length && resultStates[values[0]] ? values[0] : 'failed';
+        return blockingResults.includes(state);
+    }).map((p) => p.name);
+}
+
+// A record may be published only if it is a hard verdict, has stayed flagged past the dwell
+// window, and is corroborated by at least MIN_AUTHORITATIVE independent authoritative providers.
+// A one-off scan of a weird path can satisfy none of these, so a scan alone can never publish.
+function isEligible(record: ScanResult): boolean {
+    if (!hardPrimary.includes(record.primary)) {
+        return false;
+    }
+
+    if (!(record.lastScanned - record.firstScanned >= dwellMs)) {
+        return false;
+    }
+    return flaggingNames(record.results).filter(isAuthoritative).length >= minAuthoritative;
+}
+
+// Builds one crawlable page per hard-flagged registrable domain. The feed is never trusted to
+// have done this filtering: every record is re-derived, re-gated, and de-duplicated here, so a
+// dirty or hostile feed still cannot publish anything but a clean, corroborated domain page.
+// Any failure degrades to zero pages so the site still builds.
 export async function getStaticPaths() {
     const feedUrl = import.meta.env.SCAN_FEED_URL;
     const feedToken = import.meta.env.SCAN_FEED_TOKEN;
@@ -24,6 +94,8 @@ export async function getStaticPaths() {
     if (!feedUrl || !feedToken) {
         return [];
     }
+
+    let records: ScanResult[] = [];
 
     try {
         const response = await fetch(feedUrl, {
@@ -35,37 +107,61 @@ export async function getStaticPaths() {
         }
 
         const body = await response.json();
-        const records: ScanResult[] = Array.isArray(body?.results) ? body.results : [];
-
-        return records
-            .filter((record) => typeof record?.url === 'string' && record.url.startsWith('https://'))
-            .map((record) => ({
-                params: {target: record.url.slice('https://'.length)},
-                props: {record},
-            }));
+        records = Array.isArray(body?.results) ? body.results : [];
     } catch {
         return [];
     }
+
+    const best = new Map<string, { domain: string; record: ScanResult; authCount: number }>();
+
+    for (const record of records) {
+        if (!record || typeof record.url !== 'string') {
+            continue;
+        }
+
+        const domain = deriveDomain(record.url);
+
+        if (!domain || !isEligible(record)) {
+            continue;
+        }
+
+        const authCount = flaggingNames(record.results).filter(isAuthoritative).length;
+        const current = best.get(domain);
+
+        // One page per domain: keep the best-corroborated record, then the most recent.
+        if (!current
+            || authCount > current.authCount
+            || (authCount === current.authCount && record.lastScanned > current.record.lastScanned)) {
+            best.set(domain, {domain, record, authCount});
+        }
+    }
+
+    return Array.from(best.values()).map(({domain, record}) => ({
+        params: {target: domain},
+        props: {domain, record},
+    }));
 }
 
-const {record} = Astro.props;
+const {domain, record} = Astro.props;
 
 const stateFor = (id: string): string => {
     const values = record.results?.[id];
     return values && values.length && resultStates[values[0]] ? values[0] : 'failed';
 };
 
-const primaryLabel = resultStates[record.primary]?.label ?? 'Flagged';
-
 const flaggingProviders = providers
     .filter((p) => blockingResults.includes(stateFor(p.id)))
     .map((p) => p.name);
 
-const target = record.url.slice('https://'.length);
-const canonicalPath = `/check/${target}/`;
+const flaggedCount = flaggingProviders.length;
+const totalCount = record.total ?? providers.length;
+const primaryLabel = resultStates[record.primary]?.label ?? 'Flagged';
 
-const title = `Safety Result for: ${target}`;
-const description = `${record.flagged} of ${record.total} security providers flagged ${target} as ${primaryLabel.toLowerCase()}. `
+const canonicalPath = `/check/${domain}/`;
+const canonicalUrl = `https://${domain}/`;
+
+const title = `Website Safety Check: Is ${domain} safe?`;
+const description = `${flaggedCount} of ${totalCount} security providers flagged ${domain} as ${primaryLabel.toLowerCase()}. `
     + `See which vendors reported it and when it was last checked.`;
 
 const schema = {
@@ -78,14 +174,14 @@ const schema = {
             description,
             dateModified: new Date(record.lastScanned).toISOString(),
             isPartOf: {'@id': 'https://osprey.ac/#website'},
-            about: {'@type': 'Thing', name: record.url},
+            about: {'@type': 'Thing', name: domain},
         },
         {
             '@type': 'BreadcrumbList',
             '@id': `https://osprey.ac${canonicalPath}#breadcrumb`,
             itemListElement: [
                 {'@type': 'ListItem', position: 1, name: 'Link checker', item: 'https://osprey.ac/check/'},
-                {'@type': 'ListItem', position: 2, name: target, item: `https://osprey.ac${canonicalPath}`},
+                {'@type': 'ListItem', position: 2, name: domain, item: `https://osprey.ac${canonicalPath}`},
             ],
         },
     ],
@@ -94,9 +190,9 @@ const schema = {
 
 <Base title={title} description={description} schema={schema} canonicalPath={canonicalPath}>
     <CheckTool result={{
-        url: record.url,
+        url: canonicalUrl,
         results: record.results,
-        total: record.total,
+        total: totalCount,
         lastScanned: record.lastScanned,
     }}/>
 </Base>
