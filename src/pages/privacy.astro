@@ -1,6 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
-const effective = '8 August 2026';
+const effective = '9 August 2026';
 
 const permissions = [
     {
@@ -119,6 +119,10 @@ const localData = [
             <li>
                 <code>drive.google.com/uc</code> keeps <code>export</code> and <code>id</code>, which identify the
                 Google Drive file being downloaded
+            </li>
+            <li>
+                <code>adclick.g.doubleclick.net/pcs/click</code> keeps <code>adurl</code>, which identifies the redirect
+                URL of the ad click
             </li>
             <li>
                 <code>drive.usercontent.google.com/download</code> keeps <code>id</code> and <code>export</code>, which
