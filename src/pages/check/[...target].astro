@@ -158,7 +158,7 @@ const totalCount = record.total ?? providers.length;
 const primaryLabel = resultStates[record.primary]?.label ?? 'Flagged';
 
 const canonicalPath = `/check/${domain}/`;
-const canonicalUrl = `https://${domain}/`;
+const scannedUrl = `https://${domain}/`;
 
 const title = `Website Safety Check: Is ${domain} safe?`;
 const description = `${flaggedCount} of ${totalCount} security providers flagged ${domain} as ${primaryLabel.toLowerCase()}. `
@@ -172,6 +172,7 @@ const schema = {
             url: `https://osprey.ac${canonicalPath}`,
             name: title,
             description,
+            datePublished: new Date(record.firstScanned).toISOString(),
             dateModified: new Date(record.lastScanned).toISOString(),
             isPartOf: {'@id': 'https://osprey.ac/#website'},
             about: {'@type': 'Thing', name: domain},
@@ -190,7 +191,7 @@ const schema = {
 
 <Base title={title} description={description} schema={schema} canonicalPath={canonicalPath}>
     <CheckTool result={{
-        url: canonicalUrl,
+        url: scannedUrl,
         results: record.results,
         total: totalCount,
         lastScanned: record.lastScanned,
