@@ -1,6 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
-const effective = '10 August 2026';
+const effective = '9 August 2026';
 
 const permissions = [
     {
@@ -190,28 +190,9 @@ const localData = [
 
         <h2>Your IP address</h2>
         <p>
-            The proxy server uses your IP address <strong>solely for abuse protections</strong>, specifically rate
-            limiting and blocking networks responsible for automated abuse of the service. It is never used for
-            advertising, profiling, or tracking what you browse.
-        </p>
-        <p>
-            Before your IP address is hashed, it is sent once to <a href="https://ipinfo.io"
-                                                                    class="contact-link">IPinfo</a>, a network-lookup
-            provider, to determine which network operator (its autonomous system, or ASN) the address belongs to. This
-            lets us block networks that are responsible for abuse without singling out individual users. Your raw IP
-            address is used only for this lookup and is not stored. IPinfo's handling of the request is governed by
-            the <a href="https://ipinfo.io/privacy-policy" class="contact-link">IPinfo Privacy Policy</a>.
-        </p>
-        <p>
-            Your IP address is then hashed, and only the hash is kept, in memory, to apply rate limits and to avoid
-            repeating the network lookup for the same visitor. The hash cannot be reversed to recover your IP address,
-            and it is discarded when the proxy restarts.
-        </p>
-        <p>
-            What is kept durably is <strong>network-level information about the ASN</strong>, not about you: the ASN,
-            the operator's name and domain, whether it is currently blocked, and rough counts of how often that
-            network has been seen. This describes a network, not a person; it contains <strong>no IP address</strong>,
-            hashed or otherwise, and nothing that ties it to you. Raw IP addresses are never written to disk.
+            The proxy server uses your IP address <strong>solely for abuse protections</strong> such as rate limiting.
+            For this purpose, your IP is immediately hashed and stored in-memory. Raw IP addresses are not written to
+            disk as part of normal proxy operation.
         </p>
 
         <h2>Third-party integrations</h2>
@@ -283,18 +264,17 @@ const localData = [
 
         <h2>Data retention</h2>
         <p>
-            On the proxy server, rate-limit states, the in-memory hashed-IP network-lookup cache, local list
-            snapshots, and transient runtime logs (including the false-positive monitoring entries described above)
-            exist only in memory and may be lost on restart. Aggregated operational metrics may be retained longer in
-            Prometheus and Grafana, subject to those systems' retention settings.
+            On the proxy server, rate-limit states, local list snapshots, and transient runtime logs (including the
+            false-positive monitoring entries described above) exist only in memory and may be lost on restart.
+            Aggregated operational metrics may be retained longer in Prometheus and Grafana, subject to those systems'
+            retention settings.
         </p>
         <p>
-            The durable store described under "The website and safety checker page" is the one component that
-            persists across restarts. It holds only normalized link addresses and their aggregate vendor results and,
-            for abuse protection, the network-level ASN information described under "Your IP address". Neither contains
-            IP addresses or personal identifiers. Records may be updated on a later scan or removed at our discretion,
-            and a published warning page is removed when the corresponding link no longer meets the high-confidence
-            threshold for publishing.
+            The durable scan store described under "The website and safety checker page" is the one component that
+            persists across restarts. It holds only normalized link addresses and their aggregate vendor results, with
+            no IP addresses or personal identifiers. Records may be updated on a later scan or removed at our
+            discretion, and a published warning page is removed when the corresponding link no longer meets the
+            high-confidence threshold for publishing.
         </p>
 
         <h2>Changes to this policy</h2>
