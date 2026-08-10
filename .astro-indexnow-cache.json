@@ -3,8 +3,8 @@
   "entries": {
     "https://osprey.ac/check": "sha256:2dbf7ad11bce15ad9394bdef6d77e02ff9ab0f6865c8d6781be59ba2a12cf937",
     "https://osprey.ac/download": "sha256:d2f6977b0811badde67a7863ea78acd10dcffdc890be7064551e5aa82d257df1",
-    "https://osprey.ac/": "sha256:35041bc01c263b97aefb073bda19f698f6b6ba340c00de486bb596117a9bf8a3",
-    "https://osprey.ac/privacy": "sha256:068440dd1cf80365c5e9b3bc98c3f509a7be96ada8b20b1ba110798c27e656c8",
-    "https://osprey.ac/terms": "sha256:927d4a71f998357a28feb98798c72a1d439f18b8d086f66783f89ff322881afb"
+    "https://osprey.ac/": "sha256:31450ce85b687e6f8a5858591c2b24ccabd4e34186e0f9d79d939a38ebca503f",
+    "https://osprey.ac/privacy": "sha256:11883705abbd092771b646c630bf7f4934fe76b3ee17e32d8536fa2507216a62",
+    "https://osprey.ac/terms": "sha256:8d830ea25e59ceafb548850fd7a5525cc622f564137f1f324bee920b26c9a9e9"
   }
 }
