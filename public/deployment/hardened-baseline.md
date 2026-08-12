@@ -44,3 +44,13 @@ to render the default Osprey branding.
 
 This baseline cannot prevent extension removal. Pair it with the browser force-install policy described in
 `tamper-protection.md`, or a user who removes the extension loses all protection with nothing to stop them.
+
+## Central management and reporting
+
+The templates also set `ManagedConfigUrl`, `ReportingEndpoint`, and `ReportingAuthToken` to placeholder values, and
+`ProxyApiKey` alongside `ProxyBaseUrl`. `ManagedConfigUrl` points every endpoint at one hosted JSON file per client, so
+later setting changes need no Group Policy or Intune re-push. `ReportingEndpoint` streams detections, overrides, and
+health heartbeats to your webhook or SIEM, and a gap in heartbeats reveals a removed or disabled install. `ProxyApiKey`
+is the per-tenant key a self-hosted proxy authenticates, sent as the `X-Osprey-Tenant-Key` header and never sent to the
+public backend. Replace the placeholders with your real URLs and keys, or remove the keys to run without central
+management.

@@ -16,6 +16,11 @@ const identifierFields = [
         help: 'Route every lookup to your self-hosted proxy. Leave empty to use the public backend.',
     },
     {
+        key: 'ProxyApiKey', label: 'Proxy API key', type: 'string',
+        placeholder: 'tenant-key',
+        help: 'Per-tenant key sent to a self-hosted proxy as the X-Osprey-Tenant-Key header. Only sent when the proxy base URL is set.',
+    },
+    {
         key: 'DeviceTag', label: 'Device tag', type: 'string', app: 'deviceTag',
         placeholder: 'endpoint-0001',
         help: 'Opaque per-endpoint identifier attached to reported events.',
@@ -24,6 +29,24 @@ const identifierFields = [
         key: 'SiteId', label: 'Site ID', type: 'string', app: 'siteId',
         placeholder: 'client-acme',
         help: 'Opaque per-client identifier attached to reported events.',
+    },
+];
+
+const managementFields = [
+    {
+        key: 'ManagedConfigUrl', label: 'Managed config URL', type: 'string',
+        placeholder: 'https://config.msp.example/clients/acme/osprey.json',
+        help: 'Hosted JSON document fetched on startup and every 60 minutes. Locally pushed policies always win over fetched values. Can only be set through managed storage.',
+    },
+    {
+        key: 'ReportingEndpoint', label: 'Reporting endpoint', type: 'string',
+        placeholder: 'https://reporting.msp.example/osprey',
+        help: 'Receives detection and override events and periodic health heartbeats. Leave empty to send nothing.',
+    },
+    {
+        key: 'ReportingAuthToken', label: 'Reporting auth token', type: 'string',
+        placeholder: 'bearer-token',
+        help: 'Sent as "Authorization: Bearer <token>" on every reporting request.',
     },
 ];
 
@@ -151,6 +174,19 @@ const outputTabs = [
                             <span class="field-label">{f.label}</span>
                             <input class="text-input" type="text" data-key={f.key} data-type="string"
                                    data-app={f.app} data-label={f.label} placeholder={f.placeholder}
+                                   autocomplete="off" spellcheck="false"/>
+                            {f.help && <span class="field-help">{f.help}</span>}
+                        </label>
+                ))}
+            </fieldset>
+
+            <fieldset class="gen-group">
+                <legend>Central management &amp; reporting</legend>
+                {managementFields.map((f) => (
+                        <label class="field">
+                            <span class="field-label">{f.label}</span>
+                            <input class="text-input" type="text" data-key={f.key} data-type="string"
+                                   data-label={f.label} placeholder={f.placeholder}
                                    autocomplete="off" spellcheck="false"/>
                             {f.help && <span class="field-help">{f.help}</span>}
                         </label>
@@ -896,8 +932,12 @@ const outputTabs = [
             setValue('ManagedAllowlist', 'intranet.example.com\n*.corp.example.com');
             setValue('ManagedBlocklist', '*.known-bad.example\nphish.example/login');
             setValue('ProxyBaseUrl', 'https://osprey.msp.example');
+            setValue('ProxyApiKey', 'REPLACE-WITH-TENANT-KEY');
             setValue('DeviceTag', 'REPLACE-WITH-ENDPOINT-ID');
             setValue('SiteId', 'REPLACE-WITH-CLIENT-ID');
+            setValue('ManagedConfigUrl', 'https://config.msp.example/clients/acme/osprey.json');
+            setValue('ReportingEndpoint', 'https://reporting.msp.example/osprey');
+            setValue('ReportingAuthToken', 'REPLACE-WITH-REPORTING-TOKEN');
             setValue('BrandProductName', 'Example MSP Web Protection');
             setValue('BrandLogoUrl', 'https://cdn.msp.example/logo.png');
             setValue('SupportUrl', 'https://help.msp.example');

@@ -74,6 +74,14 @@
       <string id="DeviceTag_Explain">Opaque identifier for this endpoint, attached to reported events by later features. Has no visible effect on its own.</string>
       <string id="SiteId">Site ID</string>
       <string id="SiteId_Explain">Opaque identifier for the client organization this endpoint belongs to, attached to reported events by later features. Has no visible effect on its own.</string>
+      <string id="ProxyApiKey">Proxy API Key</string>
+      <string id="ProxyApiKey_Explain">Per-tenant API key presented to a self-hosted proxy as the X-Osprey-Tenant-Key header on every lookup. Only sent when ProxyBaseUrl is set, so the key is never sent to the public backend. When empty, no key is sent.</string>
+      <string id="ManagedConfigUrl">Managed Config URL</string>
+      <string id="ManagedConfigUrl_Explain">An http(s) URL to a JSON configuration document the extension fetches on startup and every 60 minutes. Fetched values are merged UNDER managed storage: anything set here locally always wins, and the document fills in the rest. On a fetch failure the last successfully fetched document is kept. This key can only be set through managed storage; a fetched document cannot change it.</string>
+      <string id="ReportingEndpoint">Reporting Endpoint</string>
+      <string id="ReportingEndpoint_Explain">An http(s) URL the extension POSTs detection and override events and periodic health heartbeats to. When empty, no events or heartbeats are sent.</string>
+      <string id="ReportingAuthToken">Reporting Auth Token</string>
+      <string id="ReportingAuthToken_Explain">Optional bearer token sent as the Authorization header on every reporting request. When set, each POST carries "Authorization: Bearer &lt;token&gt;". When empty, no Authorization header is sent.</string>
       <string id="DisableUserAllowlist">Disable User Allowlist</string>
       <string id="DisableUserAllowlist_Explain">If true, the end user cannot add any allowlist entries or exclusions, and existing user allowlist entries are ignored.</string>
       <string id="ManagedProviderSettings">Managed Provider Settings</string>
@@ -110,6 +118,18 @@
       </presentation>
       <presentation id="Chrome_SiteId">
         <textBox refId="Chrome_SiteId_val"><label>Site ID</label></textBox>
+      </presentation>
+      <presentation id="Chrome_ProxyApiKey">
+        <textBox refId="Chrome_ProxyApiKey_val"><label>Proxy API Key</label></textBox>
+      </presentation>
+      <presentation id="Chrome_ManagedConfigUrl">
+        <textBox refId="Chrome_ManagedConfigUrl_val"><label>Managed Config URL</label></textBox>
+      </presentation>
+      <presentation id="Chrome_ReportingEndpoint">
+        <textBox refId="Chrome_ReportingEndpoint_val"><label>Reporting Endpoint</label></textBox>
+      </presentation>
+      <presentation id="Chrome_ReportingAuthToken">
+        <textBox refId="Chrome_ReportingAuthToken_val"><label>Reporting Auth Token</label></textBox>
       </presentation>
       <presentation id="Chrome_ManagedProviderSettings">
         <textBox refId="Chrome_ManagedProviderSettings_val"><label>Managed Provider Settings</label></textBox>
@@ -149,6 +169,18 @@
       </presentation>
       <presentation id="Edge_SiteId">
         <textBox refId="Edge_SiteId_val"><label>Site ID</label></textBox>
+      </presentation>
+      <presentation id="Edge_ProxyApiKey">
+        <textBox refId="Edge_ProxyApiKey_val"><label>Proxy API Key</label></textBox>
+      </presentation>
+      <presentation id="Edge_ManagedConfigUrl">
+        <textBox refId="Edge_ManagedConfigUrl_val"><label>Managed Config URL</label></textBox>
+      </presentation>
+      <presentation id="Edge_ReportingEndpoint">
+        <textBox refId="Edge_ReportingEndpoint_val"><label>Reporting Endpoint</label></textBox>
+      </presentation>
+      <presentation id="Edge_ReportingAuthToken">
+        <textBox refId="Edge_ReportingAuthToken_val"><label>Reporting Auth Token</label></textBox>
       </presentation>
       <presentation id="Edge_ManagedProviderSettings">
         <textBox refId="Edge_ManagedProviderSettings_val"><label>Managed Provider Settings</label></textBox>

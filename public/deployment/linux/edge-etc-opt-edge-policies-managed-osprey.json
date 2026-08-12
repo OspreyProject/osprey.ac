@@ -20,8 +20,12 @@
           "phish.example/login"
         ],
         "ProxyBaseUrl": "https://osprey.msp.example",
+        "ProxyApiKey": "REPLACE-WITH-TENANT-KEY",
         "DeviceTag": "REPLACE-WITH-ENDPOINT-ID",
         "SiteId": "REPLACE-WITH-CLIENT-ID",
+        "ManagedConfigUrl": "https://config.msp.example/clients/acme/osprey.json",
+        "ReportingEndpoint": "https://reporting.msp.example/osprey",
+        "ReportingAuthToken": "REPLACE-WITH-REPORTING-TOKEN",
         "BrandProductName": "Example MSP Web Protection",
         "BrandLogoUrl": "https://cdn.msp.example/logo.png",
         "SupportUrl": "https://help.msp.example",

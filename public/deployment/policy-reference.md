@@ -1,6 +1,6 @@
 # Osprey policy reference
 
-Every key below is a property of the extension's managed-storage schema (`src/main/policies.json`). All 40 keys are read
+Every key below is a property of the extension's managed-storage schema (`src/main/policies.json`). All 44 keys are read
 on every supported browser through that browser's managed-storage mechanism. Keys left unset fall back to the defaults
 shown here.
 
@@ -37,13 +37,22 @@ shown here.
 
 ### Backend, identity, and cache
 
-| Key                      | Type    | Default  | Description                                                                                                                                                                       |
-|--------------------------|---------|----------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `ProxyBaseUrl`           | string  | (empty)  | Overrides the backend origin the extension sends lookups to. Must be an http(s) origin, for example "https://osprey.msp.example". When empty, the default public backend is used. |
-| `DeviceTag`              | string  | (empty)  | Opaque identifier for this endpoint, attached to reported events by later features. Has no visible effect on its own.                                                             |
-| `SiteId`                 | string  | (empty)  | Opaque identifier for the client organization this endpoint belongs to, attached to reported events by later features. Has no visible effect on its own.                          |
-| `CacheExpirationSeconds` | integer | `604800` | Cache entry lifetime in seconds. Range 60 to 2592000.                                                                                                                             |
-| `MetaDefenderApiKey`     | string  | (empty)  | Managed API key for the MetaDefender integrations.                                                                                                                                |
+| Key                      | Type    | Default  | Description                                                                                                                                                                                                                |
+|--------------------------|---------|----------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `ProxyBaseUrl`           | string  | (empty)  | Overrides the backend origin the extension sends lookups to. Must be an http(s) origin, for example "https://osprey.msp.example". When empty, the default public backend is used.                                          |
+| `ProxyApiKey`            | string  | (empty)  | Per-tenant API key presented to a self-hosted proxy as the `X-Osprey-Tenant-Key` header on every lookup. Only sent when `ProxyBaseUrl` is set, so the key is never sent to the public backend. When empty, no key is sent. |
+| `DeviceTag`              | string  | (empty)  | Opaque identifier for this endpoint, attached to reported events by later features. Has no visible effect on its own.                                                                                                      |
+| `SiteId`                 | string  | (empty)  | Opaque identifier for the client organization this endpoint belongs to, attached to reported events by later features. Has no visible effect on its own.                                                                   |
+| `CacheExpirationSeconds` | integer | `604800` | Cache entry lifetime in seconds. Range 60 to 2592000.                                                                                                                                                                      |
+| `MetaDefenderApiKey`     | string  | (empty)  | Managed API key for the MetaDefender integrations.                                                                                                                                                                         |
+
+### Central management and reporting
+
+| Key                  | Type   | Default | Description                                                                                                                                                                                                                                                                                                                                                                             |
+|----------------------|--------|---------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `ManagedConfigUrl`   | string | (empty) | An http(s) URL to a JSON configuration document the extension fetches on startup and every 60 minutes. Fetched values are merged under managed storage: anything set locally always wins, and the document fills in the rest. On a fetch failure the last successfully fetched document is kept. This key can only be set through managed storage; a fetched document cannot change it. |
+| `ReportingEndpoint`  | string | (empty) | An http(s) URL the extension POSTs detection and override events and periodic health heartbeats to. When empty, no events or heartbeats are sent.                                                                                                                                                                                                                                       |
+| `ReportingAuthToken` | string | (empty) | Optional bearer token sent as the Authorization header on every reporting request. When set, each POST carries "Authorization: Bearer <token>". When empty, no Authorization header is sent.                                                                                                                                                                                            |
 
 ### Provider on/off toggles
 

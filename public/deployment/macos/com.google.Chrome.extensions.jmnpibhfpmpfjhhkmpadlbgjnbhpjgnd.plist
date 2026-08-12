@@ -94,6 +94,13 @@
 			<key>value</key>
 			<string>https://osprey.msp.example</string>
 		</dict>
+		<key>ProxyApiKey</key>
+		<dict>
+			<key>state</key>
+			<string>always</string>
+			<key>value</key>
+			<string>REPLACE-WITH-TENANT-KEY</string>
+		</dict>
 		<key>DeviceTag</key>
 		<dict>
 			<key>state</key>
@@ -107,6 +114,27 @@
 			<string>always</string>
 			<key>value</key>
 			<string>REPLACE-WITH-CLIENT-ID</string>
+		</dict>
+		<key>ManagedConfigUrl</key>
+		<dict>
+			<key>state</key>
+			<string>always</string>
+			<key>value</key>
+			<string>https://config.msp.example/clients/acme/osprey.json</string>
+		</dict>
+		<key>ReportingEndpoint</key>
+		<dict>
+			<key>state</key>
+			<string>always</string>
+			<key>value</key>
+			<string>https://reporting.msp.example/osprey</string>
+		</dict>
+		<key>ReportingAuthToken</key>
+		<dict>
+			<key>state</key>
+			<string>always</string>
+			<key>value</key>
+			<string>REPLACE-WITH-REPORTING-TOKEN</string>
 		</dict>
 		<key>BrandProductName</key>
 		<dict>
