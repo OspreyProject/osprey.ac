@@ -1,0 +1,7 @@
+Windows Registry Editor Version 5.00
+
+; Points Firefox at the managed-storage manifest. Copy
+; firefox\managed-storage\osprey@foulest.net.json to the path below first.
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Mozilla\ManagedStorage\osprey@foulest.net]
+@="C:\\ProgramData\\Osprey\\osprey@foulest.net.json"

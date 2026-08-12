@@ -1,0 +1,42 @@
+{
+  "name": "osprey@foulest.net",
+  "description": "ignored",
+  "type": "storage",
+  "data": {
+    "LockProtectionOptions": true,
+    "HideProtectionOptions": true,
+    "DisableClearAllowedWebsites": true,
+    "DisableResetButtons": true,
+    "DisableThirdPartyIntegrations": true,
+    "DisableUserAllowlist": true,
+    "HideContinueButtons": true,
+    "HideReportButton": false,
+    "CacheExpirationSeconds": 604800,
+    "ManagedAllowlist": [
+      "intranet.example.com",
+      "*.corp.example.com"
+    ],
+    "ManagedBlocklist": [
+      "*.known-bad.example",
+      "phish.example/login"
+    ],
+    "ProxyBaseUrl": "https://osprey.msp.example",
+    "DeviceTag": "REPLACE-WITH-ENDPOINT-ID",
+    "SiteId": "REPLACE-WITH-CLIENT-ID",
+    "BrandProductName": "Example MSP Web Protection",
+    "BrandLogoUrl": "https://cdn.msp.example/logo.png",
+    "SupportUrl": "https://help.msp.example",
+    "SupportEmail": "support@msp.example",
+    "CustomBlockMessage": "This site was blocked by Example MSP. Contact the help desk if you need access.",
+    "ManagedProviderSettings": {
+      "alphamountain": {
+        "bypassBlockingThreshold": false,
+        "requestTimeoutMs": 8000,
+        "blockCategories": {
+          "suspicious": true,
+          "newly_registered": true
+        }
+      }
+    }
+  }
+}

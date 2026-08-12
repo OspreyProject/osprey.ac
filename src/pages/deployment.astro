@@ -1,0 +1,304 @@
+---
+import Base from '../layouts/Base.astro';
+
+const title = 'Deploy Osprey Across a Fleet - MSP & Enterprise Templates';
+const description =
+    'Ready-to-push Osprey deployment templates for Group Policy (ADMX), Intune, macOS, Linux, and Firefox. Configure every managed policy across Chrome, Edge, and Firefox without editing raw registry keys.';
+
+const bundleZip = '/osprey-deployment-templates.zip';
+
+const extensionIds = [
+    {store: 'Chrome Web Store (Chrome, Chromium, Brave, Vivaldi)', id: 'jmnpibhfpmpfjhhkmpadlbgjnbhpjgnd'},
+    {store: 'Microsoft Edge Add-ons', id: 'nopglhplnghfhpniofkcopmhbjdonlgn'},
+    {store: 'Firefox Add-ons (AMO)', id: 'osprey@foulest.net'},
+];
+
+const platforms = [
+    {
+        name: 'Windows, Group Policy',
+        body: 'Import the administrative template for a full settings UI in gpedit and GPMC, covering every policy for Chrome and Edge. The .reg files are for a quick test without Group Policy.',
+        files: [
+            {label: 'Osprey.admx', href: '/deployment/admx/Osprey.admx'},
+            {label: 'Osprey.adml (en-US)', href: '/deployment/admx/en-US/Osprey.adml'},
+            {label: 'Chrome .reg', href: '/deployment/windows/osprey-chrome.reg'},
+            {label: 'Edge .reg', href: '/deployment/windows/osprey-edge.reg'},
+            {label: 'Firefox pointer .reg', href: '/deployment/windows/osprey-firefox-managed-storage.reg'},
+        ],
+    },
+    {
+        name: 'Windows, Microsoft Intune',
+        body: 'Import the ADMX above into Intune for a full settings UI, then force-install through the Settings Catalog. The guide walks through both, with an OMA-URI fallback.',
+        files: [
+            {label: 'Intune guide', href: '/deployment/intune/README.md'},
+        ],
+    },
+    {
+        name: 'macOS',
+        body: 'Deploy the matching configuration profile through your MDM. Each profile sets every key and force-installs the extension. The plist is for MDMs that take a custom plist instead.',
+        files: [
+            {
+                label: 'Chrome profile',
+                href: '/deployment/macos/com.google.Chrome.extensions.jmnpibhfpmpfjhhkmpadlbgjnbhpjgnd.mobileconfig'
+            },
+            {
+                label: 'Edge profile',
+                href: '/deployment/macos/com.microsoft.Edge.extensions.nopglhplnghfhpniofkcopmhbjdonlgn.mobileconfig'
+            },
+            {
+                label: 'Chrome plist',
+                href: '/deployment/macos/com.google.Chrome.extensions.jmnpibhfpmpfjhhkmpadlbgjnbhpjgnd.plist'
+            },
+        ],
+    },
+    {
+        name: 'Linux',
+        body: 'Copy the file for your browser to the managed-policy directory in its name, for example the Chrome file goes to /etc/opt/chrome/policies/managed/osprey.json.',
+        files: [
+            {label: 'Chrome JSON', href: '/deployment/linux/chrome-etc-opt-chrome-policies-managed-osprey.json'},
+            {label: 'Chromium JSON', href: '/deployment/linux/chromium-etc-chromium-policies-managed-osprey.json'},
+            {label: 'Edge JSON', href: '/deployment/linux/edge-etc-opt-edge-policies-managed-osprey.json'},
+        ],
+    },
+    {
+        name: 'Firefox',
+        body: 'Firefox does not read Chromium managed storage. Deploy the native managed-storage manifest, or the enterprise policies.json with its 3rdparty.Extensions block and force-install.',
+        files: [
+            {label: 'Managed-storage manifest', href: '/deployment/firefox/managed-storage/osprey@foulest.net.json'},
+            {label: 'policies.json', href: '/deployment/firefox/policies.json'},
+        ],
+    },
+];
+
+const chromiumParity = [
+    {
+        browser: 'Chrome',
+        win: 'HKLM\\SOFTWARE\\Policies\\Google\\Chrome',
+        mac: 'com.google.Chrome',
+        linux: '/etc/opt/chrome/policies/managed/'
+    },
+    {
+        browser: 'Chromium',
+        win: 'HKLM\\SOFTWARE\\Policies\\Chromium',
+        mac: 'org.chromium.Chromium',
+        linux: '/etc/chromium/policies/managed/'
+    },
+    {
+        browser: 'Edge',
+        win: 'HKLM\\SOFTWARE\\Policies\\Microsoft\\Edge',
+        mac: 'com.microsoft.Edge',
+        linux: '/etc/opt/edge/policies/managed/'
+    },
+    {
+        browser: 'Brave',
+        win: 'HKLM\\SOFTWARE\\Policies\\BraveSoftware\\Brave',
+        mac: 'com.brave.Browser',
+        linux: '/etc/brave/policies/managed/'
+    },
+    {
+        browser: 'Vivaldi',
+        win: 'HKLM\\SOFTWARE\\Policies\\Vivaldi',
+        mac: 'com.vivaldi.Vivaldi',
+        linux: '/etc/vivaldi/policies/managed/'
+    },
+];
+
+const docs = [
+    {label: 'Full deployment guide', href: '/deployment/README.md'},
+    {label: 'Policy reference (all 40 keys)', href: '/deployment/policy-reference.md'},
+    {label: 'Recommended hardened baseline', href: '/deployment/hardened-baseline.md'},
+    {label: 'Removal protection note', href: '/deployment/tamper-protection.md'},
+];
+---
+
+<Base title={title} description={description}>
+    <section class="hero">
+        <h1>Deploy Osprey across a fleet</h1>
+        <p class="hero-sub">
+            Configure every managed policy on Chrome, Edge, and Firefox from your own tooling, without editing raw
+            registry keys by hand. These templates cover Group Policy, Intune, macOS, Linux, and Firefox.
+        </p>
+        <p class="deploy-cta">
+            <a class="install-btn" href={bundleZip} download>Download all templates</a>
+        </p>
+    </section>
+
+    <section class="band">
+        <h2 class="band-title">Choose your platform</h2>
+        <p class="band-sub">
+            Every template embeds the same hardened example configuration. Edit the placeholder domains and identifiers
+            before you push.
+        </p>
+
+        <ul class="deploy-list">
+            {
+                platforms.map((platform) => (
+                        <li>
+                            <h3>{platform.name}</h3>
+                            <p>{platform.body}</p>
+                            <p class="files">
+                                {platform.files.map((file) => (
+                                        <a href={file.href} download class="file-link">{file.label}</a>
+                                ))}
+                            </p>
+                        </li>
+                ))
+            }
+        </ul>
+    </section>
+
+    <section class="band">
+        <h2 class="band-title">Extension IDs</h2>
+        <p class="band-sub">
+            The extension has a different id in each store. Use the right one for each browser family.
+        </p>
+        <div class="table-scroll">
+            <table class="compare">
+                <thead>
+                <tr>
+                    <th scope="col">Store</th>
+                    <th scope="col">Extension id</th>
+                </tr>
+                </thead>
+                <tbody>
+                {
+                    extensionIds.map((row) => (
+                            <tr>
+                                <th scope="row">{row.store}</th>
+                                <td class="val"><code>{row.id}</code></td>
+                            </tr>
+                    ))
+                }
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="band">
+        <h2 class="band-title">Where each browser reads settings</h2>
+        <p class="band-sub">
+            Chromium browsers share the managed-storage model but each vendor uses its own path. On Windows the full key
+            adds <code>\3rdparty\extensions\&lt;id&gt;\policy</code>. Getting the path wrong is the most common reason a
+            deployment applies on some browsers and not others.
+        </p>
+        <div class="table-scroll">
+            <table class="compare">
+                <thead>
+                <tr>
+                    <th scope="col">Browser</th>
+                    <th scope="col">Windows registry root</th>
+                    <th scope="col">macOS preference domain</th>
+                    <th scope="col">Linux managed directory</th>
+                </tr>
+                </thead>
+                <tbody>
+                {
+                    chromiumParity.map((row) => (
+                            <tr>
+                                <th scope="row">{row.browser}</th>
+                                <td class="val"><code>{row.win}</code></td>
+                                <td class="val"><code>{row.mac}</code></td>
+                                <td class="val"><code>{row.linux}</code></td>
+                            </tr>
+                    ))
+                }
+                </tbody>
+            </table>
+        </div>
+        <p class="note">
+            Firefox does not read Chromium managed storage. It uses a native manifest named
+            <code>osprey@foulest.net.json</code>, or a <code>3rdparty.Extensions</code> block in
+            <code>policies.json</code>. Prefer the native manifest for lists and objects, because Firefox delivers those
+            as strings when they are set through the Windows registry. The full guide lists every path.
+        </p>
+    </section>
+
+    <section class="band">
+        <h2 class="band-title">Removal protection</h2>
+        <div class="prose">
+            <p class="band-sub">
+                None of these templates stop a user from removing the extension. That is a browser force-install policy,
+                separate from Osprey's settings, set with <code>ExtensionInstallForcelist</code> on Chromium browsers
+                and <code>ExtensionSettings</code> on Firefox. The macOS profiles already include it. The removal
+                protection note covers the rest.
+            </p>
+        </div>
+    </section>
+
+    <section class="band">
+        <h2 class="band-title">Documentation</h2>
+        <p class="files docs-files">
+            {
+                docs.map((doc) => (
+                        <a href={doc.href} class="file-link">{doc.label}</a>
+                ))
+            }
+        </p>
+    </section>
+
+    <section class="band">
+        <h2 class="band-title">Deploying for a client?</h2>
+        <div class="prose">
+            <p class="band-sub">
+                Email <a href="mailto:support@osprey.ac">support@osprey.ac</a> or open an issue
+                on <a href="https://github.com/OspreyProject/Osprey/issues/new/choose"
+                      aria-label="Create an issue on GitHub">GitHub</a>.
+                We'll help you get it deployed.
+            </p>
+        </div>
+    </section>
+</Base>
+
+<style>
+    .deploy-cta {
+        margin-top: 1.5rem;
+    }
+
+    .deploy-cta-note {
+        margin-top: 0.75rem;
+        color: var(--text-muted);
+        font-size: 0.95rem;
+    }
+
+    .deploy-list {
+        list-style: none;
+        padding: 0;
+        margin: 1.5rem 0 0;
+        display: grid;
+        gap: 1rem;
+    }
+
+    .deploy-list li {
+        padding: 1.25rem 1.4rem;
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        background-color: var(--surface);
+    }
+
+    .deploy-list h3 {
+        margin: 0 0 0.4rem;
+    }
+
+    .deploy-list p {
+        margin: 0;
+        color: var(--text-muted);
+    }
+
+    .files {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem 0.9rem;
+    }
+
+    .deploy-list .files {
+        margin-top: 0.9rem;
+    }
+
+    .docs-files {
+        margin-top: 1.25rem;
+    }
+
+    .file-link {
+        font-size: 0.95rem;
+        font-weight: 600;
+    }
+</style>
