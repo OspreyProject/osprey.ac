@@ -1,3 +1,6 @@
+// Copyright (C) 2026 Osprey Project LLC (https://osprey.ac) All rights reserved.
+// This software is not licensed for redistribution or self-hosting.
+
 // Shared provider metadata and result-state mapping, used by both the interactive checker
 // (/check/) and the per-URL result pages (/check/<host><path>/). Keeping one source of truth
 // means the two surfaces can never drift on provider names, grouping, or status labels.
