@@ -1,7 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 
-const title = 'Deploy Osprey Across a Fleet - MSP & Enterprise Templates';
+const title = 'MSP Deployment – Osprey: Browser Protection';
 const description =
     'Ready-to-push Osprey deployment templates for Group Policy (ADMX), Intune, macOS, Linux, and Firefox. Configure every managed policy across Chrome, Edge, and Firefox without editing raw registry keys.';
 
@@ -20,9 +20,9 @@ const platforms = [
         files: [
             {label: 'Osprey.admx', href: '/deployment/admx/Osprey.admx'},
             {label: 'Osprey.adml (en-US)', href: '/deployment/admx/en-US/Osprey.adml'},
-            {label: 'Chrome .reg', href: '/deployment/windows/osprey-chrome.reg'},
-            {label: 'Edge .reg', href: '/deployment/windows/osprey-edge.reg'},
-            {label: 'Firefox pointer .reg', href: '/deployment/windows/osprey-firefox-managed-storage.reg'},
+            {label: 'Chrome.reg', href: '/deployment/windows/osprey-chrome.reg'},
+            {label: 'Edge.reg', href: '/deployment/windows/osprey-edge.reg'},
+            {label: 'Firefox.reg', href: '/deployment/windows/osprey-firefox-managed-storage.reg'},
         ],
     },
     {
@@ -52,7 +52,7 @@ const platforms = [
     },
     {
         name: 'Linux',
-        body: 'Copy the file for your browser to the managed-policy directory in its name, for example the Chrome file goes to /etc/opt/chrome/policies/managed/osprey.json.',
+        body: 'Copy the file for your browser to the managed-policy directory in its name. For example, the Chrome file goes to /etc/opt/chrome/policies/managed/osprey.json.',
         files: [
             {label: 'Chrome JSON', href: '/deployment/linux/chrome-etc-opt-chrome-policies-managed-osprey.json'},
             {label: 'Chromium JSON', href: '/deployment/linux/chromium-etc-chromium-policies-managed-osprey.json'},
@@ -112,10 +112,14 @@ const docs = [
 
 <Base title={title} description={description}>
     <section class="hero">
-        <h1>Deploy Osprey across a fleet</h1>
+        <h1>MSP Deployment</h1>
         <p class="hero-sub">
             Configure every managed policy on Chrome, Edge, and Firefox from your own tooling, without editing raw
             registry keys by hand. These templates cover Group Policy, Intune, macOS, Linux, and Firefox.
+        </p>
+        <p class="deploy-cta-note">
+            Prefer to pick settings and get the exact files? Use
+            the <a class="contact-link" href="/config-generator/">configuration generator</a>.
         </p>
         <p class="deploy-cta">
             <a class="install-btn" href={bundleZip} download>Download all templates</a>
@@ -149,7 +153,7 @@ const docs = [
     <section class="band">
         <h2 class="band-title">Extension IDs</h2>
         <p class="band-sub">
-            The extension has a different id in each store. Use the right one for each browser family.
+            The extension has a different ID in each store. Use the right one for each browser family.
         </p>
         <div class="table-scroll">
             <table class="compare">
@@ -218,12 +222,12 @@ const docs = [
             <p class="band-sub">
                 None of these templates stop a user from removing the extension. That is a browser force-install policy,
                 separate from Osprey's settings, set with <code>ExtensionInstallForcelist</code> on Chromium browsers
-                and <code>ExtensionSettings</code> on Firefox. The macOS profiles already include it. The removal
-                protection note covers the rest.
+                and <code>ExtensionSettings</code> on Firefox. The macOS profiles already include it.
             </p>
         </div>
     </section>
 
+    <!-- TODO: Make the entries vertical, not horizontal -->
     <section class="band">
         <h2 class="band-title">Documentation</h2>
         <p class="files docs-files">
@@ -239,9 +243,10 @@ const docs = [
         <h2 class="band-title">Deploying for a client?</h2>
         <div class="prose">
             <p class="band-sub">
-                Email <a href="mailto:support@osprey.ac">support@osprey.ac</a> or open an issue
+                Email <a href="mailto:support@osprey.ac">support@osprey.ac</a> or create an issue
                 on <a href="https://github.com/OspreyProject/Osprey/issues/new/choose"
                       aria-label="Create an issue on GitHub">GitHub</a>.
+                <br>
                 We'll help you get it deployed.
             </p>
         </div>

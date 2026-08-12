@@ -1,0 +1,1238 @@
+---
+import Base from '../layouts/Base.astro';
+
+const title = 'MSP Config Generator – Osprey: Browser Protection';
+const description =
+    'Pick your Osprey policy settings and generate ready-to-push files: Windows .reg, macOS plist, Linux managed JSON, Group Policy (ADMX) values, and an importable extension settings file. Runs entirely in your browser.';
+
+// Every field below is rendered from these arrays so the form and all generators stay
+// in sync with policies.json. `app` marks the camelCase key used by the extension's own
+// settings envelope; `providerEnabled` and `metadefender` mark the two special mappings.
+
+const identifierFields = [
+    {
+        key: 'ProxyBaseUrl', label: 'Proxy base URL', type: 'string', app: 'proxyBaseUrl',
+        placeholder: 'https://osprey.msp.example',
+        help: 'Route every lookup to your self-hosted proxy. Leave empty to use the public backend.',
+    },
+    {
+        key: 'DeviceTag', label: 'Device tag', type: 'string', app: 'deviceTag',
+        placeholder: 'endpoint-0001',
+        help: 'Opaque per-endpoint identifier attached to reported events.',
+    },
+    {
+        key: 'SiteId', label: 'Site ID', type: 'string', app: 'siteId',
+        placeholder: 'client-acme',
+        help: 'Opaque per-client identifier attached to reported events.',
+    },
+];
+
+const brandingFields = [
+    {key: 'BrandProductName', label: 'Product name', type: 'string', placeholder: 'Example MSP Web Protection'},
+    {key: 'BrandLogoUrl', label: 'Logo URL', type: 'string', placeholder: 'https://cdn.msp.example/logo.png'},
+    {key: 'SupportUrl', label: 'Support URL', type: 'string', placeholder: 'https://help.msp.example'},
+    {key: 'SupportEmail', label: 'Support email', type: 'string', placeholder: 'support@msp.example'},
+    {
+        key: 'CustomBlockMessage', label: 'Custom block message', type: 'string',
+        placeholder: 'This site was blocked by Example MSP.',
+    },
+];
+
+const listFields = [
+    {
+        key: 'ManagedAllowlist', label: 'Managed allowlist', app: 'managedAllowlist',
+        placeholder: 'intranet.example.com\n*.corp.example.com',
+        help: 'Always treated as safe. One host or URL pattern per line. Users cannot remove these.',
+    },
+    {
+        key: 'ManagedBlocklist', label: 'Managed blocklist', app: 'managedBlocklist',
+        placeholder: '*.known-bad.example\nphish.example/login',
+        help: 'Always blocked, before the providers run. One host or URL pattern per line.',
+    },
+];
+
+const lockdownFields = [
+    {key: 'DisableUserAllowlist', label: 'Disable user allowlist', app: 'disableUserAllowlist'},
+    {key: 'LockProtectionOptions', label: 'Lock protection options', app: 'lockSettings'},
+    {key: 'HideProtectionOptions', label: 'Hide protection options', app: 'hidePopupPanel'},
+    {key: 'HideContinueButtons', label: 'Hide continue buttons', app: 'hideContinueButtons'},
+    {key: 'HideReportButton', label: 'Hide report button', app: 'hideReportButton'},
+    {key: 'DisableClearAllowedWebsites', label: 'Disable clear allowed websites', app: 'disableClearAllowedWebsites'},
+    {key: 'DisableResetButtons', label: 'Disable reset buttons', app: 'disableResetButtons'},
+    {
+        key: 'DisableThirdPartyIntegrations',
+        label: 'Disable third-party integrations',
+        app: 'disableThirdPartyIntegrations'
+    },
+];
+
+const cacheFields = [
+    {
+        key: 'CacheExpirationSeconds', label: 'Cache expiration (seconds)', type: 'int', app: 'cacheExpirationSeconds',
+        min: 60, max: 2592000, placeholder: '604800',
+        help: 'Between 60 and 2592000. Leave empty to keep the default.',
+    },
+    {
+        key: 'MetaDefenderApiKey', label: 'MetaDefender API key', type: 'string', metadefender: true,
+        placeholder: '',
+        help: 'Managed key for the MetaDefender integrations.',
+    },
+];
+
+// providerId is the extension's internal id; defaultOn is the policies.json schema default.
+const providerFields = [
+    {key: 'AlphaMountainEnabled', label: 'AlphaMountain', providerId: 'alphamountain', defaultOn: true},
+    {key: 'BforeAIPreCrimeEnabled', label: 'BforeAI PreCrime', providerId: 'bforeai', defaultOn: true},
+    {key: 'ChainPatrolEnabled', label: 'ChainPatrol', providerId: 'chainpatrol', defaultOn: true},
+    {key: 'iZOOlogicEnabled', label: 'iZOOlogic', providerId: 'izoologic', defaultOn: true},
+    {key: 'PrecisionSecEnabled', label: 'PrecisionSec', providerId: 'precisionsec', defaultOn: true},
+    {key: 'AdGuardDNSEnabled', label: 'AdGuard DNS', providerId: 'adguard-dns', defaultOn: true},
+    {key: 'AA419Enabled', label: 'Artists Against 419', providerId: 'aa419', defaultOn: true},
+    {key: 'CloudflareEnabled', label: 'Cloudflare', providerId: 'cloudflare', defaultOn: true},
+    {key: 'ControlDEnabled', label: 'Control D', providerId: 'control-d', defaultOn: false},
+    {key: 'OpenPhishEnabled', label: 'OpenPhish', providerId: 'openphish', defaultOn: true},
+    {key: 'PhishuntIOEnabled', label: 'Phishunt.io', providerId: 'phishunt-io', defaultOn: true},
+    {key: 'Quad9Enabled', label: 'Quad9', providerId: 'quad9', defaultOn: true},
+    {key: 'RedFlagDomainsEnabled', label: 'Red Flag Domains', providerId: 'red-flag-domains', defaultOn: true},
+    {key: 'SinkingYachtsEnabled', label: 'SinkingYachts', providerId: 'sinking-yachts', defaultOn: true},
+    {key: 'SwitchCHEnabled', label: 'Switch.ch', providerId: 'switch-ch', defaultOn: true},
+    {key: 'THREATfoxEnabled', label: 'THREATfox', providerId: 'threatfox', defaultOn: true},
+    {key: 'URLhausEnabled', label: 'URLhaus', providerId: 'urlhaus', defaultOn: true},
+    {key: 'URLAbuseEnabled', label: 'URLAbuse', providerId: 'urlabuse', defaultOn: true},
+    {key: 'ValidinEnabled', label: 'Validin', providerId: 'validin', defaultOn: true},
+];
+
+// Providers that can be tuned through ManagedProviderSettings, for the override row picker.
+const tuningProviders = [
+    ...providerFields.map((p) => ({id: p.providerId, label: p.label})),
+    {id: 'metadefender-reputation', label: 'MetaDefender Reputation'},
+    {id: 'metadefender-webroot', label: 'Webroot (MetaDefender)'},
+];
+
+// Only AlphaMountain declares block categories today.
+const alphaCategories = [
+    {key: 'suspicious', label: 'Suspicious'},
+    {key: 'newly_registered', label: 'Newly registered'},
+    {key: 'dynamic_dns', label: 'Dynamic DNS'},
+];
+
+const outputTabs = [
+    {id: 'reg', label: 'Windows .reg', chromium: true},
+    {id: 'plist', label: 'macOS plist', chromium: true},
+    {id: 'linux', label: 'Linux JSON', chromium: true},
+    {id: 'admx', label: 'Group Policy (ADMX)', chromium: true},
+    {id: 'firefox', label: 'Firefox', chromium: false},
+    {id: 'envelope', label: 'Extension import', chromium: false},
+];
+---
+
+<Base title={title} description={description}>
+    <section class="hero">
+        <h1>MSP Config Generator</h1>
+        <p class="hero-sub">
+            Pick your policy settings and get ready-to-push files for every platform. For raw templates and per-browser
+            paths, see the <a class="contact-link" href="/deployment/">deployment templates</a>.
+        </p>
+        <br>
+        <p class="deploy-cta">
+            <button type="button" id="loadExample" class="install-btn">Load hardened example</button>
+            <button type="button" id="resetForm" class="ghost-btn">Reset</button>
+        </p>
+    </section>
+
+    <div class="gen-grid">
+        <form id="gen-form" class="gen-form" novalidate>
+
+            <!-- TODO: Move the legend into the shape instead of on the border (it looks bad and out of place) -->
+            <fieldset class="gen-group">
+                <legend>Identifiers &amp; backend</legend>
+                {identifierFields.map((f) => (
+                        <label class="field">
+                            <span class="field-label">{f.label}</span>
+                            <input class="text-input" type="text" data-key={f.key} data-type="string"
+                                   data-app={f.app} data-label={f.label} placeholder={f.placeholder}
+                                   autocomplete="off" spellcheck="false"/>
+                            {f.help && <span class="field-help">{f.help}</span>}
+                        </label>
+                ))}
+            </fieldset>
+
+            <fieldset class="gen-group">
+                <legend>Branding</legend>
+                {brandingFields.map((f) => (
+                        <label class="field">
+                            <span class="field-label">{f.label}</span>
+                            <input class="text-input" type="text" data-key={f.key} data-type="string"
+                                   data-label={f.label} placeholder={f.placeholder}
+                                   autocomplete="off" spellcheck="false"/>
+                        </label>
+                ))}
+                <p class="field-help">Branding keys apply through managed storage only. They are not part of the
+                    importable settings file.</p>
+            </fieldset>
+
+            <fieldset class="gen-group">
+                <legend>Allow &amp; block lists</legend>
+                {listFields.map((f) => (
+                        <label class="field">
+                            <span class="field-label">{f.label}</span>
+                            <textarea class="text-input area" rows="3" data-key={f.key} data-type="list"
+                                      data-app={f.app} data-label={f.label} placeholder={f.placeholder}
+                                      spellcheck="false"></textarea>
+                            {f.help && <span class="field-help">{f.help}</span>}
+                        </label>
+                ))}
+            </fieldset>
+
+            <fieldset class="gen-group">
+                <legend>Interface lockdown</legend>
+                <div class="toggle-grid">
+                    {lockdownFields.map((f) => (
+                            <label class="toggle">
+                                <span class="field-label">{f.label}</span>
+                                <select class="select-input" data-key={f.key} data-type="bool" data-app={f.app}
+                                        data-label={f.label}>
+                                    <option value="">Not set</option>
+                                    <option value="true">On</option>
+                                    <option value="false">Off</option>
+                                </select>
+                            </label>
+                    ))}
+                </div>
+            </fieldset>
+
+            <fieldset class="gen-group">
+                <legend>Cache &amp; API keys</legend>
+                {cacheFields.map((f) => (
+                        <label class="field">
+                            <span class="field-label">{f.label}</span>
+                            {f.type === 'int' ? (
+                                    <input class="text-input" type="number" data-key={f.key} data-type="int"
+                                           data-app={f.app} data-label={f.label} min={f.min} max={f.max}
+                                           placeholder={f.placeholder} autocomplete="off"/>
+                            ) : (
+                                    <input class="text-input" type="text" data-key={f.key} data-type="string"
+                                           data-label={f.label} data-metadefender={f.metadefender ? 'true' : undefined}
+                                           placeholder={f.placeholder} autocomplete="off" spellcheck="false"/>
+                            )}
+                            {f.help && <span class="field-help">{f.help}</span>}
+                        </label>
+                ))}
+            </fieldset>
+
+            <fieldset class="gen-group">
+                <legend>Threat providers</legend>
+                <div class="toggle-grid">
+                    {providerFields.map((f) => (
+                            <label class="toggle">
+                                <span class="field-label">{f.label}
+                                    <span class="dim">{f.defaultOn ? ' (Default: On)' : ' (Default: Off)'}</span></span>
+                                <select class="select-input" data-key={f.key} data-type="bool"
+                                        data-provider-enabled={f.providerId} data-label={f.label}>
+                                    <option value="">Not set</option>
+                                    <option value="true">On</option>
+                                    <option value="false">Off</option>
+                                </select>
+                            </label>
+                    ))}
+                </div>
+            </fieldset>
+
+            <fieldset class="gen-group">
+                <legend>Advanced provider tuning</legend>
+                <p class="field-help">
+                    Per-provider overrides pushed as <code>ManagedProviderSettings</code>. Add a row to tune the block
+                    threshold, request timeout, or block categories for one provider.
+                </p>
+                <div id="tuning-rows"></div>
+                <button type="button" id="addTuning" class="ghost-btn">Add provider override</button>
+            </fieldset>
+        </form>
+
+        <section class="gen-output" aria-label="Generated output">
+            <div class="output-controls">
+                <label class="inline-field">
+                    <span class="field-label">Browser</span>
+                    <select id="browser-select" class="select-input">
+                        <option value="chrome">Chrome</option>
+                        <option value="edge">Edge</option>
+                    </select>
+                </label>
+            </div>
+
+            <div class="tabs" role="tablist">
+                {outputTabs.map((tab, i) => (
+                        <button type="button" class:list={['tab', {active: i === 0}]} role="tab"
+                                data-tab={tab.id} data-chromium={tab.chromium ? 'true' : 'false'}
+                                aria-selected={i === 0 ? 'true' : 'false'}>{tab.label}</button>
+                ))}
+            </div>
+
+            <div class="output-head">
+                <span id="output-note" class="output-note"></span>
+                <span class="output-actions">
+                    <button type="button" id="copyBtn" class="ghost-btn">Copy</button>
+                    <button type="button" id="downloadBtn" class="ghost-btn">Download</button>
+                </span>
+            </div>
+
+            <pre class="output-pre"><code id="output-code"></code></pre>
+        </section>
+    </div>
+
+    <!-- Row template cloned by the script for each provider override. -->
+    <template id="tuning-template">
+        <div class="tuning-row">
+            <div class="tuning-main">
+                <label class="inline-field">
+                    <span class="field-label">Provider</span>
+                    <select class="select-input tuning-provider">
+                        {tuningProviders.map((p) => (
+                                <option value={p.id}>{p.label}</option>
+                        ))}
+                    </select>
+                </label>
+                <label class="inline-field">
+                    <span class="field-label">Bypass block threshold</span>
+                    <select class="select-input tuning-bypass">
+                        <option value="">Not set</option>
+                        <option value="true">On</option>
+                        <option value="false">Off</option>
+                    </select>
+                </label>
+                <label class="inline-field">
+                    <span class="field-label">Request timeout (ms)</span>
+                    <input class="text-input tuning-timeout" type="number" min="1000" max="60000"
+                           placeholder="1000-60000" autocomplete="off"/>
+                </label>
+                <button type="button" class="ghost-btn tuning-remove" aria-label="Remove override">Remove</button>
+            </div>
+            <div class="tuning-categories" hidden>
+                <span class="field-label">Block categories</span>
+                <div class="toggle-grid">
+                    {alphaCategories.map((c) => (
+                            <label class="toggle">
+                                <span class="field-label">{c.label}</span>
+                                <select class="select-input tuning-category" data-category={c.key}>
+                                    <option value="">Not set</option>
+                                    <option value="true">On</option>
+                                    <option value="false">Off</option>
+                                </select>
+                            </label>
+                    ))}
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <section class="band">
+        <h2 class="band-title">How to use each output</h2>
+        <ul class="use-list">
+            <li><strong>Windows .reg</strong>: double-click to import for a quick test, or fold the values into your
+                Group Policy deployment. Uses the selected browser's registry root.
+            </li>
+            <li><strong>macOS plist</strong>: hand to an MDM that takes a custom plist, or use it as the payload for a
+                configuration profile.
+            </li>
+            <li><strong>Linux JSON</strong>: save to the managed-policy directory for the selected browser, for
+                example, <code>/etc/opt/chrome/policies/managed/osprey.json</code>.
+            </li>
+            <li><strong>Group Policy (ADMX)</strong>: import <code>Osprey.admx</code>
+                and <code>Osprey.adml</code> first, then set each listed policy to the value shown.
+            </li>
+            <li><strong>Firefox</strong>: Firefox ignores Chromium managed storage. Deploy the native managed-storage
+                manifest shown here.
+            </li>
+            <li><strong>Extension import</strong>: an <code>osprey-settings</code> file a user can import from the
+                extension's settings page. It carries provider and interface settings, not branding.
+            </li>
+        </ul>
+    </section>
+
+    <section class="band">
+        <h2 class="band-title">Something not working?</h2>
+        <div class="prose">
+            <p class="band-sub">
+                Email <a href="mailto:support@osprey.ac">support@osprey.ac</a> or create an issue
+                on <a href="https://github.com/OspreyProject/Osprey/issues/new/choose"
+                      aria-label="Create an issue on GitHub">GitHub</a>.
+                <br>
+                We'll get back to you as soon as we can.
+            </p>
+        </div>
+    </section>
+</Base>
+
+<script is:inline>
+    (function () {
+        'use strict';
+
+        const chromeID = 'jmnpibhfpmpfjhhkmpadlbgjnbhpjgnd';
+        const edgeID = 'nopglhplnghfhpniofkcopmhbjdonlgn';
+        const firefoxID = 'osprey@foulest.net';
+        const envelopeVersion = 2;
+
+        const browsers = {
+            chrome: {
+                label: 'Chrome',
+                extId: chromeID,
+                regRoot: 'HKEY_LOCAL_MACHINE\\SOFTWARE\\Policies\\Google\\Chrome\\3rdparty\\extensions\\' + chromeID + '\\policy',
+                plistDomain: 'com.google.Chrome.extensions.' + chromeID,
+                linuxPath: '/etc/opt/chrome/policies/managed/osprey.json',
+            },
+            edge: {
+                label: 'Edge',
+                extId: edgeID,
+                regRoot: 'HKEY_LOCAL_MACHINE\\SOFTWARE\\Policies\\Microsoft\\Edge\\3rdparty\\extensions\\' + edgeID + '\\policy',
+                plistDomain: 'com.microsoft.Edge.extensions.' + edgeID,
+                linuxPath: '/etc/opt/edge/policies/managed/osprey.json',
+            },
+        };
+
+        // Extension state defaults, mirrored from provider-state-store.js normalizeState.
+        const bypassDefaults = {
+            alphamountain: true, bforeai: false, chainpatrol: false, izoologic: false, precisionsec: false,
+            'adguard-dns': false, aa419: true, cloudflare: false, 'control-d': false, openphish: true,
+            'phishunt-io': false, quad9: false, 'red-flag-domains': false, 'sinking-yachts': true, 'switch-ch': false,
+            threatfox: true, urlhaus: true, urlabuse: false, validin: true,
+        };
+        const metaDefenderKeys = ['metadefender-reputation', 'metadefender-webroot'];
+        const alphaMountainKeys = ['suspicious', 'newly_registered', 'dynamic_dns'];
+
+        function defaultApp() {
+            return {
+                hideContinueButtons: false, hideReportButton: false, lockSettings: false, hidePopupPanel: false,
+                disableClearAllowedWebsites: false, disableResetButtons: false, disableThirdPartyIntegrations: false,
+                disableAllProviders: false, cacheExpirationSeconds: 604800, proxyBaseUrl: '', deviceTag: '', siteId: '',
+                disableUserAllowlist: false, managedAllowlist: [], managedBlocklist: [],
+            };
+        }
+
+        function defaultProviders() {
+            const providers = {};
+
+            for (let id in bypassDefaults) {
+                providers[id] = {
+                    enabled: true,
+                    apiKey: '',
+                    bypassBlockingThreshold: bypassDefaults[id],
+                    blockCategories: id === 'alphamountain'
+                        ? {suspicious: false, newly_registered: false, dynamic_dns: false}
+                        : {},
+                    requestTimeoutMs: 0,
+                };
+            }
+
+            for (let i = 0; i < metaDefenderKeys.length; i++) {
+                providers[metaDefenderKeys[i]] = {
+                    enabled: false,
+                    apiKey: '',
+                    bypassBlockingThreshold: false,
+                    blockCategories: {},
+                    requestTimeoutMs: 0,
+                };
+            }
+            return providers;
+        }
+
+        // ---- Reading the form -------------------------------------------------
+
+        function readTuningRows() {
+            const rows = document.querySelectorAll('#tuning-rows .tuning-row');
+            const settings = {};
+
+            rows.forEach(function (row) {
+                const providerId = row.querySelector('.tuning-provider').value;
+                const override = {};
+                const bypass = row.querySelector('.tuning-bypass').value;
+
+                if (bypass !== '') {
+                    override.bypassBlockingThreshold = bypass === 'true';
+                }
+
+                const timeoutRaw = row.querySelector('.tuning-timeout').value.trim();
+
+                if (timeoutRaw !== '') {
+                    const timeout = Number(timeoutRaw);
+
+                    if (isFinite(timeout) && timeout >= 1000 && timeout <= 60000) {
+                        override.requestTimeoutMs = Math.round(timeout);
+                    }
+                }
+
+                if (providerId === 'alphamountain') {
+                    const cats = {};
+
+                    row.querySelectorAll('.tuning-category').forEach(function (sel) {
+                        if (sel.value !== '') {
+                            cats[sel.getAttribute('data-category')] = sel.value === 'true';
+                        }
+                    });
+
+                    if (Object.keys(cats).length > 0) {
+                        override.blockCategories = cats;
+                    }
+                }
+
+                if (Object.keys(override).length > 0) {
+                    settings[providerId] = override;
+                }
+            });
+            return settings;
+        }
+
+        // Walks every [data-key] control in document order and builds the policy map, the
+        // ordered entry list (for the ADMX view), and the extension settings envelope.
+        function collect() {
+            const policyMap = {};
+            const entries = [];
+            const app = defaultApp();
+            const providers = defaultProviders();
+            const controls = document.querySelectorAll('#gen-form [data-key]');
+
+            controls.forEach(function (el) {
+                const key = el.getAttribute('data-key');
+                const type = el.getAttribute('data-type');
+                const label = el.getAttribute('data-label') || key;
+                const appKey = el.getAttribute('data-app');
+                const providerEnabled = el.getAttribute('data-provider-enabled');
+                const isMetaDefender = el.getAttribute('data-metadefender') === 'true';
+
+                let value;
+
+                if (type === 'bool') {
+                    if (el.value === '') {
+                        return;
+                    }
+
+                    value = el.value === 'true';
+
+                    if (providerEnabled) {
+                        providers[providerEnabled].enabled = value;
+                    } else if (appKey) {
+                        app[appKey] = value;
+                    }
+                } else if (type === 'int') {
+                    const raw = el.value.trim();
+
+                    if (raw === '') {
+                        return;
+                    }
+
+                    const num = Number(raw);
+
+                    if (!isFinite(num)) {
+                        return;
+                    }
+
+                    value = Math.round(num);
+
+                    if (appKey) {
+                        app[appKey] = value;
+                    }
+                } else if (type === 'list') {
+                    const items = el.value.split('\n').map(function (line) {
+                        return line.trim();
+                    }).filter(function (line) {
+                        return line.length > 0;
+                    });
+
+                    if (items.length === 0) {
+                        return;
+                    }
+
+                    value = items;
+
+                    if (appKey) {
+                        app[appKey] = items.slice();
+                    }
+                } else {
+                    const text = el.value.trim();
+
+                    if (text === '') {
+                        return;
+                    }
+
+                    value = text;
+
+                    if (isMetaDefender) {
+                        for (let i = 0; i < metaDefenderKeys.length; i++) {
+                            providers[metaDefenderKeys[i]].apiKey = text;
+                        }
+                    } else if (appKey) {
+                        app[appKey] = text;
+                    }
+                }
+
+                policyMap[key] = value;
+                entries.push({key: key, label: label, type: type, value: value});
+            });
+
+            const tuning = readTuningRows();
+
+            if (Object.keys(tuning).length > 0) {
+                policyMap.ManagedProviderSettings = tuning;
+
+                entries.push({
+                    key: 'ManagedProviderSettings',
+                    label: 'Managed Provider Settings',
+                    type: 'object',
+                    value: tuning
+                });
+
+                for (let pid in tuning) {
+                    const ov = tuning[pid];
+
+                    if (!providers[pid]) {
+                        continue;
+                    }
+
+                    if (typeof ov.bypassBlockingThreshold === 'boolean') {
+                        providers[pid].bypassBlockingThreshold = ov.bypassBlockingThreshold;
+                    }
+
+                    if (typeof ov.requestTimeoutMs === 'number') {
+                        providers[pid].requestTimeoutMs = ov.requestTimeoutMs;
+                    }
+
+                    if (ov.blockCategories) {
+                        const merged = {};
+                        const existing = providers[pid].blockCategories || {};
+
+                        for (let ek in existing) {
+                            merged[ek] = existing[ek];
+                        }
+
+                        for (let ck in ov.blockCategories) {
+                            merged[ck] = ov.blockCategories[ck];
+                        }
+
+                        providers[pid].blockCategories = merged;
+                    }
+                }
+            }
+
+            return {
+                policyMap: policyMap,
+                entries: entries,
+                app: app,
+                providers: providers
+            };
+        }
+
+        // ---- Serializers ------------------------------------------------------
+
+        function regEscape(s) {
+            return String(s).replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+        }
+
+        function toHex8(n) {
+            return (n).toString(16).padStart(8, '0');
+        }
+
+        function toReg(policyMap, root) {
+            const crlf = '\r\n';
+            const scalarLines = [];
+            const listSections = [];
+
+            Object.keys(policyMap).forEach(function (k) {
+                const v = policyMap[k];
+
+                if (Array.isArray(v)) {
+                    const sec = ['[' + root + '\\' + k + ']'];
+
+                    v.forEach(function (item, i) {
+                        sec.push('"' + (i + 1) + '"="' + regEscape(item) + '"');
+                    });
+
+                    listSections.push(sec.join(crlf));
+                } else if (typeof v === 'boolean') {
+                    scalarLines.push('"' + k + '"=dword:' + (v ? '00000001' : '00000000'));
+                } else if (typeof v === 'number') {
+                    scalarLines.push('"' + k + '"=dword:' + toHex8(v));
+                } else if (typeof v === 'string') {
+                    scalarLines.push('"' + k + '"="' + regEscape(v) + '"');
+                } else if (v && typeof v === 'object') {
+                    scalarLines.push('"' + k + '"="' + regEscape(JSON.stringify(v)) + '"');
+                }
+            });
+
+            const out = ['Windows Registry Editor Version 5.00', '', '[' + root + ']'].concat(scalarLines);
+            let text = out.join(crlf);
+
+            if (listSections.length) {
+                text += crlf + crlf + listSections.join(crlf + crlf);
+            }
+            return text + crlf;
+        }
+
+        function xmlEscape(s) {
+            return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        }
+
+        function plistValue(v, indent) {
+            const pad = '\t'.repeat(indent);
+
+            if (typeof v === 'boolean') {
+                return pad + (v ? '<true/>' : '<false/>');
+            }
+
+            if (typeof v === 'number') {
+                return pad + '<integer>' + v + '</integer>';
+            }
+
+            if (typeof v === 'string') {
+                return pad + '<string>' + xmlEscape(v) + '</string>';
+            }
+
+            if (Array.isArray(v)) {
+                const arr = [pad + '<array>'];
+
+                v.forEach(function (item) {
+                    arr.push(plistValue(item, indent + 1));
+                });
+
+                arr.push(pad + '</array>');
+                return arr.join('\n');
+            }
+
+            const lines = [pad + '<dict>'];
+
+            Object.keys(v).forEach(function (k) {
+                lines.push(pad + '\t<key>' + xmlEscape(k) + '</key>');
+                lines.push(plistValue(v[k], indent + 1));
+            });
+
+            lines.push(pad + '</dict>');
+            return lines.join('\n');
+        }
+
+        function toPlist(policyMap, domain) {
+            const lines = [];
+            lines.push('<?xml version="1.0" encoding="UTF-8"?>');
+            lines.push('<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">');
+            lines.push('<plist version="1.0">');
+            lines.push('<dict>');
+            lines.push('\t<key>' + domain + '</key>');
+            lines.push('\t<dict>');
+
+            Object.keys(policyMap).forEach(function (k) {
+                lines.push('\t\t<key>' + k + '</key>');
+                lines.push('\t\t<dict>');
+                lines.push('\t\t\t<key>state</key>');
+                lines.push('\t\t\t<string>always</string>');
+                lines.push('\t\t\t<key>value</key>');
+                lines.push(plistValue(policyMap[k], 3));
+                lines.push('\t\t</dict>');
+            });
+
+            lines.push('\t</dict>');
+            lines.push('</dict>');
+            lines.push('</plist>');
+            return lines.join('\n') + '\n';
+        }
+
+        function toLinux(policyMap, extId) {
+            const doc = {'3rdparty': {extensions: {}}};
+            doc['3rdparty'].extensions[extId] = policyMap;
+            return JSON.stringify(doc, null, 2) + '\n';
+        }
+
+        function toFirefox(policyMap) {
+            const doc = {name: firefoxID, description: 'ignored', type: 'storage', data: policyMap};
+            return JSON.stringify(doc, null, 2) + '\n';
+        }
+
+        function toAdmx(entries, browserLabel) {
+            const lines = [];
+            lines.push('Group Policy (ADMX) — values to set');
+            lines.push('');
+            lines.push('1. Import Osprey.admx and en-US\\Osprey.adml into your Central Store.');
+            lines.push('2. Edit a GPO: Computer Configuration > Administrative Templates >');
+            lines.push('   Osprey: Browser Protection > ' + browserLabel + '.');
+            lines.push('3. Set each policy below to the value shown.');
+            lines.push('');
+
+            if (entries.length === 0) {
+                lines.push('(No settings selected yet.)');
+                return lines.join('\n') + '\n';
+            }
+
+            entries.forEach(function (entry) {
+                if (entry.type === 'bool') {
+                    lines.push(entry.label + ' — ' + (entry.value ? 'Enabled' : 'Disabled'));
+                } else if (entry.type === 'list') {
+                    lines.push(entry.label + ' — Enabled, add entries:');
+
+                    entry.value.forEach(function (item) {
+                        lines.push('    ' + item);
+                    });
+                } else if (entry.type === 'object') {
+                    lines.push(entry.label + ' — Enabled, value (JSON):');
+                    lines.push('    ' + JSON.stringify(entry.value));
+                } else {
+                    lines.push(entry.label + ' — Enabled, value: ' + entry.value);
+                }
+            });
+            return lines.join('\n') + '\n';
+        }
+
+        function stamp() {
+            const now = new Date();
+
+            const pad = function (v) {
+                return String(v).padStart(2, '0');
+            };
+            return now.getFullYear() + '-' + pad(now.getMonth() + 1) + '-' + pad(now.getDate());
+        }
+
+        function toEnvelope(app, providers) {
+            return JSON.stringify({
+                type: 'osprey-settings',
+                version: envelopeVersion,
+                exportedAt: new Date().toISOString(),
+                state: {
+                    version: envelopeVersion,
+                    app: app,
+                    providers: providers,
+                },
+            }, null, 2) + '\n';
+        }
+
+        // ---- Rendering --------------------------------------------------------
+
+        const state = {tab: 'reg', browser: 'chrome', outputs: {}, files: {}, notes: {}};
+
+        function buildOutputs() {
+            const data = collect();
+            const browser = browsers[state.browser];
+            const map = data.policyMap;
+
+            state.outputs = {
+                reg: toReg(map, browser.regRoot),
+                plist: toPlist(map, browser.plistDomain),
+                linux: toLinux(map, browser.extId),
+                admx: toAdmx(data.entries, browser.label),
+                firefox: toFirefox(map),
+                envelope: toEnvelope(data.app, data.providers),
+            };
+
+            state.files = {
+                reg: 'osprey-' + state.browser + '.reg',
+                plist: browser.plistDomain + '.plist',
+                linux: 'osprey-' + state.browser + '-managed.json',
+                admx: 'osprey-admx-values.txt',
+                firefox: firefoxID + '.json',
+                envelope: 'osprey-settings-' + stamp() + '.json',
+            };
+
+            state.notes = {
+                reg: browser.label + ' registry policy',
+                plist: browser.label + ' configuration profile payload',
+                linux: 'Save to ' + browser.linuxPath,
+                admx: browser.label + ' policies',
+                firefox: 'Firefox native managed-storage manifest',
+                envelope: 'Import from the extension settings page',
+            };
+        }
+
+        function renderTab() {
+            buildOutputs();
+            document.getElementById('output-code').textContent = state.outputs[state.tab] || '';
+            document.getElementById('output-note').textContent = state.notes[state.tab] || '';
+        }
+
+        // ---- Tuning rows ------------------------------------------------------
+
+        function addTuningRow() {
+            const template = document.getElementById('tuning-template');
+            const clone = template.content.firstElementChild.cloneNode(true);
+            const providerSelect = clone.querySelector('.tuning-provider');
+            const categories = clone.querySelector('.tuning-categories');
+
+            function syncCategories() {
+                categories.hidden = providerSelect.value !== 'alphamountain';
+            }
+
+            providerSelect.addEventListener('change', function () {
+                syncCategories();
+                renderTab();
+            });
+
+            clone.querySelectorAll('select, input').forEach(function (el) {
+                el.addEventListener('input', renderTab);
+                el.addEventListener('change', renderTab);
+            });
+
+            clone.querySelector('.tuning-remove').addEventListener('click', function () {
+                clone.remove();
+                renderTab();
+            });
+
+            syncCategories();
+            document.getElementById('tuning-rows').appendChild(clone);
+        }
+
+        // ---- Example / reset --------------------------------------------------
+
+        function setValue(key, value) {
+            const el = document.querySelector('#gen-form [data-key="' + key + '"]');
+            if (el) {
+                el.value = value;
+            }
+        }
+
+        function loadExample() {
+            resetForm();
+            setValue('LockProtectionOptions', 'true');
+            setValue('HideProtectionOptions', 'true');
+            setValue('DisableClearAllowedWebsites', 'true');
+            setValue('DisableResetButtons', 'true');
+            setValue('DisableThirdPartyIntegrations', 'true');
+            setValue('DisableUserAllowlist', 'true');
+            setValue('HideContinueButtons', 'true');
+            setValue('HideReportButton', 'false');
+            setValue('CacheExpirationSeconds', '604800');
+            setValue('ManagedAllowlist', 'intranet.example.com\n*.corp.example.com');
+            setValue('ManagedBlocklist', '*.known-bad.example\nphish.example/login');
+            setValue('ProxyBaseUrl', 'https://osprey.msp.example');
+            setValue('DeviceTag', 'REPLACE-WITH-ENDPOINT-ID');
+            setValue('SiteId', 'REPLACE-WITH-CLIENT-ID');
+            setValue('BrandProductName', 'Example MSP Web Protection');
+            setValue('BrandLogoUrl', 'https://cdn.msp.example/logo.png');
+            setValue('SupportUrl', 'https://help.msp.example');
+            setValue('SupportEmail', 'support@msp.example');
+            setValue('CustomBlockMessage', 'This site was blocked by Example MSP. Contact the help desk if you need access.');
+
+            addTuningRow();
+
+            const row = document.querySelector('#tuning-rows .tuning-row:last-child');
+            row.querySelector('.tuning-provider').value = 'alphamountain';
+            row.querySelector('.tuning-categories').hidden = false;
+            row.querySelector('.tuning-bypass').value = 'false';
+            row.querySelector('.tuning-timeout').value = '8000';
+
+            row.querySelectorAll('.tuning-category').forEach(function (sel) {
+                const cat = sel.getAttribute('data-category');
+
+                if (cat === 'suspicious' || cat === 'newly_registered') {
+                    sel.value = 'true';
+                }
+            });
+
+            renderTab();
+        }
+
+        function resetForm() {
+            document.querySelectorAll('#gen-form [data-key]').forEach(function (el) {
+                el.value = '';
+            });
+
+            document.getElementById('tuning-rows').innerHTML = '';
+            renderTab();
+        }
+
+        // ---- Copy / download --------------------------------------------------
+
+        function download() {
+            const text = state.outputs[state.tab] || '';
+            const name = state.files[state.tab] || 'osprey-config.txt';
+            const blob = new Blob([text], {type: 'text/plain'});
+            const url = URL.createObjectURL(blob);
+
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = name;
+            a.rel = 'noopener';
+            a.style.display = 'none';
+
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+
+            setTimeout(function () {
+                URL.revokeObjectURL(url);
+            }, 1000);
+        }
+
+        function copy() {
+            const text = state.outputs[state.tab] || '';
+            const btn = document.getElementById('copyBtn');
+
+            const done = function () {
+                btn.textContent = 'Copied';
+
+                setTimeout(function () {
+                    btn.textContent = 'Copy';
+                }, 1500);
+            };
+
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text).then(done, done);
+            } else {
+                const ta = document.createElement('textarea');
+                ta.value = text;
+
+                document.body.appendChild(ta);
+                ta.select();
+
+                try {
+                    document.execCommand('copy');
+                } catch {
+                    // ignored
+                }
+
+                ta.remove();
+                done();
+            }
+        }
+
+        // ---- Wiring -----------------------------------------------------------
+
+        document.querySelectorAll('#gen-form input, #gen-form select, #gen-form textarea').forEach(function (el) {
+            el.addEventListener('input', renderTab);
+            el.addEventListener('change', renderTab);
+        });
+
+        document.querySelectorAll('.tab').forEach(function (tab) {
+            tab.addEventListener('click', function () {
+                state.tab = tab.getAttribute('data-tab');
+
+                document.querySelectorAll('.tab').forEach(function (t) {
+                    const active = t === tab;
+                    t.classList.toggle('active', active);
+                    t.setAttribute('aria-selected', active ? 'true' : 'false');
+                });
+
+                renderTab();
+            });
+        });
+
+        const browserSelect = document.getElementById('browser-select');
+
+        browserSelect.addEventListener('change', function () {
+            state.browser = browserSelect.value;
+            renderTab();
+        });
+
+        document.getElementById('addTuning').addEventListener('click', function () {
+            addTuningRow();
+            renderTab();
+        });
+
+        document.getElementById('loadExample').addEventListener('click', loadExample);
+        document.getElementById('resetForm').addEventListener('click', resetForm);
+        document.getElementById('copyBtn').addEventListener('click', copy);
+        document.getElementById('downloadBtn').addEventListener('click', download);
+
+        renderTab();
+    })();
+</script>
+
+<style>
+    .deploy-cta {
+        margin-top: 1.5rem;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+    }
+
+    .gen-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        gap: 1.5rem;
+        align-items: start;
+        margin-top: 1rem;
+    }
+
+    @media (max-width: 900px) {
+        .gen-grid {
+            grid-template-columns: minmax(0, 1fr);
+        }
+    }
+
+    .gen-group {
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        background-color: var(--surface);
+        padding: 1rem 1.2rem 1.2rem;
+        margin: 0 0 1.2rem;
+    }
+
+    .gen-group legend {
+        font-weight: 700;
+        padding: 0 0.4rem;
+    }
+
+    .field {
+        display: block;
+        margin-top: 0.9rem;
+    }
+
+    .field-label {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 0.3rem;
+    }
+
+    .field-help {
+        display: block;
+        color: var(--text-muted);
+        font-size: 0.85rem;
+        margin-top: 0.3rem;
+    }
+
+    .dim {
+        color: var(--text-muted);
+        font-weight: 400;
+        font-size: 0.85rem;
+    }
+
+    .text-input,
+    .select-input {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 0.5rem 0.6rem;
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: inherit;
+        font-size: 0.95rem;
+    }
+
+    .area {
+        resize: vertical;
+        min-height: 4.5rem;
+        font-family: ui-monospace, monospace;
+    }
+
+    .toggle-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(13rem, 1fr));
+        gap: 0.8rem;
+        margin-top: 0.9rem;
+    }
+
+    .toggle .field-label {
+        font-weight: 600;
+    }
+
+    .gen-output {
+        position: sticky;
+        top: 1rem;
+    }
+
+    .output-controls {
+        margin-bottom: 0.8rem;
+    }
+
+    .inline-field {
+        display: block;
+    }
+
+    .tabs {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.4rem;
+        margin-bottom: 0.8rem;
+    }
+
+    .tab {
+        padding: 0.4rem 0.7rem;
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        background-color: var(--surface);
+        color: var(--text);
+        font-family: inherit;
+        font-size: 0.9rem;
+        cursor: pointer;
+    }
+
+    .tab.active {
+        border-color: var(--accent);
+        color: var(--accent-ink);
+    }
+
+    .output-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 0.6rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .output-note {
+        color: var(--text-muted);
+        font-size: 0.85rem;
+    }
+
+    .output-actions {
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    .output-pre {
+        margin: 0;
+        padding: 0.9rem;
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        background-color: var(--bg);
+        overflow: auto;
+        max-height: 32rem;
+    }
+
+    .output-pre code {
+        font-family: ui-monospace, monospace;
+        font-size: 0.82rem;
+        white-space: pre;
+    }
+
+    .ghost-btn {
+        padding: 0.45rem 0.9rem;
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        background-color: var(--surface);
+        color: var(--text);
+        font-family: inherit;
+        font-size: 0.9rem;
+        font-weight: 600;
+        cursor: pointer;
+    }
+
+    .ghost-btn:hover {
+        background-color: var(--surface-hover);
+    }
+
+    .tuning-row {
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 0.8rem;
+        margin-bottom: 0.8rem;
+    }
+
+    .tuning-main {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+        gap: 0.7rem;
+        align-items: end;
+    }
+
+    .tuning-remove {
+        height: fit-content;
+    }
+
+    .tuning-categories {
+        margin-top: 0.8rem;
+        border-top: 1px solid var(--border);
+        padding-top: 0.6rem;
+    }
+
+    .use-list {
+        margin: 1rem 0 0;
+        padding-left: 1.2rem;
+        display: grid;
+        gap: 0.6rem;
+        color: var(--text-muted);
+    }
+</style>
