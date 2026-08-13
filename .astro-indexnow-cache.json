@@ -2,7 +2,7 @@
   "version": 1,
   "entries": {
     "https://osprey.ac/check": "sha256:bb6c6cc441680e6d9f2b42f3567411569931c40b268431e48539dfe2f4396288",
-    "https://osprey.ac/config-generator": "sha256:59a0fc2c7f1689177f4cb773bc8851b33223660344a48cc89cc7ee0a2ca70cbe",
+    "https://osprey.ac/config-generator": "sha256:fadf3d4e02a1730577e49c41ce93e5f5a8ad2a3b212933a529ea66078005422a",
     "https://osprey.ac/deployment": "sha256:7c7f2c4918c471a9d741bfe16c513670c42074d3c0d7118a164ca5672eedc5c6",
     "https://osprey.ac/download": "sha256:89465dbfbca5d9ba547a49c9bf272cad959ef6dfa7a788869768d92ffb85551c",
     "https://osprey.ac/": "sha256:92267f8ea5aa1b37c21c01f9f713910d56eb3463a5780bc522a5022224786c6c",
