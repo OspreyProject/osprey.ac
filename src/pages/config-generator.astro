@@ -10,7 +10,8 @@ const description =
 
 // Every field below is rendered from these arrays so the form and all generators stay
 // in sync with policies.json. `app` marks the camelCase key used by the extension's own
-// settings envelope; `providerEnabled` and `metadefender` mark the two special mappings.
+// settings envelope; `providerEnabled` and `metadefender` mark the two special mappings. Provider
+// on/off toggles are folded into ManagedProviderSettings as each provider's `enabled` value.
 
 const identifierFields = [
     {
@@ -54,12 +55,12 @@ const managementFields = [
 ];
 
 const brandingFields = [
-    {key: 'BrandProductName', label: 'Product name', type: 'string', placeholder: 'Example MSP Web Protection'},
+    {key: 'BrandName', label: 'Product name', type: 'string', placeholder: 'Example MSP Web Protection'},
     {key: 'BrandLogoUrl', label: 'Logo URL', type: 'string', placeholder: 'https://cdn.msp.example/logo.png'},
     {key: 'SupportUrl', label: 'Support URL', type: 'string', placeholder: 'https://help.msp.example'},
     {key: 'SupportEmail', label: 'Support email', type: 'string', placeholder: 'support@msp.example'},
     {
-        key: 'CustomBlockMessage', label: 'Custom block message', type: 'string',
+        key: 'CustomWarningMessage', label: 'Custom block message', type: 'string',
         placeholder: 'This site was blocked by Example MSP.',
     },
 ];
@@ -79,16 +80,16 @@ const listFields = [
 
 const lockdownFields = [
     {key: 'DisableUserAllowlist', label: 'Disable user allowlist', app: 'disableUserAllowlist'},
-    {key: 'LockProtectionOptions', label: 'Lock protection options', app: 'lockSettings'},
-    {key: 'HideProtectionOptions', label: 'Hide protection options', app: 'hidePopupPanel'},
-    {key: 'HideContinueButtons', label: 'Hide continue buttons', app: 'hideContinueButtons'},
-    {key: 'HideReportButton', label: 'Hide report button', app: 'hideReportButton'},
-    {key: 'DisableClearAllowedWebsites', label: 'Disable clear allowed websites', app: 'disableClearAllowedWebsites'},
-    {key: 'DisableResetButtons', label: 'Disable reset buttons', app: 'disableResetButtons'},
+    {key: 'LockProviderSettings', label: 'Lock provider settings', app: 'lockProviderSettings'},
+    {key: 'HideProviderControls', label: 'Hide provider controls', app: 'hideProviderControls'},
+    {key: 'HideWarningProceedButton', label: 'Hide warning proceed button', app: 'hideWarningProceedButton'},
+    {key: 'HideWarningReportButton', label: 'Hide warning report button', app: 'hideWarningReportButton'},
+    {key: 'LockUserAllowlist', label: 'Lock user allowlist', app: 'lockUserAllowlist'},
+    {key: 'DisableSettingsReset', label: 'Disable settings reset', app: 'disableSettingsReset'},
     {
-        key: 'DisableThirdPartyIntegrations',
-        label: 'Disable third-party integrations',
-        app: 'disableThirdPartyIntegrations'
+        key: 'DisableThirdPartyProviders',
+        label: 'Disable third-party providers',
+        app: 'disableThirdPartyProviders'
     },
 ];
 
@@ -105,27 +106,27 @@ const cacheFields = [
     },
 ];
 
-// providerId is the extension's internal id; defaultOn is the policies.json schema default.
+// providerId is the ManagedProviderSettings key and the extension's internal id; defaultOn is the catalog default.
 const providerFields = [
-    {key: 'AlphaMountainEnabled', label: 'AlphaMountain', providerId: 'alphamountain', defaultOn: true},
-    {key: 'BforeAIPreCrimeEnabled', label: 'BforeAI PreCrime', providerId: 'bforeai', defaultOn: true},
-    {key: 'ChainPatrolEnabled', label: 'ChainPatrol', providerId: 'chainpatrol', defaultOn: true},
-    {key: 'iZOOlogicEnabled', label: 'iZOOlogic', providerId: 'izoologic', defaultOn: true},
-    {key: 'PrecisionSecEnabled', label: 'PrecisionSec', providerId: 'precisionsec', defaultOn: true},
-    {key: 'AdGuardDNSEnabled', label: 'AdGuard DNS', providerId: 'adguard-dns', defaultOn: true},
-    {key: 'AA419Enabled', label: 'Artists Against 419', providerId: 'aa419', defaultOn: true},
-    {key: 'CloudflareEnabled', label: 'Cloudflare', providerId: 'cloudflare', defaultOn: true},
-    {key: 'ControlDEnabled', label: 'Control D', providerId: 'control-d', defaultOn: false},
-    {key: 'OpenPhishEnabled', label: 'OpenPhish', providerId: 'openphish', defaultOn: true},
-    {key: 'PhishuntIOEnabled', label: 'Phishunt.io', providerId: 'phishunt-io', defaultOn: true},
-    {key: 'Quad9Enabled', label: 'Quad9', providerId: 'quad9', defaultOn: true},
-    {key: 'RedFlagDomainsEnabled', label: 'Red Flag Domains', providerId: 'red-flag-domains', defaultOn: true},
-    {key: 'SinkingYachtsEnabled', label: 'SinkingYachts', providerId: 'sinking-yachts', defaultOn: true},
-    {key: 'SwitchCHEnabled', label: 'Switch.ch', providerId: 'switch-ch', defaultOn: true},
-    {key: 'THREATfoxEnabled', label: 'THREATfox', providerId: 'threatfox', defaultOn: true},
-    {key: 'URLhausEnabled', label: 'URLhaus', providerId: 'urlhaus', defaultOn: true},
-    {key: 'URLAbuseEnabled', label: 'URLAbuse', providerId: 'urlabuse', defaultOn: true},
-    {key: 'ValidinEnabled', label: 'Validin', providerId: 'validin', defaultOn: true},
+    {label: 'AlphaMountain', providerId: 'alphamountain', defaultOn: true},
+    {label: 'BforeAI PreCrime', providerId: 'bforeai', defaultOn: true},
+    {label: 'ChainPatrol', providerId: 'chainpatrol', defaultOn: true},
+    {label: 'iZOOlogic', providerId: 'izoologic', defaultOn: true},
+    {label: 'PrecisionSec', providerId: 'precisionsec', defaultOn: true},
+    {label: 'AdGuard DNS', providerId: 'adguard-dns', defaultOn: true},
+    {label: 'Artists Against 419', providerId: 'aa419', defaultOn: true},
+    {label: 'Cloudflare', providerId: 'cloudflare', defaultOn: true},
+    {label: 'Control D', providerId: 'control-d', defaultOn: false},
+    {label: 'OpenPhish', providerId: 'openphish', defaultOn: true},
+    {label: 'Phishunt.io', providerId: 'phishunt-io', defaultOn: true},
+    {label: 'Quad9', providerId: 'quad9', defaultOn: true},
+    {label: 'Red Flag Domains', providerId: 'red-flag-domains', defaultOn: true},
+    {label: 'SinkingYachts', providerId: 'sinking-yachts', defaultOn: true},
+    {label: 'Switch.ch', providerId: 'switch-ch', defaultOn: true},
+    {label: 'THREATfox', providerId: 'threatfox', defaultOn: true},
+    {label: 'URLhaus', providerId: 'urlhaus', defaultOn: true},
+    {label: 'URLAbuse', providerId: 'urlabuse', defaultOn: true},
+    {label: 'Validin', providerId: 'validin', defaultOn: true},
 ];
 
 // Providers that can be tuned through ManagedProviderSettings, for the override row picker.
@@ -278,7 +279,7 @@ const outputTabs = [
                             <label class="toggle">
                                 <span class="field-label">{f.label}
                                     <span class="dim">{f.defaultOn ? ' (Default: On)' : ' (Default: Off)'}</span></span>
-                                <select class="select-input" data-key={f.key} data-type="bool"
+                                <select class="select-input" data-type="bool"
                                         data-provider-enabled={f.providerId} data-label={f.label}>
                                     <option value="">Not set</option>
                                     <option value="true">On</option>
@@ -452,10 +453,21 @@ const outputTabs = [
 
         function defaultApp() {
             return {
-                hideContinueButtons: false, hideReportButton: false, lockSettings: false, hidePopupPanel: false,
-                disableClearAllowedWebsites: false, disableResetButtons: false, disableThirdPartyIntegrations: false,
-                disableAllProviders: false, cacheExpirationSeconds: 604800, proxyBaseUrl: '', deviceTag: '', siteId: '',
-                disableUserAllowlist: false, managedAllowlist: [], managedBlocklist: [],
+                hideWarningProceedButton: false,
+                hideWarningReportButton: false,
+                lockProviderSettings: false,
+                hideProviderControls: false,
+                lockUserAllowlist: false,
+                disableSettingsReset: false,
+                disableThirdPartyProviders: false,
+                disableAllProviders: false,
+                cacheExpirationSeconds: 604800,
+                proxyBaseUrl: '',
+                deviceTag: '',
+                siteId: '',
+                disableUserAllowlist: false,
+                managedAllowlist: [],
+                managedBlocklist: [],
             };
         }
 
@@ -546,7 +558,6 @@ const outputTabs = [
                 const type = el.getAttribute('data-type');
                 const label = el.getAttribute('data-label') || key;
                 const appKey = el.getAttribute('data-app');
-                const providerEnabled = el.getAttribute('data-provider-enabled');
                 const isMetaDefender = el.getAttribute('data-metadefender') === 'true';
 
                 let value;
@@ -558,9 +569,7 @@ const outputTabs = [
 
                     value = el.value === 'true';
 
-                    if (providerEnabled) {
-                        providers[providerEnabled].enabled = value;
-                    } else if (appKey) {
+                    if (appKey) {
                         app[appKey] = value;
                     }
                 } else if (type === 'int') {
@@ -620,6 +629,22 @@ const outputTabs = [
             });
 
             const tuning = readTuningRows();
+
+            document.querySelectorAll('#gen-form [data-provider-enabled]').forEach(function (el) {
+                if (el.value === '') {
+                    return;
+                }
+
+                const pid = el.getAttribute('data-provider-enabled');
+                const enabled = el.value === 'true';
+
+                tuning[pid] = tuning[pid] || {};
+                tuning[pid].enabled = enabled;
+
+                if (providers[pid]) {
+                    providers[pid].enabled = enabled;
+                }
+            });
 
             if (Object.keys(tuning).length > 0) {
                 policyMap.ManagedProviderSettings = tuning;
@@ -935,14 +960,14 @@ const outputTabs = [
 
         function loadExample() {
             resetForm();
-            setValue('LockProtectionOptions', 'true');
-            setValue('HideProtectionOptions', 'true');
-            setValue('DisableClearAllowedWebsites', 'true');
-            setValue('DisableResetButtons', 'true');
-            setValue('DisableThirdPartyIntegrations', 'true');
+            setValue('LockProviderSettings', 'true');
+            setValue('HideProviderControls', 'true');
+            setValue('LockUserAllowlist', 'true');
+            setValue('DisableSettingsReset', 'true');
+            setValue('DisableThirdPartyProviders', 'true');
             setValue('DisableUserAllowlist', 'true');
-            setValue('HideContinueButtons', 'true');
-            setValue('HideReportButton', 'false');
+            setValue('HideWarningProceedButton', 'true');
+            setValue('HideWarningReportButton', 'false');
             setValue('CacheExpirationSeconds', '604800');
             setValue('ManagedAllowlist', 'intranet.example.com\n*.corp.example.com');
             setValue('ManagedBlocklist', '*.known-bad.example\nphish.example/login');
@@ -953,11 +978,11 @@ const outputTabs = [
             setValue('ManagedConfigUrl', 'https://config.msp.example/clients/acme/osprey.json');
             setValue('ReportingEndpoint', 'https://reporting.msp.example/osprey');
             setValue('ReportingAuthToken', 'REPLACE-WITH-REPORTING-TOKEN');
-            setValue('BrandProductName', 'Example MSP Web Protection');
+            setValue('BrandName', 'Example MSP Web Protection');
             setValue('BrandLogoUrl', 'https://cdn.msp.example/logo.png');
             setValue('SupportUrl', 'https://help.msp.example');
             setValue('SupportEmail', 'support@msp.example');
-            setValue('CustomBlockMessage', 'This site was blocked by Example MSP. Contact the help desk if you need access.');
+            setValue('CustomWarningMessage', 'This site was blocked by Example MSP. Contact the help desk if you need access.');
 
             addTuningRow();
 

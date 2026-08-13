@@ -4,35 +4,35 @@
 <dict>
 	<key>com.google.Chrome.extensions.jmnpibhfpmpfjhhkmpadlbgjnbhpjgnd</key>
 	<dict>
-		<key>LockProtectionOptions</key>
+		<key>LockProviderSettings</key>
 		<dict>
 			<key>state</key>
 			<string>always</string>
 			<key>value</key>
 			<true/>
 		</dict>
-		<key>HideProtectionOptions</key>
+		<key>HideProviderControls</key>
 		<dict>
 			<key>state</key>
 			<string>always</string>
 			<key>value</key>
 			<true/>
 		</dict>
-		<key>DisableClearAllowedWebsites</key>
+		<key>LockUserAllowlist</key>
 		<dict>
 			<key>state</key>
 			<string>always</string>
 			<key>value</key>
 			<true/>
 		</dict>
-		<key>DisableResetButtons</key>
+		<key>DisableSettingsReset</key>
 		<dict>
 			<key>state</key>
 			<string>always</string>
 			<key>value</key>
 			<true/>
 		</dict>
-		<key>DisableThirdPartyIntegrations</key>
+		<key>DisableThirdPartyProviders</key>
 		<dict>
 			<key>state</key>
 			<string>always</string>
@@ -46,14 +46,14 @@
 			<key>value</key>
 			<true/>
 		</dict>
-		<key>HideContinueButtons</key>
+		<key>HideWarningProceedButton</key>
 		<dict>
 			<key>state</key>
 			<string>always</string>
 			<key>value</key>
 			<true/>
 		</dict>
-		<key>HideReportButton</key>
+		<key>HideWarningReportButton</key>
 		<dict>
 			<key>state</key>
 			<string>always</string>
@@ -136,7 +136,7 @@
 			<key>value</key>
 			<string>REPLACE-WITH-REPORTING-TOKEN</string>
 		</dict>
-		<key>BrandProductName</key>
+		<key>BrandName</key>
 		<dict>
 			<key>state</key>
 			<string>always</string>
@@ -164,7 +164,7 @@
 			<key>value</key>
 			<string>support@msp.example</string>
 		</dict>
-		<key>CustomBlockMessage</key>
+		<key>CustomWarningMessage</key>
 		<dict>
 			<key>state</key>
 			<string>always</string>

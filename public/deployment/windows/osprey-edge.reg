@@ -1,14 +1,14 @@
 Windows Registry Editor Version 5.00
 
 [HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge\3rdparty\extensions\nopglhplnghfhpniofkcopmhbjdonlgn\policy]
-"LockProtectionOptions"=dword:00000001
-"HideProtectionOptions"=dword:00000001
-"DisableClearAllowedWebsites"=dword:00000001
-"DisableResetButtons"=dword:00000001
-"DisableThirdPartyIntegrations"=dword:00000001
+"LockProviderSettings"=dword:00000001
+"HideProviderControls"=dword:00000001
+"LockUserAllowlist"=dword:00000001
+"DisableSettingsReset"=dword:00000001
+"DisableThirdPartyProviders"=dword:00000001
 "DisableUserAllowlist"=dword:00000001
-"HideContinueButtons"=dword:00000001
-"HideReportButton"=dword:00000000
+"HideWarningProceedButton"=dword:00000001
+"HideWarningReportButton"=dword:00000000
 "CacheExpirationSeconds"=dword:00093a80
 "ProxyBaseUrl"="https://osprey.msp.example"
 "ProxyApiKey"="REPLACE-WITH-TENANT-KEY"
@@ -17,11 +17,11 @@ Windows Registry Editor Version 5.00
 "ManagedConfigUrl"="https://config.msp.example/clients/acme/osprey.json"
 "ReportingEndpoint"="https://reporting.msp.example/osprey"
 "ReportingAuthToken"="REPLACE-WITH-REPORTING-TOKEN"
-"BrandProductName"="Example MSP Web Protection"
+"BrandName"="Example MSP Web Protection"
 "BrandLogoUrl"="https://cdn.msp.example/logo.png"
 "SupportUrl"="https://help.msp.example"
 "SupportEmail"="support@msp.example"
-"CustomBlockMessage"="This site was blocked by Example MSP. Contact the help desk if you need access."
+"CustomWarningMessage"="This site was blocked by Example MSP. Contact the help desk if you need access."
 "ManagedProviderSettings"="{\"alphamountain\":{\"bypassBlockingThreshold\":false,\"requestTimeoutMs\":8000,\"blockCategories\":{\"suspicious\":true,\"newly_registered\":true}}}"
 
 [HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge\3rdparty\extensions\nopglhplnghfhpniofkcopmhbjdonlgn\policy\ManagedAllowlist]

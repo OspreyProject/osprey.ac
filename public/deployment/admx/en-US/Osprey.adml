@@ -8,62 +8,24 @@
       <string id="CAT_Osprey">Osprey: Browser Protection</string>
       <string id="CAT_Chrome">Google Chrome / Chromium</string>
       <string id="CAT_Edge">Microsoft Edge</string>
-      <string id="HideContinueButtons">Hide Continue Buttons</string>
-      <string id="HideContinueButtons_Explain">If true, the warning page continue buttons are hidden.</string>
-      <string id="HideReportButton">Hide Report Button</string>
-      <string id="HideReportButton_Explain">If true, the warning page report button is hidden.</string>
-      <string id="DisableClearAllowedWebsites">Disable Clear Allowed Websites</string>
-      <string id="DisableClearAllowedWebsites_Explain">If true, the clear allowed websites button is disabled.</string>
-      <string id="LockProtectionOptions">Lock Protection Options</string>
-      <string id="LockProtectionOptions_Explain">If true, provider toggles and provider settings are locked in the options page.</string>
-      <string id="DisableResetButtons">Disable Reset Buttons</string>
-      <string id="DisableResetButtons_Explain">If true, reset actions in the settings page are disabled.</string>
-      <string id="DisableThirdPartyIntegrations">Disable Third-Party Integrations</string>
-      <string id="DisableThirdPartyIntegrations_Explain">If true, third-party direct integrations are disabled and cannot be enabled from settings.</string>
+      <string id="HideWarningProceedButton">Hide Warning Proceed Button</string>
+      <string id="HideWarningProceedButton_Explain">If true, the warning page proceed button is hidden.</string>
+      <string id="HideWarningReportButton">Hide Warning Report Button</string>
+      <string id="HideWarningReportButton_Explain">If true, the warning page report button is hidden.</string>
+      <string id="LockUserAllowlist">Lock User Allowlist</string>
+      <string id="LockUserAllowlist_Explain">If true, the user cannot edit or clear the allowed websites list, but existing entries still apply.</string>
+      <string id="LockProviderSettings">Lock Provider Settings</string>
+      <string id="LockProviderSettings_Explain">If true, provider toggles and provider settings are locked in the options page.</string>
+      <string id="DisableSettingsReset">Disable Settings Reset</string>
+      <string id="DisableSettingsReset_Explain">If true, reset actions in the settings page are disabled.</string>
+      <string id="DisableThirdPartyProviders">Disable Third-Party Providers</string>
+      <string id="DisableThirdPartyProviders_Explain">If true, third-party providers are disabled and cannot be enabled from settings.</string>
       <string id="CacheExpirationSeconds">Cache Expiration Seconds</string>
       <string id="CacheExpirationSeconds_Explain">Cache entry lifetime in seconds. (minimum 60, maximum 2592000, default 604800)</string>
       <string id="MetaDefenderApiKey">MetaDefender API Key</string>
       <string id="MetaDefenderApiKey_Explain">Managed API key for the MetaDefender integrations.</string>
-      <string id="HideProtectionOptions">Hide Protection Options</string>
-      <string id="HideProtectionOptions_Explain">If true, protection options are hidden from the popup and options page.</string>
-      <string id="AlphaMountainEnabled">AlphaMountain Enabled</string>
-      <string id="AlphaMountainEnabled_Explain">Managed enabled state for AlphaMountain.</string>
-      <string id="BforeAIPreCrimeEnabled">BforeAI PreCrime Enabled</string>
-      <string id="BforeAIPreCrimeEnabled_Explain">Managed enabled state for BforeAI PreCrime.</string>
-      <string id="ChainPatrolEnabled">ChainPatrol Enabled</string>
-      <string id="ChainPatrolEnabled_Explain">Managed enabled state for ChainPatrol.</string>
-      <string id="iZOOlogicEnabled">iZOOlogic Enabled</string>
-      <string id="iZOOlogicEnabled_Explain">Managed enabled state for iZOOlogic.</string>
-      <string id="PrecisionSecEnabled">PrecisionSec Enabled</string>
-      <string id="PrecisionSecEnabled_Explain">Managed enabled state for PrecisionSec.</string>
-      <string id="AdGuardDNSEnabled">AdGuard DNS Enabled</string>
-      <string id="AdGuardDNSEnabled_Explain">Managed enabled state for AdGuard DNS.</string>
-      <string id="AA419Enabled">Artists Against 419 Enabled</string>
-      <string id="AA419Enabled_Explain">Managed enabled state for Artists Against 419.</string>
-      <string id="CloudflareEnabled">Cloudflare Enabled</string>
-      <string id="CloudflareEnabled_Explain">Managed enabled state for Cloudflare.</string>
-      <string id="ControlDEnabled">Control D Enabled</string>
-      <string id="ControlDEnabled_Explain">Managed enabled state for Control D.</string>
-      <string id="OpenPhishEnabled">OpenPhish Enabled</string>
-      <string id="OpenPhishEnabled_Explain">Managed enabled state for OpenPhish.</string>
-      <string id="PhishuntIOEnabled">Phishunt.io Enabled</string>
-      <string id="PhishuntIOEnabled_Explain">Managed enabled state for Phishunt.io.</string>
-      <string id="Quad9Enabled">Quad9 Enabled</string>
-      <string id="Quad9Enabled_Explain">Managed enabled state for Quad9.</string>
-      <string id="RedFlagDomainsEnabled">Red Flag Domains Enabled</string>
-      <string id="RedFlagDomainsEnabled_Explain">Managed enabled state for Red Flag Domains.</string>
-      <string id="SinkingYachtsEnabled">SinkingYachts Enabled</string>
-      <string id="SinkingYachtsEnabled_Explain">Managed enabled state for SinkingYachts.</string>
-      <string id="SwitchCHEnabled">Switch.ch Enabled</string>
-      <string id="SwitchCHEnabled_Explain">Managed enabled state for Switch.ch.</string>
-      <string id="THREATfoxEnabled">THREATfox Enabled</string>
-      <string id="THREATfoxEnabled_Explain">Managed enabled state for THREATfox.</string>
-      <string id="URLhausEnabled">URLhaus Enabled</string>
-      <string id="URLhausEnabled_Explain">Managed enabled state for URLhaus.</string>
-      <string id="URLAbuseEnabled">URLAbuse Enabled</string>
-      <string id="URLAbuseEnabled_Explain">Managed enabled state for URLAbuse.</string>
-      <string id="ValidinEnabled">Validin Enabled</string>
-      <string id="ValidinEnabled_Explain">Managed enabled state for Validin.</string>
+      <string id="HideProviderControls">Hide Provider Controls</string>
+      <string id="HideProviderControls_Explain">If true, provider controls are hidden from the popup and options page.</string>
       <string id="ManagedAllowlist">Managed Allowlist</string>
       <string id="ManagedAllowlist_Explain">Host or URL patterns that are always treated as safe. The end user cannot remove these. Examples: "intranet.example.com", "*.corp.example.com", "https://apps.example.com/portal".</string>
       <string id="ManagedBlocklist">Managed Blocklist</string>
@@ -85,17 +47,17 @@
       <string id="DisableUserAllowlist">Disable User Allowlist</string>
       <string id="DisableUserAllowlist_Explain">If true, the end user cannot add any allowlist entries or exclusions, and existing user allowlist entries are ignored.</string>
       <string id="ManagedProviderSettings">Managed Provider Settings</string>
-      <string id="ManagedProviderSettings_Explain">Per-provider overrides keyed by provider id. Each value may set "bypassBlockingThreshold" (boolean), "requestTimeoutMs" (integer between 1000 and 60000), and "blockCategories" (an object mapping a category key to a boolean).</string>
+      <string id="ManagedProviderSettings_Explain">Per-provider overrides keyed by provider id. Each value may set "enabled" (boolean, the managed enabled state for the provider), "bypassBlockingThreshold" (boolean), "requestTimeoutMs" (integer between 1000 and 60000), and "blockCategories" (an object mapping a category key to a boolean).</string>
       <string id="BrandLogoUrl">Brand Logo URL</string>
       <string id="BrandLogoUrl_Explain">Image URL or data: image string used for the logo on the warning page and popup. When empty, the default Osprey logo is shown.</string>
-      <string id="BrandProductName">Brand Product Name</string>
-      <string id="BrandProductName_Explain">Name shown in the warning page banner and popup, replacing the default Osprey product name. When empty, the default name is shown.</string>
+      <string id="BrandName">Brand Name</string>
+      <string id="BrandName_Explain">Name shown in the warning page banner and popup, replacing the default Osprey product name. When empty, the default name is shown.</string>
       <string id="SupportUrl">Support URL</string>
       <string id="SupportUrl_Explain">Support or help-desk URL shown as a contact link on the warning page and popup. Must be an http(s) URL, for example "https://help.msp.example". When empty, no support link is shown.</string>
       <string id="SupportEmail">Support Email</string>
       <string id="SupportEmail_Explain">Support email address shown as a contact link on the warning page. When empty, no email link is shown.</string>
-      <string id="CustomBlockMessage">Custom Block Message</string>
-      <string id="CustomBlockMessage_Explain">Optional override for the lead sentence on the warning page. When empty, the default block message is shown.</string>
+      <string id="CustomWarningMessage">Custom Warning Message</string>
+      <string id="CustomWarningMessage_Explain">Optional override for the lead sentence on the warning page. When empty, the default warning message is shown.</string>
     </stringTable>
     <presentationTable>
       <presentation id="Chrome_CacheExpirationSeconds">
@@ -137,8 +99,8 @@
       <presentation id="Chrome_BrandLogoUrl">
         <textBox refId="Chrome_BrandLogoUrl_val"><label>Brand Logo URL</label></textBox>
       </presentation>
-      <presentation id="Chrome_BrandProductName">
-        <textBox refId="Chrome_BrandProductName_val"><label>Brand Product Name</label></textBox>
+      <presentation id="Chrome_BrandName">
+        <textBox refId="Chrome_BrandName_val"><label>Brand Name</label></textBox>
       </presentation>
       <presentation id="Chrome_SupportUrl">
         <textBox refId="Chrome_SupportUrl_val"><label>Support URL</label></textBox>
@@ -146,8 +108,8 @@
       <presentation id="Chrome_SupportEmail">
         <textBox refId="Chrome_SupportEmail_val"><label>Support Email</label></textBox>
       </presentation>
-      <presentation id="Chrome_CustomBlockMessage">
-        <textBox refId="Chrome_CustomBlockMessage_val"><label>Custom Block Message</label></textBox>
+      <presentation id="Chrome_CustomWarningMessage">
+        <textBox refId="Chrome_CustomWarningMessage_val"><label>Custom Warning Message</label></textBox>
       </presentation>
       <presentation id="Edge_CacheExpirationSeconds">
         <decimalTextBox refId="Edge_CacheExpirationSeconds_val" defaultValue="604800">Cache Expiration Seconds</decimalTextBox>
@@ -188,8 +150,8 @@
       <presentation id="Edge_BrandLogoUrl">
         <textBox refId="Edge_BrandLogoUrl_val"><label>Brand Logo URL</label></textBox>
       </presentation>
-      <presentation id="Edge_BrandProductName">
-        <textBox refId="Edge_BrandProductName_val"><label>Brand Product Name</label></textBox>
+      <presentation id="Edge_BrandName">
+        <textBox refId="Edge_BrandName_val"><label>Brand Name</label></textBox>
       </presentation>
       <presentation id="Edge_SupportUrl">
         <textBox refId="Edge_SupportUrl_val"><label>Support URL</label></textBox>
@@ -197,8 +159,8 @@
       <presentation id="Edge_SupportEmail">
         <textBox refId="Edge_SupportEmail_val"><label>Support Email</label></textBox>
       </presentation>
-      <presentation id="Edge_CustomBlockMessage">
-        <textBox refId="Edge_CustomBlockMessage_val"><label>Custom Block Message</label></textBox>
+      <presentation id="Edge_CustomWarningMessage">
+        <textBox refId="Edge_CustomWarningMessage_val"><label>Custom Warning Message</label></textBox>
       </presentation>
     </presentationTable>
   </resources>

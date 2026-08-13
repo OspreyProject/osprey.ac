@@ -20,37 +20,37 @@
     </category>
   </categories>
   <policies>
-    <policy name="Chrome_HideContinueButtons" class="Machine" displayName="$(string.HideContinueButtons)" explainText="$(string.HideContinueButtons_Explain)" key="Software\Policies\Google\Chrome\3rdparty\extensions\jmnpibhfpmpfjhhkmpadlbgjnbhpjgnd\policy" valueName="HideContinueButtons">
+    <policy name="Chrome_HideWarningProceedButton" class="Machine" displayName="$(string.HideWarningProceedButton)" explainText="$(string.HideWarningProceedButton_Explain)" key="Software\Policies\Google\Chrome\3rdparty\extensions\jmnpibhfpmpfjhhkmpadlbgjnbhpjgnd\policy" valueName="HideWarningProceedButton">
       <parentCategory ref="CAT_Chrome" />
       <supportedOn ref="SUPPORTED_OspreyBrowser" />
       <enabledValue><decimal value="1" /></enabledValue>
       <disabledValue><decimal value="0" /></disabledValue>
     </policy>
-    <policy name="Chrome_HideReportButton" class="Machine" displayName="$(string.HideReportButton)" explainText="$(string.HideReportButton_Explain)" key="Software\Policies\Google\Chrome\3rdparty\extensions\jmnpibhfpmpfjhhkmpadlbgjnbhpjgnd\policy" valueName="HideReportButton">
+    <policy name="Chrome_HideWarningReportButton" class="Machine" displayName="$(string.HideWarningReportButton)" explainText="$(string.HideWarningReportButton_Explain)" key="Software\Policies\Google\Chrome\3rdparty\extensions\jmnpibhfpmpfjhhkmpadlbgjnbhpjgnd\policy" valueName="HideWarningReportButton">
       <parentCategory ref="CAT_Chrome" />
       <supportedOn ref="SUPPORTED_OspreyBrowser" />
       <enabledValue><decimal value="1" /></enabledValue>
       <disabledValue><decimal value="0" /></disabledValue>
     </policy>
-    <policy name="Chrome_DisableClearAllowedWebsites" class="Machine" displayName="$(string.DisableClearAllowedWebsites)" explainText="$(string.DisableClearAllowedWebsites_Explain)" key="Software\Policies\Google\Chrome\3rdparty\extensions\jmnpibhfpmpfjhhkmpadlbgjnbhpjgnd\policy" valueName="DisableClearAllowedWebsites">
+    <policy name="Chrome_LockUserAllowlist" class="Machine" displayName="$(string.LockUserAllowlist)" explainText="$(string.LockUserAllowlist_Explain)" key="Software\Policies\Google\Chrome\3rdparty\extensions\jmnpibhfpmpfjhhkmpadlbgjnbhpjgnd\policy" valueName="LockUserAllowlist">
       <parentCategory ref="CAT_Chrome" />
       <supportedOn ref="SUPPORTED_OspreyBrowser" />
       <enabledValue><decimal value="1" /></enabledValue>
       <disabledValue><decimal value="0" /></disabledValue>
     </policy>
-    <policy name="Chrome_LockProtectionOptions" class="Machine" displayName="$(string.LockProtectionOptions)" explainText="$(string.LockProtectionOptions_Explain)" key="Software\Policies\Google\Chrome\3rdparty\extensions\jmnpibhfpmpfjhhkmpadlbgjnbhpjgnd\policy" valueName="LockProtectionOptions">
+    <policy name="Chrome_LockProviderSettings" class="Machine" displayName="$(string.LockProviderSettings)" explainText="$(string.LockProviderSettings_Explain)" key="Software\Policies\Google\Chrome\3rdparty\extensions\jmnpibhfpmpfjhhkmpadlbgjnbhpjgnd\policy" valueName="LockProviderSettings">
       <parentCategory ref="CAT_Chrome" />
       <supportedOn ref="SUPPORTED_OspreyBrowser" />
       <enabledValue><decimal value="1" /></enabledValue>
       <disabledValue><decimal value="0" /></disabledValue>
     </policy>
-    <policy name="Chrome_DisableResetButtons" class="Machine" displayName="$(string.DisableResetButtons)" explainText="$(string.DisableResetButtons_Explain)" key="Software\Policies\Google\Chrome\3rdparty\extensions\jmnpibhfpmpfjhhkmpadlbgjnbhpjgnd\policy" valueName="DisableResetButtons">
+    <policy name="Chrome_DisableSettingsReset" class="Machine" displayName="$(string.DisableSettingsReset)" explainText="$(string.DisableSettingsReset_Explain)" key="Software\Policies\Google\Chrome\3rdparty\extensions\jmnpibhfpmpfjhhkmpadlbgjnbhpjgnd\policy" valueName="DisableSettingsReset">
       <parentCategory ref="CAT_Chrome" />
       <supportedOn ref="SUPPORTED_OspreyBrowser" />
       <enabledValue><decimal value="1" /></enabledValue>
       <disabledValue><decimal value="0" /></disabledValue>
     </policy>
-    <policy name="Chrome_DisableThirdPartyIntegrations" class="Machine" displayName="$(string.DisableThirdPartyIntegrations)" explainText="$(string.DisableThirdPartyIntegrations_Explain)" key="Software\Policies\Google\Chrome\3rdparty\extensions\jmnpibhfpmpfjhhkmpadlbgjnbhpjgnd\policy" valueName="DisableThirdPartyIntegrations">
+    <policy name="Chrome_DisableThirdPartyProviders" class="Machine" displayName="$(string.DisableThirdPartyProviders)" explainText="$(string.DisableThirdPartyProviders_Explain)" key="Software\Policies\Google\Chrome\3rdparty\extensions\jmnpibhfpmpfjhhkmpadlbgjnbhpjgnd\policy" valueName="DisableThirdPartyProviders">
       <parentCategory ref="CAT_Chrome" />
       <supportedOn ref="SUPPORTED_OspreyBrowser" />
       <enabledValue><decimal value="1" /></enabledValue>
@@ -70,121 +70,7 @@
         <text id="Chrome_MetaDefenderApiKey_val" valueName="MetaDefenderApiKey" maxLength="2048" />
       </elements>
     </policy>
-    <policy name="Chrome_HideProtectionOptions" class="Machine" displayName="$(string.HideProtectionOptions)" explainText="$(string.HideProtectionOptions_Explain)" key="Software\Policies\Google\Chrome\3rdparty\extensions\jmnpibhfpmpfjhhkmpadlbgjnbhpjgnd\policy" valueName="HideProtectionOptions">
-      <parentCategory ref="CAT_Chrome" />
-      <supportedOn ref="SUPPORTED_OspreyBrowser" />
-      <enabledValue><decimal value="1" /></enabledValue>
-      <disabledValue><decimal value="0" /></disabledValue>
-    </policy>
-    <policy name="Chrome_AlphaMountainEnabled" class="Machine" displayName="$(string.AlphaMountainEnabled)" explainText="$(string.AlphaMountainEnabled_Explain)" key="Software\Policies\Google\Chrome\3rdparty\extensions\jmnpibhfpmpfjhhkmpadlbgjnbhpjgnd\policy" valueName="AlphaMountainEnabled">
-      <parentCategory ref="CAT_Chrome" />
-      <supportedOn ref="SUPPORTED_OspreyBrowser" />
-      <enabledValue><decimal value="1" /></enabledValue>
-      <disabledValue><decimal value="0" /></disabledValue>
-    </policy>
-    <policy name="Chrome_BforeAIPreCrimeEnabled" class="Machine" displayName="$(string.BforeAIPreCrimeEnabled)" explainText="$(string.BforeAIPreCrimeEnabled_Explain)" key="Software\Policies\Google\Chrome\3rdparty\extensions\jmnpibhfpmpfjhhkmpadlbgjnbhpjgnd\policy" valueName="BforeAIPreCrimeEnabled">
-      <parentCategory ref="CAT_Chrome" />
-      <supportedOn ref="SUPPORTED_OspreyBrowser" />
-      <enabledValue><decimal value="1" /></enabledValue>
-      <disabledValue><decimal value="0" /></disabledValue>
-    </policy>
-    <policy name="Chrome_ChainPatrolEnabled" class="Machine" displayName="$(string.ChainPatrolEnabled)" explainText="$(string.ChainPatrolEnabled_Explain)" key="Software\Policies\Google\Chrome\3rdparty\extensions\jmnpibhfpmpfjhhkmpadlbgjnbhpjgnd\policy" valueName="ChainPatrolEnabled">
-      <parentCategory ref="CAT_Chrome" />
-      <supportedOn ref="SUPPORTED_OspreyBrowser" />
-      <enabledValue><decimal value="1" /></enabledValue>
-      <disabledValue><decimal value="0" /></disabledValue>
-    </policy>
-    <policy name="Chrome_iZOOlogicEnabled" class="Machine" displayName="$(string.iZOOlogicEnabled)" explainText="$(string.iZOOlogicEnabled_Explain)" key="Software\Policies\Google\Chrome\3rdparty\extensions\jmnpibhfpmpfjhhkmpadlbgjnbhpjgnd\policy" valueName="iZOOlogicEnabled">
-      <parentCategory ref="CAT_Chrome" />
-      <supportedOn ref="SUPPORTED_OspreyBrowser" />
-      <enabledValue><decimal value="1" /></enabledValue>
-      <disabledValue><decimal value="0" /></disabledValue>
-    </policy>
-    <policy name="Chrome_PrecisionSecEnabled" class="Machine" displayName="$(string.PrecisionSecEnabled)" explainText="$(string.PrecisionSecEnabled_Explain)" key="Software\Policies\Google\Chrome\3rdparty\extensions\jmnpibhfpmpfjhhkmpadlbgjnbhpjgnd\policy" valueName="PrecisionSecEnabled">
-      <parentCategory ref="CAT_Chrome" />
-      <supportedOn ref="SUPPORTED_OspreyBrowser" />
-      <enabledValue><decimal value="1" /></enabledValue>
-      <disabledValue><decimal value="0" /></disabledValue>
-    </policy>
-    <policy name="Chrome_AdGuardDNSEnabled" class="Machine" displayName="$(string.AdGuardDNSEnabled)" explainText="$(string.AdGuardDNSEnabled_Explain)" key="Software\Policies\Google\Chrome\3rdparty\extensions\jmnpibhfpmpfjhhkmpadlbgjnbhpjgnd\policy" valueName="AdGuardDNSEnabled">
-      <parentCategory ref="CAT_Chrome" />
-      <supportedOn ref="SUPPORTED_OspreyBrowser" />
-      <enabledValue><decimal value="1" /></enabledValue>
-      <disabledValue><decimal value="0" /></disabledValue>
-    </policy>
-    <policy name="Chrome_AA419Enabled" class="Machine" displayName="$(string.AA419Enabled)" explainText="$(string.AA419Enabled_Explain)" key="Software\Policies\Google\Chrome\3rdparty\extensions\jmnpibhfpmpfjhhkmpadlbgjnbhpjgnd\policy" valueName="AA419Enabled">
-      <parentCategory ref="CAT_Chrome" />
-      <supportedOn ref="SUPPORTED_OspreyBrowser" />
-      <enabledValue><decimal value="1" /></enabledValue>
-      <disabledValue><decimal value="0" /></disabledValue>
-    </policy>
-    <policy name="Chrome_CloudflareEnabled" class="Machine" displayName="$(string.CloudflareEnabled)" explainText="$(string.CloudflareEnabled_Explain)" key="Software\Policies\Google\Chrome\3rdparty\extensions\jmnpibhfpmpfjhhkmpadlbgjnbhpjgnd\policy" valueName="CloudflareEnabled">
-      <parentCategory ref="CAT_Chrome" />
-      <supportedOn ref="SUPPORTED_OspreyBrowser" />
-      <enabledValue><decimal value="1" /></enabledValue>
-      <disabledValue><decimal value="0" /></disabledValue>
-    </policy>
-    <policy name="Chrome_ControlDEnabled" class="Machine" displayName="$(string.ControlDEnabled)" explainText="$(string.ControlDEnabled_Explain)" key="Software\Policies\Google\Chrome\3rdparty\extensions\jmnpibhfpmpfjhhkmpadlbgjnbhpjgnd\policy" valueName="ControlDEnabled">
-      <parentCategory ref="CAT_Chrome" />
-      <supportedOn ref="SUPPORTED_OspreyBrowser" />
-      <enabledValue><decimal value="1" /></enabledValue>
-      <disabledValue><decimal value="0" /></disabledValue>
-    </policy>
-    <policy name="Chrome_OpenPhishEnabled" class="Machine" displayName="$(string.OpenPhishEnabled)" explainText="$(string.OpenPhishEnabled_Explain)" key="Software\Policies\Google\Chrome\3rdparty\extensions\jmnpibhfpmpfjhhkmpadlbgjnbhpjgnd\policy" valueName="OpenPhishEnabled">
-      <parentCategory ref="CAT_Chrome" />
-      <supportedOn ref="SUPPORTED_OspreyBrowser" />
-      <enabledValue><decimal value="1" /></enabledValue>
-      <disabledValue><decimal value="0" /></disabledValue>
-    </policy>
-    <policy name="Chrome_PhishuntIOEnabled" class="Machine" displayName="$(string.PhishuntIOEnabled)" explainText="$(string.PhishuntIOEnabled_Explain)" key="Software\Policies\Google\Chrome\3rdparty\extensions\jmnpibhfpmpfjhhkmpadlbgjnbhpjgnd\policy" valueName="PhishuntIOEnabled">
-      <parentCategory ref="CAT_Chrome" />
-      <supportedOn ref="SUPPORTED_OspreyBrowser" />
-      <enabledValue><decimal value="1" /></enabledValue>
-      <disabledValue><decimal value="0" /></disabledValue>
-    </policy>
-    <policy name="Chrome_Quad9Enabled" class="Machine" displayName="$(string.Quad9Enabled)" explainText="$(string.Quad9Enabled_Explain)" key="Software\Policies\Google\Chrome\3rdparty\extensions\jmnpibhfpmpfjhhkmpadlbgjnbhpjgnd\policy" valueName="Quad9Enabled">
-      <parentCategory ref="CAT_Chrome" />
-      <supportedOn ref="SUPPORTED_OspreyBrowser" />
-      <enabledValue><decimal value="1" /></enabledValue>
-      <disabledValue><decimal value="0" /></disabledValue>
-    </policy>
-    <policy name="Chrome_RedFlagDomainsEnabled" class="Machine" displayName="$(string.RedFlagDomainsEnabled)" explainText="$(string.RedFlagDomainsEnabled_Explain)" key="Software\Policies\Google\Chrome\3rdparty\extensions\jmnpibhfpmpfjhhkmpadlbgjnbhpjgnd\policy" valueName="RedFlagDomainsEnabled">
-      <parentCategory ref="CAT_Chrome" />
-      <supportedOn ref="SUPPORTED_OspreyBrowser" />
-      <enabledValue><decimal value="1" /></enabledValue>
-      <disabledValue><decimal value="0" /></disabledValue>
-    </policy>
-    <policy name="Chrome_SinkingYachtsEnabled" class="Machine" displayName="$(string.SinkingYachtsEnabled)" explainText="$(string.SinkingYachtsEnabled_Explain)" key="Software\Policies\Google\Chrome\3rdparty\extensions\jmnpibhfpmpfjhhkmpadlbgjnbhpjgnd\policy" valueName="SinkingYachtsEnabled">
-      <parentCategory ref="CAT_Chrome" />
-      <supportedOn ref="SUPPORTED_OspreyBrowser" />
-      <enabledValue><decimal value="1" /></enabledValue>
-      <disabledValue><decimal value="0" /></disabledValue>
-    </policy>
-    <policy name="Chrome_SwitchCHEnabled" class="Machine" displayName="$(string.SwitchCHEnabled)" explainText="$(string.SwitchCHEnabled_Explain)" key="Software\Policies\Google\Chrome\3rdparty\extensions\jmnpibhfpmpfjhhkmpadlbgjnbhpjgnd\policy" valueName="SwitchCHEnabled">
-      <parentCategory ref="CAT_Chrome" />
-      <supportedOn ref="SUPPORTED_OspreyBrowser" />
-      <enabledValue><decimal value="1" /></enabledValue>
-      <disabledValue><decimal value="0" /></disabledValue>
-    </policy>
-    <policy name="Chrome_THREATfoxEnabled" class="Machine" displayName="$(string.THREATfoxEnabled)" explainText="$(string.THREATfoxEnabled_Explain)" key="Software\Policies\Google\Chrome\3rdparty\extensions\jmnpibhfpmpfjhhkmpadlbgjnbhpjgnd\policy" valueName="THREATfoxEnabled">
-      <parentCategory ref="CAT_Chrome" />
-      <supportedOn ref="SUPPORTED_OspreyBrowser" />
-      <enabledValue><decimal value="1" /></enabledValue>
-      <disabledValue><decimal value="0" /></disabledValue>
-    </policy>
-    <policy name="Chrome_URLhausEnabled" class="Machine" displayName="$(string.URLhausEnabled)" explainText="$(string.URLhausEnabled_Explain)" key="Software\Policies\Google\Chrome\3rdparty\extensions\jmnpibhfpmpfjhhkmpadlbgjnbhpjgnd\policy" valueName="URLhausEnabled">
-      <parentCategory ref="CAT_Chrome" />
-      <supportedOn ref="SUPPORTED_OspreyBrowser" />
-      <enabledValue><decimal value="1" /></enabledValue>
-      <disabledValue><decimal value="0" /></disabledValue>
-    </policy>
-    <policy name="Chrome_URLAbuseEnabled" class="Machine" displayName="$(string.URLAbuseEnabled)" explainText="$(string.URLAbuseEnabled_Explain)" key="Software\Policies\Google\Chrome\3rdparty\extensions\jmnpibhfpmpfjhhkmpadlbgjnbhpjgnd\policy" valueName="URLAbuseEnabled">
-      <parentCategory ref="CAT_Chrome" />
-      <supportedOn ref="SUPPORTED_OspreyBrowser" />
-      <enabledValue><decimal value="1" /></enabledValue>
-      <disabledValue><decimal value="0" /></disabledValue>
-    </policy>
-    <policy name="Chrome_ValidinEnabled" class="Machine" displayName="$(string.ValidinEnabled)" explainText="$(string.ValidinEnabled_Explain)" key="Software\Policies\Google\Chrome\3rdparty\extensions\jmnpibhfpmpfjhhkmpadlbgjnbhpjgnd\policy" valueName="ValidinEnabled">
+    <policy name="Chrome_HideProviderControls" class="Machine" displayName="$(string.HideProviderControls)" explainText="$(string.HideProviderControls_Explain)" key="Software\Policies\Google\Chrome\3rdparty\extensions\jmnpibhfpmpfjhhkmpadlbgjnbhpjgnd\policy" valueName="HideProviderControls">
       <parentCategory ref="CAT_Chrome" />
       <supportedOn ref="SUPPORTED_OspreyBrowser" />
       <enabledValue><decimal value="1" /></enabledValue>
@@ -273,11 +159,11 @@
         <text id="Chrome_BrandLogoUrl_val" valueName="BrandLogoUrl" maxLength="2048" />
       </elements>
     </policy>
-    <policy name="Chrome_BrandProductName" class="Machine" displayName="$(string.BrandProductName)" explainText="$(string.BrandProductName_Explain)" presentation="$(presentation.Chrome_BrandProductName)" key="Software\Policies\Google\Chrome\3rdparty\extensions\jmnpibhfpmpfjhhkmpadlbgjnbhpjgnd\policy">
+    <policy name="Chrome_BrandName" class="Machine" displayName="$(string.BrandName)" explainText="$(string.BrandName_Explain)" presentation="$(presentation.Chrome_BrandName)" key="Software\Policies\Google\Chrome\3rdparty\extensions\jmnpibhfpmpfjhhkmpadlbgjnbhpjgnd\policy">
       <parentCategory ref="CAT_Chrome" />
       <supportedOn ref="SUPPORTED_OspreyBrowser" />
       <elements>
-        <text id="Chrome_BrandProductName_val" valueName="BrandProductName" maxLength="2048" />
+        <text id="Chrome_BrandName_val" valueName="BrandName" maxLength="2048" />
       </elements>
     </policy>
     <policy name="Chrome_SupportUrl" class="Machine" displayName="$(string.SupportUrl)" explainText="$(string.SupportUrl_Explain)" presentation="$(presentation.Chrome_SupportUrl)" key="Software\Policies\Google\Chrome\3rdparty\extensions\jmnpibhfpmpfjhhkmpadlbgjnbhpjgnd\policy">
@@ -294,44 +180,44 @@
         <text id="Chrome_SupportEmail_val" valueName="SupportEmail" maxLength="2048" />
       </elements>
     </policy>
-    <policy name="Chrome_CustomBlockMessage" class="Machine" displayName="$(string.CustomBlockMessage)" explainText="$(string.CustomBlockMessage_Explain)" presentation="$(presentation.Chrome_CustomBlockMessage)" key="Software\Policies\Google\Chrome\3rdparty\extensions\jmnpibhfpmpfjhhkmpadlbgjnbhpjgnd\policy">
+    <policy name="Chrome_CustomWarningMessage" class="Machine" displayName="$(string.CustomWarningMessage)" explainText="$(string.CustomWarningMessage_Explain)" presentation="$(presentation.Chrome_CustomWarningMessage)" key="Software\Policies\Google\Chrome\3rdparty\extensions\jmnpibhfpmpfjhhkmpadlbgjnbhpjgnd\policy">
       <parentCategory ref="CAT_Chrome" />
       <supportedOn ref="SUPPORTED_OspreyBrowser" />
       <elements>
-        <text id="Chrome_CustomBlockMessage_val" valueName="CustomBlockMessage" maxLength="2048" />
+        <text id="Chrome_CustomWarningMessage_val" valueName="CustomWarningMessage" maxLength="2048" />
       </elements>
     </policy>
-    <policy name="Edge_HideContinueButtons" class="Machine" displayName="$(string.HideContinueButtons)" explainText="$(string.HideContinueButtons_Explain)" key="Software\Policies\Microsoft\Edge\3rdparty\extensions\nopglhplnghfhpniofkcopmhbjdonlgn\policy" valueName="HideContinueButtons">
+    <policy name="Edge_HideWarningProceedButton" class="Machine" displayName="$(string.HideWarningProceedButton)" explainText="$(string.HideWarningProceedButton_Explain)" key="Software\Policies\Microsoft\Edge\3rdparty\extensions\nopglhplnghfhpniofkcopmhbjdonlgn\policy" valueName="HideWarningProceedButton">
       <parentCategory ref="CAT_Edge" />
       <supportedOn ref="SUPPORTED_OspreyBrowser" />
       <enabledValue><decimal value="1" /></enabledValue>
       <disabledValue><decimal value="0" /></disabledValue>
     </policy>
-    <policy name="Edge_HideReportButton" class="Machine" displayName="$(string.HideReportButton)" explainText="$(string.HideReportButton_Explain)" key="Software\Policies\Microsoft\Edge\3rdparty\extensions\nopglhplnghfhpniofkcopmhbjdonlgn\policy" valueName="HideReportButton">
+    <policy name="Edge_HideWarningReportButton" class="Machine" displayName="$(string.HideWarningReportButton)" explainText="$(string.HideWarningReportButton_Explain)" key="Software\Policies\Microsoft\Edge\3rdparty\extensions\nopglhplnghfhpniofkcopmhbjdonlgn\policy" valueName="HideWarningReportButton">
       <parentCategory ref="CAT_Edge" />
       <supportedOn ref="SUPPORTED_OspreyBrowser" />
       <enabledValue><decimal value="1" /></enabledValue>
       <disabledValue><decimal value="0" /></disabledValue>
     </policy>
-    <policy name="Edge_DisableClearAllowedWebsites" class="Machine" displayName="$(string.DisableClearAllowedWebsites)" explainText="$(string.DisableClearAllowedWebsites_Explain)" key="Software\Policies\Microsoft\Edge\3rdparty\extensions\nopglhplnghfhpniofkcopmhbjdonlgn\policy" valueName="DisableClearAllowedWebsites">
+    <policy name="Edge_LockUserAllowlist" class="Machine" displayName="$(string.LockUserAllowlist)" explainText="$(string.LockUserAllowlist_Explain)" key="Software\Policies\Microsoft\Edge\3rdparty\extensions\nopglhplnghfhpniofkcopmhbjdonlgn\policy" valueName="LockUserAllowlist">
       <parentCategory ref="CAT_Edge" />
       <supportedOn ref="SUPPORTED_OspreyBrowser" />
       <enabledValue><decimal value="1" /></enabledValue>
       <disabledValue><decimal value="0" /></disabledValue>
     </policy>
-    <policy name="Edge_LockProtectionOptions" class="Machine" displayName="$(string.LockProtectionOptions)" explainText="$(string.LockProtectionOptions_Explain)" key="Software\Policies\Microsoft\Edge\3rdparty\extensions\nopglhplnghfhpniofkcopmhbjdonlgn\policy" valueName="LockProtectionOptions">
+    <policy name="Edge_LockProviderSettings" class="Machine" displayName="$(string.LockProviderSettings)" explainText="$(string.LockProviderSettings_Explain)" key="Software\Policies\Microsoft\Edge\3rdparty\extensions\nopglhplnghfhpniofkcopmhbjdonlgn\policy" valueName="LockProviderSettings">
       <parentCategory ref="CAT_Edge" />
       <supportedOn ref="SUPPORTED_OspreyBrowser" />
       <enabledValue><decimal value="1" /></enabledValue>
       <disabledValue><decimal value="0" /></disabledValue>
     </policy>
-    <policy name="Edge_DisableResetButtons" class="Machine" displayName="$(string.DisableResetButtons)" explainText="$(string.DisableResetButtons_Explain)" key="Software\Policies\Microsoft\Edge\3rdparty\extensions\nopglhplnghfhpniofkcopmhbjdonlgn\policy" valueName="DisableResetButtons">
+    <policy name="Edge_DisableSettingsReset" class="Machine" displayName="$(string.DisableSettingsReset)" explainText="$(string.DisableSettingsReset_Explain)" key="Software\Policies\Microsoft\Edge\3rdparty\extensions\nopglhplnghfhpniofkcopmhbjdonlgn\policy" valueName="DisableSettingsReset">
       <parentCategory ref="CAT_Edge" />
       <supportedOn ref="SUPPORTED_OspreyBrowser" />
       <enabledValue><decimal value="1" /></enabledValue>
       <disabledValue><decimal value="0" /></disabledValue>
     </policy>
-    <policy name="Edge_DisableThirdPartyIntegrations" class="Machine" displayName="$(string.DisableThirdPartyIntegrations)" explainText="$(string.DisableThirdPartyIntegrations_Explain)" key="Software\Policies\Microsoft\Edge\3rdparty\extensions\nopglhplnghfhpniofkcopmhbjdonlgn\policy" valueName="DisableThirdPartyIntegrations">
+    <policy name="Edge_DisableThirdPartyProviders" class="Machine" displayName="$(string.DisableThirdPartyProviders)" explainText="$(string.DisableThirdPartyProviders_Explain)" key="Software\Policies\Microsoft\Edge\3rdparty\extensions\nopglhplnghfhpniofkcopmhbjdonlgn\policy" valueName="DisableThirdPartyProviders">
       <parentCategory ref="CAT_Edge" />
       <supportedOn ref="SUPPORTED_OspreyBrowser" />
       <enabledValue><decimal value="1" /></enabledValue>
@@ -351,121 +237,7 @@
         <text id="Edge_MetaDefenderApiKey_val" valueName="MetaDefenderApiKey" maxLength="2048" />
       </elements>
     </policy>
-    <policy name="Edge_HideProtectionOptions" class="Machine" displayName="$(string.HideProtectionOptions)" explainText="$(string.HideProtectionOptions_Explain)" key="Software\Policies\Microsoft\Edge\3rdparty\extensions\nopglhplnghfhpniofkcopmhbjdonlgn\policy" valueName="HideProtectionOptions">
-      <parentCategory ref="CAT_Edge" />
-      <supportedOn ref="SUPPORTED_OspreyBrowser" />
-      <enabledValue><decimal value="1" /></enabledValue>
-      <disabledValue><decimal value="0" /></disabledValue>
-    </policy>
-    <policy name="Edge_AlphaMountainEnabled" class="Machine" displayName="$(string.AlphaMountainEnabled)" explainText="$(string.AlphaMountainEnabled_Explain)" key="Software\Policies\Microsoft\Edge\3rdparty\extensions\nopglhplnghfhpniofkcopmhbjdonlgn\policy" valueName="AlphaMountainEnabled">
-      <parentCategory ref="CAT_Edge" />
-      <supportedOn ref="SUPPORTED_OspreyBrowser" />
-      <enabledValue><decimal value="1" /></enabledValue>
-      <disabledValue><decimal value="0" /></disabledValue>
-    </policy>
-    <policy name="Edge_BforeAIPreCrimeEnabled" class="Machine" displayName="$(string.BforeAIPreCrimeEnabled)" explainText="$(string.BforeAIPreCrimeEnabled_Explain)" key="Software\Policies\Microsoft\Edge\3rdparty\extensions\nopglhplnghfhpniofkcopmhbjdonlgn\policy" valueName="BforeAIPreCrimeEnabled">
-      <parentCategory ref="CAT_Edge" />
-      <supportedOn ref="SUPPORTED_OspreyBrowser" />
-      <enabledValue><decimal value="1" /></enabledValue>
-      <disabledValue><decimal value="0" /></disabledValue>
-    </policy>
-    <policy name="Edge_ChainPatrolEnabled" class="Machine" displayName="$(string.ChainPatrolEnabled)" explainText="$(string.ChainPatrolEnabled_Explain)" key="Software\Policies\Microsoft\Edge\3rdparty\extensions\nopglhplnghfhpniofkcopmhbjdonlgn\policy" valueName="ChainPatrolEnabled">
-      <parentCategory ref="CAT_Edge" />
-      <supportedOn ref="SUPPORTED_OspreyBrowser" />
-      <enabledValue><decimal value="1" /></enabledValue>
-      <disabledValue><decimal value="0" /></disabledValue>
-    </policy>
-    <policy name="Edge_iZOOlogicEnabled" class="Machine" displayName="$(string.iZOOlogicEnabled)" explainText="$(string.iZOOlogicEnabled_Explain)" key="Software\Policies\Microsoft\Edge\3rdparty\extensions\nopglhplnghfhpniofkcopmhbjdonlgn\policy" valueName="iZOOlogicEnabled">
-      <parentCategory ref="CAT_Edge" />
-      <supportedOn ref="SUPPORTED_OspreyBrowser" />
-      <enabledValue><decimal value="1" /></enabledValue>
-      <disabledValue><decimal value="0" /></disabledValue>
-    </policy>
-    <policy name="Edge_PrecisionSecEnabled" class="Machine" displayName="$(string.PrecisionSecEnabled)" explainText="$(string.PrecisionSecEnabled_Explain)" key="Software\Policies\Microsoft\Edge\3rdparty\extensions\nopglhplnghfhpniofkcopmhbjdonlgn\policy" valueName="PrecisionSecEnabled">
-      <parentCategory ref="CAT_Edge" />
-      <supportedOn ref="SUPPORTED_OspreyBrowser" />
-      <enabledValue><decimal value="1" /></enabledValue>
-      <disabledValue><decimal value="0" /></disabledValue>
-    </policy>
-    <policy name="Edge_AdGuardDNSEnabled" class="Machine" displayName="$(string.AdGuardDNSEnabled)" explainText="$(string.AdGuardDNSEnabled_Explain)" key="Software\Policies\Microsoft\Edge\3rdparty\extensions\nopglhplnghfhpniofkcopmhbjdonlgn\policy" valueName="AdGuardDNSEnabled">
-      <parentCategory ref="CAT_Edge" />
-      <supportedOn ref="SUPPORTED_OspreyBrowser" />
-      <enabledValue><decimal value="1" /></enabledValue>
-      <disabledValue><decimal value="0" /></disabledValue>
-    </policy>
-    <policy name="Edge_AA419Enabled" class="Machine" displayName="$(string.AA419Enabled)" explainText="$(string.AA419Enabled_Explain)" key="Software\Policies\Microsoft\Edge\3rdparty\extensions\nopglhplnghfhpniofkcopmhbjdonlgn\policy" valueName="AA419Enabled">
-      <parentCategory ref="CAT_Edge" />
-      <supportedOn ref="SUPPORTED_OspreyBrowser" />
-      <enabledValue><decimal value="1" /></enabledValue>
-      <disabledValue><decimal value="0" /></disabledValue>
-    </policy>
-    <policy name="Edge_CloudflareEnabled" class="Machine" displayName="$(string.CloudflareEnabled)" explainText="$(string.CloudflareEnabled_Explain)" key="Software\Policies\Microsoft\Edge\3rdparty\extensions\nopglhplnghfhpniofkcopmhbjdonlgn\policy" valueName="CloudflareEnabled">
-      <parentCategory ref="CAT_Edge" />
-      <supportedOn ref="SUPPORTED_OspreyBrowser" />
-      <enabledValue><decimal value="1" /></enabledValue>
-      <disabledValue><decimal value="0" /></disabledValue>
-    </policy>
-    <policy name="Edge_ControlDEnabled" class="Machine" displayName="$(string.ControlDEnabled)" explainText="$(string.ControlDEnabled_Explain)" key="Software\Policies\Microsoft\Edge\3rdparty\extensions\nopglhplnghfhpniofkcopmhbjdonlgn\policy" valueName="ControlDEnabled">
-      <parentCategory ref="CAT_Edge" />
-      <supportedOn ref="SUPPORTED_OspreyBrowser" />
-      <enabledValue><decimal value="1" /></enabledValue>
-      <disabledValue><decimal value="0" /></disabledValue>
-    </policy>
-    <policy name="Edge_OpenPhishEnabled" class="Machine" displayName="$(string.OpenPhishEnabled)" explainText="$(string.OpenPhishEnabled_Explain)" key="Software\Policies\Microsoft\Edge\3rdparty\extensions\nopglhplnghfhpniofkcopmhbjdonlgn\policy" valueName="OpenPhishEnabled">
-      <parentCategory ref="CAT_Edge" />
-      <supportedOn ref="SUPPORTED_OspreyBrowser" />
-      <enabledValue><decimal value="1" /></enabledValue>
-      <disabledValue><decimal value="0" /></disabledValue>
-    </policy>
-    <policy name="Edge_PhishuntIOEnabled" class="Machine" displayName="$(string.PhishuntIOEnabled)" explainText="$(string.PhishuntIOEnabled_Explain)" key="Software\Policies\Microsoft\Edge\3rdparty\extensions\nopglhplnghfhpniofkcopmhbjdonlgn\policy" valueName="PhishuntIOEnabled">
-      <parentCategory ref="CAT_Edge" />
-      <supportedOn ref="SUPPORTED_OspreyBrowser" />
-      <enabledValue><decimal value="1" /></enabledValue>
-      <disabledValue><decimal value="0" /></disabledValue>
-    </policy>
-    <policy name="Edge_Quad9Enabled" class="Machine" displayName="$(string.Quad9Enabled)" explainText="$(string.Quad9Enabled_Explain)" key="Software\Policies\Microsoft\Edge\3rdparty\extensions\nopglhplnghfhpniofkcopmhbjdonlgn\policy" valueName="Quad9Enabled">
-      <parentCategory ref="CAT_Edge" />
-      <supportedOn ref="SUPPORTED_OspreyBrowser" />
-      <enabledValue><decimal value="1" /></enabledValue>
-      <disabledValue><decimal value="0" /></disabledValue>
-    </policy>
-    <policy name="Edge_RedFlagDomainsEnabled" class="Machine" displayName="$(string.RedFlagDomainsEnabled)" explainText="$(string.RedFlagDomainsEnabled_Explain)" key="Software\Policies\Microsoft\Edge\3rdparty\extensions\nopglhplnghfhpniofkcopmhbjdonlgn\policy" valueName="RedFlagDomainsEnabled">
-      <parentCategory ref="CAT_Edge" />
-      <supportedOn ref="SUPPORTED_OspreyBrowser" />
-      <enabledValue><decimal value="1" /></enabledValue>
-      <disabledValue><decimal value="0" /></disabledValue>
-    </policy>
-    <policy name="Edge_SinkingYachtsEnabled" class="Machine" displayName="$(string.SinkingYachtsEnabled)" explainText="$(string.SinkingYachtsEnabled_Explain)" key="Software\Policies\Microsoft\Edge\3rdparty\extensions\nopglhplnghfhpniofkcopmhbjdonlgn\policy" valueName="SinkingYachtsEnabled">
-      <parentCategory ref="CAT_Edge" />
-      <supportedOn ref="SUPPORTED_OspreyBrowser" />
-      <enabledValue><decimal value="1" /></enabledValue>
-      <disabledValue><decimal value="0" /></disabledValue>
-    </policy>
-    <policy name="Edge_SwitchCHEnabled" class="Machine" displayName="$(string.SwitchCHEnabled)" explainText="$(string.SwitchCHEnabled_Explain)" key="Software\Policies\Microsoft\Edge\3rdparty\extensions\nopglhplnghfhpniofkcopmhbjdonlgn\policy" valueName="SwitchCHEnabled">
-      <parentCategory ref="CAT_Edge" />
-      <supportedOn ref="SUPPORTED_OspreyBrowser" />
-      <enabledValue><decimal value="1" /></enabledValue>
-      <disabledValue><decimal value="0" /></disabledValue>
-    </policy>
-    <policy name="Edge_THREATfoxEnabled" class="Machine" displayName="$(string.THREATfoxEnabled)" explainText="$(string.THREATfoxEnabled_Explain)" key="Software\Policies\Microsoft\Edge\3rdparty\extensions\nopglhplnghfhpniofkcopmhbjdonlgn\policy" valueName="THREATfoxEnabled">
-      <parentCategory ref="CAT_Edge" />
-      <supportedOn ref="SUPPORTED_OspreyBrowser" />
-      <enabledValue><decimal value="1" /></enabledValue>
-      <disabledValue><decimal value="0" /></disabledValue>
-    </policy>
-    <policy name="Edge_URLhausEnabled" class="Machine" displayName="$(string.URLhausEnabled)" explainText="$(string.URLhausEnabled_Explain)" key="Software\Policies\Microsoft\Edge\3rdparty\extensions\nopglhplnghfhpniofkcopmhbjdonlgn\policy" valueName="URLhausEnabled">
-      <parentCategory ref="CAT_Edge" />
-      <supportedOn ref="SUPPORTED_OspreyBrowser" />
-      <enabledValue><decimal value="1" /></enabledValue>
-      <disabledValue><decimal value="0" /></disabledValue>
-    </policy>
-    <policy name="Edge_URLAbuseEnabled" class="Machine" displayName="$(string.URLAbuseEnabled)" explainText="$(string.URLAbuseEnabled_Explain)" key="Software\Policies\Microsoft\Edge\3rdparty\extensions\nopglhplnghfhpniofkcopmhbjdonlgn\policy" valueName="URLAbuseEnabled">
-      <parentCategory ref="CAT_Edge" />
-      <supportedOn ref="SUPPORTED_OspreyBrowser" />
-      <enabledValue><decimal value="1" /></enabledValue>
-      <disabledValue><decimal value="0" /></disabledValue>
-    </policy>
-    <policy name="Edge_ValidinEnabled" class="Machine" displayName="$(string.ValidinEnabled)" explainText="$(string.ValidinEnabled_Explain)" key="Software\Policies\Microsoft\Edge\3rdparty\extensions\nopglhplnghfhpniofkcopmhbjdonlgn\policy" valueName="ValidinEnabled">
+    <policy name="Edge_HideProviderControls" class="Machine" displayName="$(string.HideProviderControls)" explainText="$(string.HideProviderControls_Explain)" key="Software\Policies\Microsoft\Edge\3rdparty\extensions\nopglhplnghfhpniofkcopmhbjdonlgn\policy" valueName="HideProviderControls">
       <parentCategory ref="CAT_Edge" />
       <supportedOn ref="SUPPORTED_OspreyBrowser" />
       <enabledValue><decimal value="1" /></enabledValue>
@@ -554,11 +326,11 @@
         <text id="Edge_BrandLogoUrl_val" valueName="BrandLogoUrl" maxLength="2048" />
       </elements>
     </policy>
-    <policy name="Edge_BrandProductName" class="Machine" displayName="$(string.BrandProductName)" explainText="$(string.BrandProductName_Explain)" presentation="$(presentation.Edge_BrandProductName)" key="Software\Policies\Microsoft\Edge\3rdparty\extensions\nopglhplnghfhpniofkcopmhbjdonlgn\policy">
+    <policy name="Edge_BrandName" class="Machine" displayName="$(string.BrandName)" explainText="$(string.BrandName_Explain)" presentation="$(presentation.Edge_BrandName)" key="Software\Policies\Microsoft\Edge\3rdparty\extensions\nopglhplnghfhpniofkcopmhbjdonlgn\policy">
       <parentCategory ref="CAT_Edge" />
       <supportedOn ref="SUPPORTED_OspreyBrowser" />
       <elements>
-        <text id="Edge_BrandProductName_val" valueName="BrandProductName" maxLength="2048" />
+        <text id="Edge_BrandName_val" valueName="BrandName" maxLength="2048" />
       </elements>
     </policy>
     <policy name="Edge_SupportUrl" class="Machine" displayName="$(string.SupportUrl)" explainText="$(string.SupportUrl_Explain)" presentation="$(presentation.Edge_SupportUrl)" key="Software\Policies\Microsoft\Edge\3rdparty\extensions\nopglhplnghfhpniofkcopmhbjdonlgn\policy">
@@ -575,11 +347,11 @@
         <text id="Edge_SupportEmail_val" valueName="SupportEmail" maxLength="2048" />
       </elements>
     </policy>
-    <policy name="Edge_CustomBlockMessage" class="Machine" displayName="$(string.CustomBlockMessage)" explainText="$(string.CustomBlockMessage_Explain)" presentation="$(presentation.Edge_CustomBlockMessage)" key="Software\Policies\Microsoft\Edge\3rdparty\extensions\nopglhplnghfhpniofkcopmhbjdonlgn\policy">
+    <policy name="Edge_CustomWarningMessage" class="Machine" displayName="$(string.CustomWarningMessage)" explainText="$(string.CustomWarningMessage_Explain)" presentation="$(presentation.Edge_CustomWarningMessage)" key="Software\Policies\Microsoft\Edge\3rdparty\extensions\nopglhplnghfhpniofkcopmhbjdonlgn\policy">
       <parentCategory ref="CAT_Edge" />
       <supportedOn ref="SUPPORTED_OspreyBrowser" />
       <elements>
-        <text id="Edge_CustomBlockMessage_val" valueName="CustomBlockMessage" maxLength="2048" />
+        <text id="Edge_CustomWarningMessage_val" valueName="CustomWarningMessage" maxLength="2048" />
       </elements>
     </policy>
   </policies>
