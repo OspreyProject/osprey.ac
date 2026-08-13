@@ -201,12 +201,16 @@ const outputTabs = [
                             {f.help && <span class="field-help">{f.help}</span>}
                         </label>
                 ))}
-                <p class="field-help">After deploying, verify events and heartbeats actually arrive with the
-                    <a class="contact-link" href="/reporting-check/">reporting setup checker</a>.</p>
+                <p class="field-help">Running your own receiver? After deploying, verify events and heartbeats
+                    actually arrive with
+                    the <a class="contact-link" href="/reporting-check/">reporting setup checker</a>. It is not needed
+                    with the management console, where enrolled devices appear on the Devices page directly.
+                </p>
                 <p class="field-help">These four values are exactly what
                     the <a class="contact-link" href="https://console.osprey.ac">Osprey Management Console</a> provides
                     and hosts automatically. Console customers should use the console's Enroll devices page instead of
-                    filling them in here.</p>
+                    filling them in here.
+                </p>
             </fieldset>
 
             <fieldset class="gen-group">
@@ -220,7 +224,8 @@ const outputTabs = [
                         </label>
                 ))}
                 <p class="field-help">Branding keys apply through managed storage only. They are not part of the
-                    importable settings file.</p>
+                    importable settings file.
+                </p>
             </fieldset>
 
             <fieldset class="gen-group">

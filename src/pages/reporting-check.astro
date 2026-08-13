@@ -48,6 +48,16 @@ const checks = [
             endpoint's <code>ReportingEndpoint</code> policy at it and watch the extension's events and heartbeats
             arrive below, so you know your configuration works before you wire up your own webhook or SIEM.
         </p>
+        <div class="note console-cta">
+            This checker is for MSPs running their own receiver instead of
+            the <a class="contact-link" href="https://console.osprey.ac">Osprey Management Console</a>.
+            <br>
+            <br>
+            Console customers do not need it. When you enroll a device, it appears on the client's Devices page with its
+            first heartbeat, and detections are shown under Events, which verifies the whole reporting chain including
+            the ingest key. The one time this page helps a console customer is debugging a device that never shows
+            up, by temporarily pointing that single machine here to prove the extension is reporting at all.
+        </div>
     </section>
 
     <div class="rc-grid">
