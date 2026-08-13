@@ -478,9 +478,15 @@ const checks = [
     .rc-mark {
         display: inline-block;
         width: 1.2rem;
+        flex-shrink: 0;
         text-align: center;
         font-weight: 700;
         color: var(--text-muted);
+    }
+
+    .rc-check > span:last-child {
+        flex: 1;
+        min-width: 0;
     }
 
     .rc-pass .rc-mark {
