@@ -1,8 +1,8 @@
 # Osprey policy reference
 
-Every key below is a property of the extension's managed-storage schema (`src/main/policies.json`). All 44 keys are read
-on every supported browser through that browser's managed-storage mechanism. Keys left unset fall back to the defaults
-shown here.
+Every key below is a property of the extension's managed-storage schema (`src/main/policies.json`), and every key is
+read on every supported browser through that browser's managed-storage mechanism. Keys left unset fall back to the
+defaults shown here.
 
 ### UI hardening and lockdown
 
@@ -41,8 +41,8 @@ shown here.
 |--------------------------|---------|----------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `ProxyBaseUrl`           | string  | (empty)  | Overrides the backend origin the extension sends lookups to. Must be an http(s) origin, for example "https://osprey.msp.example". When empty, the default public backend is used.                                          |
 | `ProxyApiKey`            | string  | (empty)  | Per-tenant API key presented to a self-hosted proxy as the `X-Osprey-Tenant-Key` header on every lookup. Only sent when `ProxyBaseUrl` is set, so the key is never sent to the public backend. When empty, no key is sent. |
-| `DeviceTag`              | string  | (empty)  | Opaque identifier for this endpoint, attached to reported events by later features. Has no visible effect on its own.                                                                                                      |
-| `SiteId`                 | string  | (empty)  | Opaque identifier for the client organization this endpoint belongs to, attached to reported events by later features. Has no visible effect on its own.                                                                   |
+| `DeviceTag`              | string  | (empty)  | Opaque identifier for this endpoint, attached to every reported event and heartbeat. In the Osprey Management Console it is the device's identity on the Devices list.                                                      |
+| `SiteId`                 | string  | (empty)  | Opaque identifier for the client organization this endpoint belongs to, attached to every reported event and heartbeat, and used to group devices in reporting.                                                            |
 | `CacheExpirationSeconds` | integer | `604800` | Cache entry lifetime in seconds. Range 60 to 2592000.                                                                                                                                                                      |
 | `MetaDefenderApiKey`     | string  | (empty)  | Managed API key for the MetaDefender integrations.                                                                                                                                                                         |
 

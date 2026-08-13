@@ -17,7 +17,7 @@ and adjust from there. Replace the placeholder domains and identifiers first.
 | `HideWarningProceedButton`           | `true`                          | The warning page proceed button is hidden, so a user cannot click past a block. |
 | `ManagedAllowlist`              | client-internal hosts           | Internal apps stay reachable and the user cannot remove them.                      |
 | `ManagedBlocklist`              | client-specific bad hosts       | Blocked before providers run, independent of the built-in feeds.                   |
-| `DeviceTag`, `SiteId`           | per-endpoint and per-client ids | Identifiers later reporting attaches to every event.                               |
+| `DeviceTag`, `SiteId`           | per-endpoint and per-client ids | Identifiers reporting attaches to every event and heartbeat.                       |
 
 ## Why these three combine
 
@@ -50,7 +50,8 @@ This baseline cannot prevent extension removal. Pair it with the browser force-i
 The templates also set `ManagedConfigUrl`, `ReportingEndpoint`, and `ReportingAuthToken` to placeholder values, and
 `ProxyApiKey` alongside `ProxyBaseUrl`. `ManagedConfigUrl` points every endpoint at one hosted JSON file per client, so
 later setting changes need no Group Policy or Intune re-push. `ReportingEndpoint` streams detections, overrides, and
-health heartbeats to your webhook or SIEM, and a gap in heartbeats reveals a removed or disabled install. `ProxyApiKey`
+health heartbeats to your receiver, which is your client's ingest URL from the Osprey Management Console, or your own
+webhook or SIEM if you run without it, and a gap in heartbeats reveals a removed or disabled install. `ProxyApiKey`
 is the per-tenant key a self-hosted proxy authenticates, sent as the `X-Osprey-Tenant-Key` header and never sent to the
 public backend. Replace the placeholders with your real URLs and keys, or remove the keys to run without central
 management.

@@ -42,5 +42,6 @@ the user.
 Force-install stops removal from inside the browser. It does not stop a local administrator from removing the policy
 itself, uninstalling the browser, or installing a different browser with no policy. Those are endpoint-management
 concerns, handled by locking down admin rights and by controlling which browsers are allowed on the fleet, not by
-Osprey. The later reporting features in the roadmap close the remaining gap: a missing heartbeat reveals an endpoint
-where the extension was removed or disabled despite these policies.
+Osprey. Outbound reporting closes the remaining gap: a missing heartbeat reveals an endpoint where the extension was
+removed or disabled despite these policies, surfaced as a silent device in the Osprey Management Console or by your own
+receiver's heartbeat-gap alerting.
