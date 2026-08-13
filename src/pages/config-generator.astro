@@ -159,6 +159,12 @@ const outputTabs = [
             Pick your policy settings and get ready-to-push files for every platform. For raw templates and per-browser
             paths, see the <a class="contact-link" href="/deployment/">deployment templates</a>.
         </p>
+        <div class="note console-cta">
+            Managing multiple clients?
+            The <a href="https://console.osprey.ac" class="contact-link">Osprey Management Console</a> fills
+            these values in per client, hosts the config and reporting endpoints for you, and pushes later policy
+            changes to every enrolled device without re-generating or re-deploying files.
+        </div>
         <br>
         <p class="deploy-cta">
             <button type="button" id="loadExample" class="install-btn">Load hardened example</button>
@@ -196,6 +202,10 @@ const outputTabs = [
                 ))}
                 <p class="field-help">After deploying, verify events and heartbeats actually arrive with the
                     <a class="contact-link" href="/reporting-check/">reporting setup checker</a>.</p>
+                <p class="field-help">These four values are exactly what
+                    the <a class="contact-link" href="https://console.osprey.ac">Osprey Management Console</a> provides
+                    and hosts automatically. Console customers should use the console's Enroll devices page instead of
+                    filling them in here.</p>
             </fieldset>
 
             <fieldset class="gen-group">

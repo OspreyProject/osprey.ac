@@ -265,6 +265,41 @@ html[data-theme="light"] .theme-toggle .icon-sun {
 }
 
 /* --------------------------------------------------
+   Console sign-in link
+-------------------------------------------------- */
+.console-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    padding: 0;
+    border-radius: var(--radius);
+    color: var(--text-muted);
+    line-height: 0;
+}
+
+.site-nav .console-link:hover {
+    color: var(--accent-ink);
+    background-color: var(--surface-hover);
+    text-decoration: none;
+}
+
+.console-link svg {
+    display: block;
+    width: 20px;
+    height: 20px;
+}
+
+.note.console-cta {
+    max-width: 44rem;
+    margin: 1.5rem auto 0;
+    text-align: left;
+    font-size: 0.95rem;
+    color: var(--text-muted);
+}
+
+/* --------------------------------------------------
    Support (Ko-fi) link
 -------------------------------------------------- */
 .support-link {
