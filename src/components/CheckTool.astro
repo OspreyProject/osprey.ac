@@ -34,11 +34,13 @@ const stateFor = (id: string): string => {
     return values && values.length && resultStates[values[0]] ? values[0] : 'failed';
 };
 
-const flaggedNames = finished
-    ? providers.filter((p) => blockingResults.includes(stateFor(p.id))).map((p) => p.name)
+const flaggedProviders = finished
+    ? providers
+        .filter((p) => blockingResults.includes(stateFor(p.id)))
+        .map((p) => ({name: p.name, state: stateFor(p.id)}))
     : [];
 
-const summary = finished ? summarize(flaggedNames) : null;
+const summary = finished ? summarize(flaggedProviders) : null;
 const totalProviders = result?.total ?? providers.length;
 const initialUrl = finished ? result!.url : '';
 const scannedMs = result?.lastScanned ?? null;
@@ -276,10 +278,17 @@ const fmtDate = (ms: number): string => new Date(ms).toISOString().slice(0, 10);
             'Validin',
         ].map(normalizeName));
 
+        const alphaMountain = normalizeName('AlphaMountain');
+
         function providerName(id) {
             const card = cards.get(id);
             const el = card && card.querySelector('.provider-name');
             return el ? el.textContent.trim() : '';
+        }
+
+        function providerState(id) {
+            const card = cards.get(id);
+            return card ? card.getAttribute('data-state') : '';
         }
 
         let scanning = false;
@@ -393,9 +402,16 @@ const fmtDate = (ms: number): string => new Date(ms).toISOString().slice(0, 10);
             }
 
             if (flagged > 0) {
+                const only = flaggedIds[0];
+
                 // A single flag from a non-authoritative provider is a soft signal
-                const caution = flagged === 1
-                    && !authoritative.has(normalizeName(providerName(flaggedIds[0])));
+                let caution = flagged === 1 && !authoritative.has(normalizeName(providerName(only)));
+
+                // AlphaMountain alone counts as soft when its verdict would not render red
+                if (!caution && flagged === 1 && normalizeName(providerName(only)) === alphaMountain) {
+                    const tone = (states[providerState(only)] || {}).tone;
+                    caution = tone != null && tone !== 'danger';
+                }
 
                 if (caution) {
                     summaryBadgeLabel.textContent = 'Caution';

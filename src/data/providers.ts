@@ -87,22 +87,38 @@ export interface SummaryInfo {
     text: string;
 }
 
-// Derives the summary badge label, tone, and text from the set of flagging provider names.
+// A flagging provider and the result state it returned, enough to weigh the verdict.
+export interface FlaggedProvider {
+    name: string;
+    state: string;
+}
+
+// AlphaMountain's normalized name. Flagging alone with a non-red verdict softens the summary.
+const alphaMountain = normalizeName('AlphaMountain');
+
+// Derives the summary badge label, tone, and text from the flagging providers.
 // This is the server-side twin of updateSummary() in the checker script, so a pre-rendered
 // result page reads exactly like the tool does the moment a scan finishes.
-export const summarize = (flaggedNames: string[]): SummaryInfo => {
-    const flagged = flaggedNames.length;
+export const summarize = (flagged: FlaggedProvider[]): SummaryInfo => {
+    const count = flagged.length;
 
-    if (flagged === 0) {
+    if (count === 0) {
         return {label: 'Safe', tone: 'safe', text: 'No providers flagged this URL'};
     }
 
-    const caution = flagged === 1 && !isAuthoritative(flaggedNames[0]);
+    // A single flag from a non-authoritative provider is a soft signal
+    let caution = count === 1 && !isAuthoritative(flagged[0].name);
+
+    // AlphaMountain alone counts as soft when its verdict would not render red
+    if (!caution && count === 1 && normalizeName(flagged[0].name) === alphaMountain) {
+        const tone = resultStates[flagged[0].state]?.tone;
+        caution = tone != null && tone !== 'danger';
+    }
 
     return {
         label: caution ? 'Caution' : 'Unsafe',
         tone: caution ? 'warn' : 'danger',
-        text: flagged === 1 ? '1 provider flagged this URL' : `${flagged} providers flagged this URL`
+        text: count === 1 ? '1 provider flagged this URL' : `${count} providers flagged this URL`
     };
 };
 
