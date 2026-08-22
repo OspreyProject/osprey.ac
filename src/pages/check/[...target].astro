@@ -24,7 +24,7 @@ export const hardPrimary = ['phishing', 'malicious']; // soft "warn" verdicts ne
 export const minAuthoritative = 2;                        // independent corroboration required
 
 // SCAN_DWELL_HOURS overrides the dwell window; set it to 0 in a test build to publish immediately.
-export const dwellHours = 0; /*Number(import.meta.env.SCAN_DWELL_HOURS ?? 24);*/
+export const dwellHours = Number(import.meta.env.SCAN_DWELL_HOURS ?? 24);
 export const dwellMs = (Number.isFinite(dwellHours) ? dwellHours : 24) * 60 * 60 * 1000;
 
 // Reduces a submitted URL to its registrable domain, or null if it cannot be published.
@@ -56,6 +56,13 @@ export function deriveDomain(rawUrl: string): string | null {
     }
 
     const domain = info.domain.toLowerCase();
+
+    // Publish only when the scanned host is the registrable domain itself (or its www form).
+    // A verdict on one subdomain of a shared host such as godaddysites.com or weebly.com must
+    // never become a page that condemns the whole platform.
+    if (host !== domain && host !== 'www.' + domain) {
+        return null;
+    }
 
     // Publish only plain ASCII registrable domains of two or more labels. Anything with a
     // glyph, emoji, space, or stray character never gets here, so there is no free text left
