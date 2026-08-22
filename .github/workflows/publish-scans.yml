@@ -4,6 +4,8 @@
 name: Publish scan pages
 
 on:
+  push:
+    branches: [ main ]
   schedule:
     # Every 30 minutes.
     - cron: '*/30 * * * *'
