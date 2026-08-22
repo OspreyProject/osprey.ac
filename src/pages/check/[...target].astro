@@ -18,10 +18,11 @@ interface ScanResult {
     firstScanned: number;
 }
 
-// Publication gate, tune these two if the backend's signal density changes.
+// Publication gate, tune these if the backend's signal density changes.
 // A domain must clear all three checks before it is allowed to mint a page.
 export const hardPrimary = ['phishing', 'malicious']; // soft "warn" verdicts never earn a page
-export const minAuthoritative = 2;                        // independent corroboration required
+export const minAuthoritative = 1;                        // one authoritative flag is enough...
+export const minCorroborating = 2;                        // ...or two flags from any providers
 
 // SCAN_DWELL_HOURS overrides the dwell window; set it to 0 in a test build to publish immediately.
 export const dwellHours = Number(import.meta.env.SCAN_DWELL_HOURS ?? 24);
@@ -93,7 +94,19 @@ export function isEligible(record: ScanResult): boolean {
     if (!(record.lastScanned - record.firstScanned >= dwellMs)) {
         return false;
     }
-    return flaggingNames(record.results).filter(isAuthoritative).length >= minAuthoritative;
+    return isCorroborated(record);
+}
+
+// One authoritative provider, or two providers of any kind, is enough corroboration.
+export function isCorroborated(record: ScanResult): boolean {
+    const names = flaggingNames(record.results);
+    return names.filter(isAuthoritative).length >= minAuthoritative || names.length >= minCorroborating;
+}
+
+// Ranks records for the same domain: authoritative flags first, then total flags.
+export function corroborationScore(record: ScanResult): number {
+    const names = flaggingNames(record.results);
+    return names.filter(isAuthoritative).length * 100 + names.length;
 }
 
 // Builds one crawlable page per hard-flagged registrable domain. The feed is never trusted to
@@ -153,11 +166,12 @@ export async function getStaticPaths() {
         if (!isEligible(record)) {
             console.log(`[check] ${domain} ineligible: primary=${record.primary} `
                 + `authoritative=${flaggingNames(record.results).filter(isAuthoritative).length}/${minAuthoritative} `
+                + `flags=${flaggingNames(record.results).length}/${minCorroborating} `
                 + `dwellHours=${((record.lastScanned - record.firstScanned) / 3600000).toFixed(1)}/${dwellMs / 3600000}`);
             continue;
         }
 
-        const authCount = flaggingNames(record.results).filter(isAuthoritative).length;
+        const authCount = corroborationScore(record);
         const current = best.get(domain);
 
         // One page per domain: keep the best-corroborated record, then the most recent.
