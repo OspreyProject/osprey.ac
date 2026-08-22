@@ -3,7 +3,7 @@
 // This software is not licensed for redistribution or self-hosting.
 
 import Base from '../layouts/Base.astro';
-const effective = '9 August 2026';
+const effective = '22 August 2026';
 
 const permissions = [
     {
@@ -60,27 +60,12 @@ const localData = [
 
         <p>
             Osprey: Browser Protection is operated by Osprey Project LLC, a California limited liability company
-            ("Osprey Project LLC", "we", "us", or "our"). We are committed to protecting your privacy. This Privacy
-            Policy explains what data is processed when you use the Osprey website
-            at <a href="https://osprey.ac" class="contact-link">osprey.ac</a>, including the website safety checker
-            at <a href="https://osprey.ac/check/" class="contact-link">osprey.ac/check</a>, the Osprey browser
-            extension, and its supporting proxy service, and how it is handled.
+            ("we", "us", or "our"), which is the data controller for the data described here. This policy covers the
+            Osprey website at <a href="https://osprey.ac" class="contact-link">osprey.ac</a>, including the website
+            safety checker at <a href="https://osprey.ac/check/" class="contact-link">osprey.ac/check</a>, the Osprey
+            browser extension, and the proxy server at <a href="https://api.osprey.ac" class="contact-link">api.osprey.ac</a>,
+            hosted in New York, NY.
         </p>
-
-        <p>
-            Osprey Project LLC is the data controller responsible for the data described in this policy. Our contact
-            details are listed in the Contact section at the end of this page.
-        </p>
-
-        <p>The Osprey protection system consists of two main components:</p>
-
-        <ul>
-            <li>The <strong>browser extension</strong>, which runs locally on your device</li>
-            <li>
-                The <strong>proxy server</strong>, hosted in New York, NY at <a href="https://api.osprey.ac"
-                                                                                class="contact-link">api.osprey.ac</a>
-            </li>
-        </ul>
 
         <h2>How URL checking works</h2>
         <p>
@@ -88,122 +73,63 @@ const localData = [
             against threat intelligence providers, DNS filtering services, and local threat intelligence lists.
         </p>
         <p>
-            <strong>Providers never see which specific websites you visit.</strong> All checks are routed through the
-            proxy server, so providers only ever see requests originating from the proxy's IP address, not yours.
-            Thousands of users' checks are mixed together from a single IP, making it practically impossible for any
-            provider to associate a URL lookup with you specifically.
-        </p>
-        <p>
-            <strong>Most URLs are never sent to providers at all.</strong> The proxy server maintains a cache of
-            previously checked URLs. If a URL has already been recently evaluated, the result is returned from cache
-            without contacting any provider.
+            <strong>Providers never see which websites you visit.</strong> All checks are routed through the proxy
+            server, so providers only see requests from the proxy's IP address, not yours, and many users' checks are
+            mixed together. Recently checked URLs are served from the proxy's cache without contacting any provider.
         </p>
         <p>When a URL does reach a provider, the data sent depends on the provider type:</p>
         <ul>
             <li><strong>DNS-based providers</strong> receive only the hostname, never the full URL or path</li>
-            <li><strong>API-based providers</strong> receive the full URL with query parameters stripped, aside from the
-                limited exceptions described in "Retained query parameters"
+            <li><strong>API-based providers</strong> receive the URL with query parameters stripped, except for a small
+                fixed set of parameters on specific file-sharing and redirect links that identify the resource being
+                checked rather than you (for example the file ID in a Google Drive download link)
             </li>
-            <li>
-                <strong>Local threat intelligence lists</strong> are checked entirely in-memory on the proxy server,
-                with no external calls per request
-            </li>
+            <li><strong>Local threat intelligence lists</strong> are checked on the proxy server with no external calls</li>
         </ul>
-
-        <h2>Retained query parameters</h2>
-        <p>
-            As a narrow, hard-coded exception to the query stripping described above, a small and fixed set of links
-            keep specific query parameters. For these links the parameters identify which resource is being checked
-            rather than tracking you, and removing them would either make the address meaningless or cause unrelated
-            targets to look identical, which would weaken checking. In each case only the named parameters are kept and
-            every other parameter is discarded. The exceptions are:
-        </p>
-        <ul>
-            <li>
-                <code>drive.google.com/uc</code> keeps <code>export</code> and <code>id</code>, which identify the
-                Google Drive file being downloaded
-            </li>
-            <li>
-                <code>adclick.g.doubleclick.net/pcs/click</code> keeps <code>adurl</code>, which identifies the redirect
-                URL of the ad click
-            </li>
-            <li>
-                <code>drive.usercontent.google.com/download</code> keeps <code>id</code> and <code>export</code>, which
-                identify the Google Drive file being downloaded
-            </li>
-            <li>
-                <code>google.com/share.google</code> keeps <code>q</code>, which identifies the shared query
-            </li>
-        </ul>
-        <p>
-            These exceptions apply consistently wherever a URL is normalized: when the extension checks a link, when the
-            website safety checker page checks a link, in the durable scan store, and in false-positive monitoring. The
-            retained parameters are the only query data kept for these links, and no other query parameters are
-            transmitted, stored, or logged.
-        </p>
 
         <h2>The website and safety checker page</h2>
         <p>
-            The Osprey website at <a href="https://osprey.ac" class="contact-link">osprey.ac</a> provides information
-            about the project and a website safety checker page
-            at <a href="https://osprey.ac/check/" class="contact-link">osprey.ac/check</a>. The website does not require
-            an account and does not use advertising or cross-site tracking cookies.
+            The website does not require an account and does not use advertising or cross-site tracking cookies.
         </p>
         <p>
-            The website safety checker page lets you submit a single link to be scanned on demand. When you submit a
-            link, it is sent to the proxy server and checked against the same providers, and with the same protections,
-            described in "How URL checking works" above. Providers see requests only from the proxy's IP address rather
-            than yours, results may be served from the proxy's cache, and query parameters are stripped before a URL
-            reaches an API-based provider, aside from the limited exceptions described in "Retained query parameters".
+            The website safety checker page lets you submit a single link to be scanned on demand. The link is sent to
+            the proxy server and checked with the same providers and protections described above. It is not used to
+            build a profile of you and is not sold to any third party.
         </p>
         <p>
-            A link you submit on the website safety checker page is subject to the same limited operational and
-            false-positive monitoring described elsewhere in this policy. It is not used to build a profile of you, and
-            it is not sold to any third party.
+            The proxy server keeps a durable record of the aggregate result for each scanned link, with the query
+            string and fragment removed. This record is about the link, not about you: it holds no IP address or
+            other identifier.
         </p>
         <p>
-            To avoid rescanning the same link repeatedly, the proxy server keeps a durable record of the aggregate
-            result for each scanned address. The stored address is normalized first: the scheme is set to https, a
-            leading <code>www.</code> is removed, and the query string and fragment are dropped, so tracking parameters
-            are not retained, apart from the resource-identifying parameters described in "Retained query parameters".
-            The path is kept, so a specific page can be recorded separately from its host. A stored result is served on
-            a later scan of the same address for up to 24 hours, after which the link is scanned fresh. This record is
-            about the link, not about you: it holds no IP address, no identifier, and nothing that ties the scan to the
-            person who ran it.
-        </p>
-        <p>
-            When several vendors independently report a link as phishing or malicious, Osprey may publish a public page
-            for that specific link so that others searching for it can see the warning. Only these hard, high-confidence
-            detections are published. Links that come back clean, and softer or lower-confidence signals, are never
-            published and are excluded from the sitemap and search indexing.
+            When a scanned link is reported as phishing or malicious by one authoritative vendor or by two or more
+            vendors of any kind, we may publish a public warning page for the link's registrable domain (for
+            example <code>osprey.ac/check/example.com/</code>). Paths, query strings, and subdomains are discarded, so a
+            published page never identifies a specific page, account, or resource, and a page is never published for a
+            shared hosting platform on the basis of one of its tenant sites. Clean results and lower-confidence
+            signals are never published. Published pages are listed in the website's sitemap and announced to search
+            engines, and a page is removed when the underlying record no longer meets the publishing threshold.
         </p>
 
         <h2>Bot protection (Cloudflare Turnstile)</h2>
         <p>
-            To protect the website safety checker page from automated abuse, we use Cloudflare Turnstile. Turnstile runs
-            in invisible mode, so it normally completes without any action from you. To tell humans and bots apart,
-            Cloudflare processes certain information from your browser and device when the check page loads and when you
-            submit a link.
-        </p>
-        <p>
-            Cloudflare's handling of that information is governed by
+            The website safety checker page uses Cloudflare Turnstile to prevent automated abuse. Cloudflare processes
+            certain browser and device information when the page loads and when you submit a link, as described in
             the <a href="https://www.cloudflare.com/en-gb/turnstile-privacy-policy/" class="contact-link">Cloudflare
             Turnstile Privacy Addendum</a>.
         </p>
 
         <h2>Your IP address</h2>
         <p>
-            The proxy server uses your IP address <strong>solely for abuse protections</strong> such as rate limiting.
-            For this purpose, your IP is immediately hashed and stored in-memory. Raw IP addresses are not written to
-            disk as part of normal proxy operation.
+            The proxy server uses your IP address solely for abuse protections such as rate limiting. It is hashed and
+            held in memory, and raw IP addresses are not written to disk in normal operation.
         </p>
 
         <h2>Third-party integrations</h2>
         <p>
-            If you configure a provider using your own API key (for example, MetaDefender), that provider receives
-            requests directly from your device rather than through the proxy server. The privacy protections described
-            above, meaning IP shielding and caching, <strong>do not apply</strong> to those integrations. You are
-            subject to that provider's own data handling practices when using a personal API key.
+            If you configure a provider with your own API key (for example, MetaDefender), that provider receives
+            requests directly from your device, the protections above do not apply, and the provider's own privacy
+            practices govern.
         </p>
 
         <h2>Browser permissions</h2>
@@ -218,10 +144,8 @@ const localData = [
         </ul>
 
         <p>
-            The extension does <strong>not</strong> request host access to the websites you browse. It cannot read page
-            content, inject scripts, or access cookies or form data on the sites you visit. The URLs you navigate to are
-            observed only through the browser's navigation events, which expose the destination URL but not the contents
-            of the page.
+            The extension does not request host access to the websites you browse and cannot read page content,
+            inject scripts, or access cookies or form data. It sees only the destination URL of each navigation.
         </p>
 
         <h2>Data stored locally</h2>
@@ -238,46 +162,26 @@ const localData = [
         </ul>
 
         <p>
-            All local storage data is cleared when you uninstall the extension, or when you clear the list of excluded
-            websites using the settings page. None of it is transmitted to the proxy server or any third party.
+            Local data is cleared when you uninstall the extension. None of it is sent to the proxy server or any
+            third party.
         </p>
 
-        <h2>Operational monitoring</h2>
+        <h2>Operational and false-positive monitoring</h2>
         <p>
-            The proxy server uses standard operational tooling (Micrometer, Prometheus, Grafana) to monitor service
-            health, stability, and capacity. Metrics include aggregated counts such as requests per provider, cache
-            hit/miss rates, and system performance indicators. This data is used solely for service reliability and
-            abuse prevention, not for advertising or user profiling.
-        </p>
-
-        <h2>False-positive monitoring</h2>
-        <p>
-            To catch cases where a legitimate website is mistakenly flagged as dangerous, the proxy server keeps a
-            transient log entry whenever a provider returns
-            a <strong>malicious</strong> or <strong>phishing</strong> verdict. Each entry records only the provider
-            name, the verdict, and the same value that was checked against that provider: a hostname for DNS-based
-            providers, or the checked URL for URL-based providers. That URL has its query parameters stripped apart from
-            the resource-identifying parameters described in "Retained query parameters". It never includes your IP
-            address or any other identifier that could tie the lookup back to you.
-        </p>
-        <p>
-            Results that come back safe are <strong>never</strong> logged. These entries exist only in memory, are not
-            written to disk, and are not sent to any external system. They are lost when the proxy restarts.
+            The proxy server keeps aggregated service metrics (such as request counts and cache rates) for reliability
+            and abuse prevention, not for advertising or profiling. To catch legitimate sites that are mistakenly
+            flagged, it also keeps an in-memory log entry when a provider returns a malicious or phishing verdict,
+            recording only the provider, the verdict, and the hostname or query-stripped URL that was checked. Safe
+            results are never logged, and no entry includes your IP address or any other identifier.
         </p>
 
         <h2>Data retention</h2>
         <p>
-            On the proxy server, rate-limit states, local list snapshots, and transient runtime logs (including the
-            false-positive monitoring entries described above) exist only in memory and may be lost on restart.
-            Aggregated operational metrics may be retained longer in Prometheus and Grafana, subject to those systems'
-            retention settings.
-        </p>
-        <p>
-            The durable scan store described under "The website and safety checker page" is the one component that
-            persists across restarts. It holds only normalized link addresses and their aggregate vendor results, with
-            no IP addresses or personal identifiers. Records may be updated on a later scan or removed at our
-            discretion, and a published warning page is removed when the corresponding link no longer meets the
-            high-confidence threshold for publishing.
+            Rate-limit state and monitoring log entries exist only in memory and are lost on restart. Aggregated
+            metrics may be retained longer. The scan record store persists and holds only link addresses and their
+            vendor results, with no personal identifiers. Records may be updated on a later scan or removed at our
+            discretion. Search engines notified of a published page may continue to list it until they recrawl and
+            find it removed.
         </p>
 
         <h2>Changes to this policy</h2>
@@ -288,8 +192,7 @@ const localData = [
 
         <h2>Contact</h2>
         <p>
-            For privacy-related questions, contact us at <a href="mailto:support@osprey.ac">support@osprey.ac</a>, or
-            write to us at the address below:
+            For privacy questions, contact <a href="mailto:support@osprey.ac">support@osprey.ac</a> or write to:
         </p>
         <address>
             Osprey Project LLC<br/>

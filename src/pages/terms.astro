@@ -3,7 +3,7 @@
 // This software is not licensed for redistribution or self-hosting.
 
 import Base from '../layouts/Base.astro';
-const effective = '8 August 2026';
+const effective = '22 August 2026';
 
 const acceptableUse = [
     'violate applicable law;',
@@ -41,21 +41,21 @@ const acceptableUse = [
 
         <h2>1. About Osprey</h2>
         <p>
-            Osprey is an open-source browser protection project operated by Osprey Project LLC. It is intended to help
-            identify potentially malicious, phishing, scam-related, or otherwise unsafe websites.
+            Osprey is an open-source browser protection project intended to help identify potentially malicious,
+            phishing, scam-related, or otherwise unsafe websites. It supplements your own judgment and other security
+            tools and does not replace them.
         </p>
         <p>
-            Osprey is meant to supplement your own judgment and other security tools, not replace them.
-        </p>
-        <p>
-            The Osprey website also provides a website safety checker page
-            at <a href="https://osprey.ac/check/" class="contact-link">osprey.ac/check</a>, where you may submit an
-            individual link to have it scanned against the same providers used by the extension. Links you submit on the
-            website safety checker page are sent to the hosted proxy service and processed as described in
-            our <a href="/privacy/" class="contact-link">Privacy Policy</a>, which includes durably storing the
-            aggregate result for a submitted link and publishing a public warning page when several vendors
-            independently report the link as phishing or malicious. Results are provided for your information only
-            and are subject to Section 5 (No guarantee of detection).
+            The website safety checker page at <a href="https://osprey.ac/check/"
+                                                  class="contact-link">osprey.ac/check</a>
+            lets you submit a link to be scanned. Submitted links are processed as described in
+            our <a href="/privacy/" class="contact-link">Privacy Policy</a>, which includes storing the aggregate result
+            and publishing a public warning page for the link's registrable domain when the report is corroborated by
+            one authoritative vendor or by two or more vendors. Published pages reflect third-party vendor reports at
+            the time of the most recent scan and are not a statement by Osprey Project LLC that a domain or its owner
+            has engaged in wrongdoing. If you operate a domain with a published warning page and believe the reports
+            are mistaken, contact us (Section 13) and we will review the record. Removal from the Service does not
+            guarantee prompt removal from third-party search results.
         </p>
 
         <h2>2. Open-source software</h2>
@@ -65,43 +65,26 @@ const acceptableUse = [
             later"), unless a different license is expressly stated for a specific component or file.
         </p>
         <p>
-            Your rights to use, copy, modify, and distribute project source code are governed by the applicable
-            open-source license, not by these Terms. Osprey Project LLC retains ownership of the copyright it holds in
-            that code.
-        </p>
-        <p>
-            If there is any conflict between these Terms and an applicable open-source license with respect to software
-            released under that license, the open-source license will control for that software.
+            Your rights in that source code are governed by the applicable open-source license, not by these Terms,
+            and that license controls in the event of any conflict. Osprey Project LLC retains the copyright it holds
+            in that code. Materials hosted on GitHub are also subject to GitHub's own terms.
         </p>
 
-        <h2>3. GitHub</h2>
+        <h2>3. Non-commercial use</h2>
         <p>
-            Project source code, releases, issue tracking, and related materials may be hosted or distributed through
-            GitHub. Your use of GitHub is governed by GitHub's own terms, policies, and privacy practices, not by these
-            Terms.
+            Osprey, the hosted proxy service, and any public APIs are made available on a non-commercial basis for end
+            users, researchers, and organizations using them for their own internal purposes. See Section 5 for
+            restrictions on commercial use.
         </p>
 
-        <h2>4. Non-commercial use</h2>
-        <p>
-            Osprey is made available on a non-commercial basis for end users, researchers, and organizations using it
-            for their own internal purposes. The hosted Osprey proxy service and any public APIs made available through
-            it are likewise provided on a non-commercial basis.
-        </p>
-        <p>
-            Restrictions on commercial use of the hosted Service are described in Section 6 (Acceptable Use).
-        </p>
-
-        <h2>5. No guarantee of detection</h2>
+        <h2>4. No guarantee of detection</h2>
         <p>
             Osprey is a security aid only. We do not guarantee that the Service will detect, block, or correctly
-            classify every malicious, phishing, scam-related, deceptive, or otherwise unsafe site or URL.
-        </p>
-        <p>
-            Threat intelligence can be incomplete, delayed, unavailable, or inaccurate. You are responsible for your own
-            security decisions and for how you use the results provided by Osprey.
+            classify every unsafe site or URL. Threat intelligence can be incomplete, delayed, unavailable, or
+            inaccurate. You are responsible for your own security decisions and for how you use the results.
         </p>
 
-        <h2>6. Acceptable use</h2>
+        <h2>5. Acceptable use</h2>
         <p>Please do not use the Service to:</p>
         <ul>
             {acceptableUse.map((item) =>
@@ -112,46 +95,33 @@ const acceptableUse = [
             users, or third parties.
         </p>
 
-        <h2>7. Third-party services</h2>
+        <h2>6. Third-party services</h2>
         <p>
-            The Service may rely on third-party threat intelligence, DNS filtering, hosting, network, security,
-            monitoring, or infrastructure providers. We are not responsible for outages, errors, policy changes, or
-            inaccuracies caused by third-party services.
-        </p>
-        <p>
-            The website safety checker page is protected by Cloudflare Turnstile to prevent automated abuse. How
-            Cloudflare processes information for this purpose is described in
-            our <a href="/privacy/" class="contact-link">Privacy Policy</a>.
+            The Service relies on third-party threat intelligence, DNS filtering, hosting, security, and
+            infrastructure providers, including Cloudflare Turnstile on the website safety checker page. We are not
+            responsible for outages, errors, policy changes, or inaccuracies caused by third-party services.
         </p>
 
-        <h2>8. Privacy</h2>
+        <h2>7. Privacy</h2>
         <p>
-            Our <a href="/privacy/" class="contact-link">Privacy Policy</a> describes how Osprey processes data,
-            including limited operational monitoring and service telemetry used to run, secure, and maintain the
-            service.
+            Our <a href="/privacy/" class="contact-link">Privacy Policy</a> describes how Osprey processes data.
         </p>
 
-        <h2>9. Project name and branding</h2>
+        <h2>8. Project name and branding</h2>
         <p>
-            Except to the extent governed by applicable open-source licenses, the Osprey name, logos, branding, website
-            content, and other non-code materials are owned by Osprey Project LLC and may be protected by applicable
-            law.
-        </p>
-        <p>
-            These Terms do not give you permission to use the Osprey name, logos, branding, or other source identifiers
-            in a way that is likely to cause confusion about affiliation, sponsorship, or endorsement.
+            The Osprey name, logos, branding, and other non-code materials are owned by Osprey Project LLC. These
+            Terms do not permit their use in a way likely to cause confusion about affiliation, sponsorship, or
+            endorsement.
         </p>
 
-        <h2>10. Changes to the Service</h2>
+        <h2>9. Changes</h2>
         <p>
-            The Service may change over time, and we may modify, limit, suspend, or discontinue parts of it at any time.
-        </p>
-        <p>
-            We may also update these Terms from time to time. The effective date above reflects the date of the most
-            recent revision. Continued use of the Service after an update means you accept the revised Terms.
+            We may modify, limit, suspend, or discontinue any part of the Service at any time, and may update these
+            Terms. The effective date above reflects the most recent revision. Continued use after an update means you
+            accept the revised Terms.
         </p>
 
-        <h2>11. Disclaimer</h2>
+        <h2>10. Disclaimer</h2>
         <p class="legal-caps">
             THE SERVICE IS PROVIDED "AS IS" AND "AS AVAILABLE," WITHOUT WARRANTIES OF ANY KIND, TO THE MAXIMUM EXTENT
             PERMITTED BY APPLICABLE LAW.
@@ -162,7 +132,7 @@ const acceptableUse = [
             ACCURATE, OR EFFECTIVE AT DETECTING OR PREVENTING ANY PARTICULAR THREAT.
         </p>
 
-        <h2>12. Limitation of liability</h2>
+        <h2>11. Limitation of liability</h2>
         <p class="legal-caps">
             TO THE MAXIMUM EXTENT PERMITTED BY LAW, OSPREY PROJECT LLC AND ITS MEMBERS, MANAGERS, CONTRIBUTORS,
             MAINTAINERS, OPERATORS, LICENSORS, AND SERVICE PROVIDERS WILL NOT BE LIABLE FOR ANY INDIRECT, INCIDENTAL,
@@ -174,7 +144,7 @@ const acceptableUse = [
             OR RELATED TO THESE TERMS OR THE SERVICE WILL NOT EXCEED ONE HUNDRED U.S. DOLLARS ($100 USD).
         </p>
 
-        <h2>13. Governing law</h2>
+        <h2>12. Governing law</h2>
         <p>
             These Terms are governed by the laws of the State of California, without regard to its conflict of laws
             rules, except to the extent applicable law requires otherwise.
@@ -185,10 +155,9 @@ const acceptableUse = [
             to the extent applicable law requires otherwise.
         </p>
 
-        <h2>14. Contact</h2>
+        <h2>13. Contact</h2>
         <p>
-            If you have questions about these Terms, contact <a href="mailto:support@osprey.ac">support@osprey.ac</a>,
-            or write to us at the address below:
+            Questions about these Terms: <a href="mailto:support@osprey.ac">support@osprey.ac</a>, or write to:
         </p>
         <address>
             Osprey Project LLC<br/>
