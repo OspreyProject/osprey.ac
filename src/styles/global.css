@@ -1782,4 +1782,14 @@ html[data-browser="edge"] .download-card[data-browser="edge"] .download-badge {
     .marquee-item img {
         height: 36px;
     }
+
+    /* The short link columns pair up; the contact block stays full width. */
+    .footer-cols {
+        grid-template-columns: 1fr 1fr;
+        gap: 1.5rem 1rem;
+    }
+
+    .footer-col:last-child {
+        grid-column: 1 / -1;
+    }
 }
