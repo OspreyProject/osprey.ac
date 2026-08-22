@@ -106,11 +106,17 @@ export async function getStaticPaths() {
 
     try {
         const response = await fetch(feedUrl, {
-            headers: {'Authorization': `Bearer ${feedToken}`, 'Accept': 'application/json'},
+            headers: {
+                'Authorization': `Bearer ${feedToken}`,
+                'Accept': 'application/json',
+                'User-Agent': 'Mozilla/5.0 (compatible; OspreySiteBuild/1.0; +https://osprey.ac)',
+            },
         });
 
         if (!response.ok) {
-            console.log(`[check] scan feed returned HTTP ${response.status}`);
+            const text = (await response.text()).replace(/\s+/g, ' ').slice(0, 300);
+            console.log(`[check] scan feed returned HTTP ${response.status} server=${response.headers.get('server')} `
+                + `cf-ray=${response.headers.get('cf-ray')} body=${text}`);
             return [];
         }
 
