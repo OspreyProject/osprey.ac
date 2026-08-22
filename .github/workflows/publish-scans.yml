@@ -27,10 +27,10 @@ jobs:
       url: ${{ steps.deploy.outputs.page_url }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Set up Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: 22
           cache: npm
@@ -43,15 +43,13 @@ jobs:
           SCAN_FEED_URL: ${{ secrets.SCAN_FEED_URL }}
           SCAN_FEED_TOKEN: ${{ secrets.SCAN_FEED_TOKEN }}
           INDEXNOW_KEY: ${{ secrets.INDEXNOW_KEY }}
-          # Testing: disable the 24h dwell gate. Remove this line for normal operation.
-          SCAN_DWELL_HOURS: '0'
         run: npm run build
 
       - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v4
         with:
           path: dist
 
       - name: Deploy to GitHub Pages
         id: deploy
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
