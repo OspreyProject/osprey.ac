@@ -20,19 +20,19 @@ interface ScanResult {
 
 // Publication gate, tune these two if the backend's signal density changes.
 // A domain must clear all three checks before it is allowed to mint a page.
-const hardPrimary = ['phishing', 'malicious']; // soft "warn" verdicts never earn a page
-const minAuthoritative = 2;                        // independent corroboration required
+export const hardPrimary = ['phishing', 'malicious']; // soft "warn" verdicts never earn a page
+export const minAuthoritative = 2;                        // independent corroboration required
 
 // SCAN_DWELL_HOURS overrides the dwell window; set it to 0 in a test build to publish immediately.
-const dwellHours = 0; /*Number(import.meta.env.SCAN_DWELL_HOURS ?? 24);*/
-const dwellMs = (Number.isFinite(dwellHours) ? dwellHours : 24) * 60 * 60 * 1000;
+export const dwellHours = 0; /*Number(import.meta.env.SCAN_DWELL_HOURS ?? 24);*/
+export const dwellMs = (Number.isFinite(dwellHours) ? dwellHours : 24) * 60 * 60 * 1000;
 
 // Reduces a submitted URL to its registrable domain, or null if it cannot be published.
 // The registrable domain is the only part of a URL the submitter cannot freely choose, so it
 // is the only value ever allowed into an indexable field. Paths, queries, fragments, ports,
 // userinfo, subdomain labels on domains the submitter does not own, raw IPs, and every
 // non-ASCII glyph are discarded here and can never reach a slug, title, meta, or schema value.
-function deriveDomain(rawUrl: string): string | null {
+export function deriveDomain(rawUrl: string): string | null {
     let parsed: URL;
 
     try {
@@ -67,7 +67,7 @@ function deriveDomain(rawUrl: string): string | null {
 }
 
 // The provider names currently returning a blocking verdict for this record.
-function flaggingNames(results: Record<string, string[]>): string[] {
+export function flaggingNames(results: Record<string, string[]>): string[] {
     return providers.filter((p) => {
         const values = results?.[p.id];
         const state = values && values.length && resultStates[values[0]] ? values[0] : 'failed';
@@ -78,7 +78,7 @@ function flaggingNames(results: Record<string, string[]>): string[] {
 // A record may be published only if it is a hard verdict, has stayed flagged past the dwell
 // window, and is corroborated by at least MIN_AUTHORITATIVE independent authoritative providers.
 // A one-off scan of a weird path can satisfy none of these, so a scan alone can never publish.
-function isEligible(record: ScanResult): boolean {
+export function isEligible(record: ScanResult): boolean {
     if (!hardPrimary.includes(record.primary)) {
         return false;
     }
