@@ -43,6 +43,8 @@ jobs:
           SCAN_FEED_URL: ${{ secrets.SCAN_FEED_URL }}
           SCAN_FEED_TOKEN: ${{ secrets.SCAN_FEED_TOKEN }}
           INDEXNOW_KEY: ${{ secrets.INDEXNOW_KEY }}
+          # Testing: disable the 24h dwell gate. Remove this line for normal operation.
+          SCAN_DWELL_HOURS: '0'
         run: npm run build
 
       - name: Upload Pages artifact

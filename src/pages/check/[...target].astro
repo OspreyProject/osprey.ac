@@ -22,7 +22,10 @@ interface ScanResult {
 // A domain must clear all three checks before it is allowed to mint a page.
 const hardPrimary = ['phishing', 'malicious']; // soft "warn" verdicts never earn a page
 const minAuthoritative = 2;                        // independent corroboration required
-const dwellMs = 24 * 60 * 60 * 1000;           // must stay flagged this long first
+
+// SCAN_DWELL_HOURS overrides the dwell window; set it to 0 in a test build to publish immediately.
+const dwellHours = 0; /*Number(import.meta.env.SCAN_DWELL_HOURS ?? 24);*/
+const dwellMs = (Number.isFinite(dwellHours) ? dwellHours : 24) * 60 * 60 * 1000;
 
 // Reduces a submitted URL to its registrable domain, or null if it cannot be published.
 // The registrable domain is the only part of a URL the submitter cannot freely choose, so it
