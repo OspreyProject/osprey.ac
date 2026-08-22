@@ -98,6 +98,7 @@ export async function getStaticPaths() {
     const feedToken = import.meta.env.SCAN_FEED_TOKEN;
 
     if (!feedUrl || !feedToken) {
+        console.log('[check] scan feed disabled: SCAN_FEED_URL or SCAN_FEED_TOKEN unset');
         return [];
     }
 
@@ -109,15 +110,18 @@ export async function getStaticPaths() {
         });
 
         if (!response.ok) {
+            console.log(`[check] scan feed returned HTTP ${response.status}`);
             return [];
         }
 
         const body = await response.json();
         records = Array.isArray(body?.results) ? body.results : [];
-    } catch {
+    } catch (error) {
+        console.log(`[check] scan feed fetch failed: ${error instanceof Error ? error.message : String(error)}`);
         return [];
     }
 
+    let derived = 0;
     const best = new Map<string, { domain: string; record: ScanResult; authCount: number }>();
 
     for (const record of records) {
@@ -127,7 +131,16 @@ export async function getStaticPaths() {
 
         const domain = deriveDomain(record.url);
 
-        if (!domain || !isEligible(record)) {
+        if (!domain) {
+            continue;
+        }
+
+        derived++;
+
+        if (!isEligible(record)) {
+            console.log(`[check] ${domain} ineligible: primary=${record.primary} `
+                + `authoritative=${flaggingNames(record.results).filter(isAuthoritative).length}/${minAuthoritative} `
+                + `dwellHours=${((record.lastScanned - record.firstScanned) / 3600000).toFixed(1)}/${dwellMs / 3600000}`);
             continue;
         }
 
@@ -141,6 +154,8 @@ export async function getStaticPaths() {
             best.set(domain, {domain, record, authCount});
         }
     }
+
+    console.log(`[check] feed records=${records.length} derived=${derived} pages=${best.size}`);
 
     return Array.from(best.values()).map(({domain, record}) => ({
         params: {target: domain},
