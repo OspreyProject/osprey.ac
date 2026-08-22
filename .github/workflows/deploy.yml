@@ -1,8 +1,14 @@
+# Builds and deploys the site on every push to main and on a 30 minute timer. The timer exists so
+# newly hard-flagged links get their own crawlable result page between pushes. The build reads the
+# proxy's index feed to know which pages to generate; if the feed is unreachable or the secrets are
+# unset, it degrades to zero generated pages and still deploys.
 name: Deploy to GitHub Pages
 
 on:
   push:
     branches: [ main ]
+  schedule:
+    - cron: '*/30 * * * *'
   workflow_dispatch:
 
 permissions:
@@ -10,19 +16,20 @@ permissions:
   pages: write
   id-token: write
 
+# Queue runs behind each other rather than cancelling, so a scheduled run never kills a push deploy.
 concurrency:
   group: pages
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: 22
           cache: npm
@@ -33,7 +40,12 @@ jobs:
       - name: Build
         run: npm run build
         env:
+          SCAN_FEED_URL: ${{ secrets.SCAN_FEED_URL }}
+          SCAN_FEED_TOKEN: ${{ secrets.SCAN_FEED_TOKEN }}
           INDEXNOW_KEY: ${{ secrets.INDEXNOW_KEY }}
+
+      - name: Show sitemap
+        run: cat dist/sitemap-0.xml
 
       - name: Commit IndexNow cache
         if: github.ref == 'refs/heads/main'
@@ -49,7 +61,7 @@ jobs:
           fi
 
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v4
         with:
           path: ./dist
 
@@ -62,4 +74,4 @@ jobs:
     steps:
       - name: Deploy
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
