@@ -53,8 +53,8 @@
     "https://osprey.ac/deployment": "sha256:f25b1a04afb5ded76e5e5ace882600312b4768484bf8be9e5ac999e9accc92b2",
     "https://osprey.ac/download": "sha256:93989b0c3c047b9e47f5183f0150aeb9549eb03578476d835948c51fffdbce27",
     "https://osprey.ac/": "sha256:3880cd1dbb0f4b886f7d31473d2ff83b2d814709883726386686d6717f010f6b",
-    "https://osprey.ac/privacy": "sha256:01924467ec46aa35f7def11c6287b01a9202db372053fc9df84dac6e7531353e",
+    "https://osprey.ac/privacy": "sha256:b39875345f563f9287dc13a6cb1aae92e7619e76149ec1f431df5b2c3f129c73",
     "https://osprey.ac/reporting-check": "sha256:6b7aba567824df752645cb3bfaea7b8a803ccca9abb43b1d5c9d5dce2771ff33",
-    "https://osprey.ac/terms": "sha256:a5f60bf1764c296b40353d3dcf66641b7cb7a8cd8a1e70667276fb7f46a79c28"
+    "https://osprey.ac/terms": "sha256:ae198c7731e99e8e309c2463eb1c8f393b16a5b68b6f9f9f542e1a09e81ca466"
   }
 }
