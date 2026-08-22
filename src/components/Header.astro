@@ -34,7 +34,15 @@ const links = [
             <span>Osprey</span>
         </a>
 
-        <nav class="site-nav" aria-label="Primary">
+        <button type="button" class="nav-toggle" id="nav-toggle" aria-label="Toggle navigation menu"
+                aria-expanded="false" aria-controls="site-nav">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round" aria-hidden="true">
+                <path d="M3 6h18M3 12h18M3 18h18"/>
+            </svg>
+        </button>
+
+        <nav class="site-nav" id="site-nav" aria-label="Primary">
             {links.map((link) => (
                     <a href={link.href} class={link.isNew ? 'has-badge' : ''}>
                         {link.label}
@@ -86,3 +94,43 @@ const links = [
         </nav>
     </div>
 </header>
+
+<script is:inline>
+    (function () {
+        const toggle = document.getElementById('nav-toggle');
+        const header = document.querySelector('.site-header');
+        const nav = document.getElementById('site-nav');
+
+        if (!toggle || !header || !nav) {
+            return;
+        }
+
+        function setOpen(open) {
+            header.classList.toggle('open', open);
+            toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+        }
+
+        toggle.addEventListener('click', function (event) {
+            event.stopPropagation();
+            setOpen(!header.classList.contains('open'));
+        });
+
+        nav.addEventListener('click', function (event) {
+            if (event.target.closest('a')) {
+                setOpen(false);
+            }
+        });
+
+        document.addEventListener('click', function (event) {
+            if (header.classList.contains('open') && !event.target.closest('.site-header')) {
+                setOpen(false);
+            }
+        });
+
+        document.addEventListener('keydown', function (event) {
+            if (event.key === 'Escape') {
+                setOpen(false);
+            }
+        });
+    })();
+</script>

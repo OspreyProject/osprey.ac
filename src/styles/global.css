@@ -105,6 +105,38 @@ body {
     max-width: var(--max-width);
     margin: 0 auto;
     padding: 0 1.25rem;
+    min-width: 0;
+}
+
+img,
+svg,
+video,
+iframe {
+    max-width: 100%;
+}
+
+img {
+    height: auto;
+}
+
+p,
+li,
+dd,
+dt,
+h1,
+h2,
+h3,
+td,
+th,
+address,
+summary,
+label {
+    overflow-wrap: anywhere;
+}
+
+pre {
+    max-width: 100%;
+    overflow-x: auto;
 }
 
 main {
@@ -228,6 +260,26 @@ code {
     display: inline-flex;
     align-items: center;
     gap: 0.25rem;
+}
+
+.nav-toggle {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    padding: 0;
+    background: none;
+    border: none;
+    border-radius: var(--radius);
+    color: var(--text-muted);
+    cursor: pointer;
+    line-height: 0;
+}
+
+.nav-toggle:hover {
+    color: var(--accent-ink);
+    background-color: var(--surface-hover);
 }
 
 /* --------------------------------------------------
@@ -1633,13 +1685,101 @@ html[data-browser="edge"] .download-card[data-browser="edge"] .download-badge {
         justify-self: center;
     }
 
-    .header-inner {
-        flex-direction: column;
-        gap: 0.85rem;
+    .wrap {
+        padding: 0 1rem;
     }
 
+    main {
+        padding: 1.75rem 0;
+    }
+
+    /* The header becomes a sticky bar holding the brand and the hamburger. */
+    .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 800;
+    }
+
+    .header-inner {
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        padding-top: 0.75rem;
+        padding-bottom: 0.75rem;
+    }
+
+    .nav-toggle {
+        display: inline-flex;
+        margin-left: auto;
+    }
+
+    /* The links and icons collapse behind the hamburger and drop into a full-width column. */
     .site-nav {
+        display: none;
+        width: 100%;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0;
+        margin-top: 0.5rem;
+        border-top: 1px solid var(--border);
+    }
+
+    .site-header.open .site-nav {
+        display: flex;
+    }
+
+    .site-nav > a {
+        padding: 0.8rem 0.25rem;
+        border-bottom: 1px solid var(--border);
+    }
+
+    .site-nav .nav-icons {
+        padding: 0.5rem 0 0.25rem;
+        gap: 0.75rem;
+    }
+
+    .band-title {
+        margin: 4rem 0 2rem;
+    }
+
+    .scan-row {
+        flex-direction: column;
+    }
+
+    .scan-button {
+        width: 100%;
         justify-content: center;
-        gap: 1rem;
+    }
+
+    /* Provider names wrap instead of truncating so every letter stays readable. */
+    .provider-name {
+        white-space: normal;
+        overflow: visible;
+        text-overflow: clip;
+    }
+
+    .summary {
+        grid-template-columns: 1fr;
+        row-gap: 0.15rem;
+    }
+
+    .summary-badge,
+    .summary-label,
+    .summary-text,
+    .summary-url,
+    .summary-age {
+        grid-column: 1;
+        justify-self: start;
+    }
+
+    .summary-label {
+        margin-top: 0.5rem;
+    }
+
+    .marquee-item {
+        padding: 0 1.5rem;
+    }
+
+    .marquee-item img {
+        height: 36px;
     }
 }

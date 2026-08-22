@@ -1134,6 +1134,10 @@ const outputTabs = [
         .gen-grid {
             grid-template-columns: minmax(0, 1fr);
         }
+
+        .gen-output {
+            position: static;
+        }
     }
 
     .gen-group {
@@ -1241,6 +1245,7 @@ const outputTabs = [
 
     .output-head {
         display: flex;
+        flex-wrap: wrap;
         justify-content: space-between;
         align-items: center;
         gap: 0.6rem;
