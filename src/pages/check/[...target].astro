@@ -19,14 +19,10 @@ interface ScanResult {
 }
 
 // Publication gate, tune these if the backend's signal density changes.
-// A domain must clear all three checks before it is allowed to mint a page.
+// A domain must clear both checks before it is allowed to mint a page.
 export const hardPrimary = ['phishing', 'malicious']; // soft "warn" verdicts never earn a page
 export const minAuthoritative = 1;                        // one authoritative flag is enough...
 export const minCorroborating = 2;                        // ...or two flags from any providers
-
-// SCAN_DWELL_HOURS overrides the dwell window; set it to 0 in a test build to publish immediately.
-export const dwellHours = Number(import.meta.env.SCAN_DWELL_HOURS ?? 24);
-export const dwellMs = (Number.isFinite(dwellHours) ? dwellHours : 24) * 60 * 60 * 1000;
 
 // Reduces a submitted URL to its registrable domain, or null if it cannot be published.
 // The registrable domain is the only part of a URL the submitter cannot freely choose, so it
@@ -83,15 +79,10 @@ export function flaggingNames(results: Record<string, string[]>): string[] {
     }).map((p) => p.name);
 }
 
-// A record may be published only if it is a hard verdict, has stayed flagged past the dwell
-// window, and is corroborated by at least MIN_AUTHORITATIVE independent authoritative providers.
-// A one-off scan of a weird path can satisfy none of these, so a scan alone can never publish.
+// A record may be published only if it is a hard verdict that is corroborated by one
+// authoritative provider or two providers of any kind.
 export function isEligible(record: ScanResult): boolean {
     if (!hardPrimary.includes(record.primary)) {
-        return false;
-    }
-
-    if (!(record.lastScanned - record.firstScanned >= dwellMs)) {
         return false;
     }
     return isCorroborated(record);
@@ -166,8 +157,7 @@ export async function getStaticPaths() {
         if (!isEligible(record)) {
             console.log(`[check] ${domain} ineligible: primary=${record.primary} `
                 + `authoritative=${flaggingNames(record.results).filter(isAuthoritative).length}/${minAuthoritative} `
-                + `flags=${flaggingNames(record.results).length}/${minCorroborating} `
-                + `dwellHours=${((record.lastScanned - record.firstScanned) / 3600000).toFixed(1)}/${dwellMs / 3600000}`);
+                + `flags=${flaggingNames(record.results).length}/${minCorroborating}`);
             continue;
         }
 
