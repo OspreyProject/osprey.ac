@@ -143,11 +143,12 @@ const checks = [
                 return window.crypto.randomUUID();
             }
 
+            const bytes = new Uint8Array(16);
+            window.crypto.getRandomValues(bytes);
             let out = '';
-            const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
 
-            for (let i = 0; i < 32; i++) {
-                out += chars[Math.floor(Math.random() * chars.length)];
+            for (let i = 0; i < bytes.length; i++) {
+                out += bytes[i].toString(16).padStart(2, '0');
             }
             return out;
         }
