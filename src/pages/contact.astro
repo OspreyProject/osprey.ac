@@ -1,0 +1,446 @@
+---
+// Copyright (C) 2026 Osprey Project LLC (https://osprey.ac) All rights reserved.
+// This software is not licensed for redistribution or self-hosting.
+
+import Base from '../layouts/Base.astro';
+
+const title = 'Contact Us - Osprey: Browser Protection';
+const description =
+    'Contact the Osprey team. Ask about using Osprey in your business, joining the MSP program, partnerships, support, or reporting a false positive.';
+
+const categories = [
+    {value: 'business', label: 'I want to use Osprey in my business', company: 'Company'},
+    {value: 'msp', label: 'I am an MSP interested in selling Osprey', company: 'Company'},
+    {value: 'partnership', label: 'Other business opportunity or question', company: 'Company'},
+    {value: 'support', label: 'I need support or want to report a false positive', company: ''},
+    {value: 'general', label: 'General question', company: ''},
+];
+
+const schema = {
+    '@context': 'https://schema.org',
+    '@graph': [
+        {
+            '@type': 'ContactPage',
+            '@id': 'https://osprey.ac/contact/#page',
+            url: 'https://osprey.ac/contact/',
+            name: 'Contact Us',
+            isPartOf: {'@id': 'https://osprey.ac/#website'},
+        },
+    ],
+};
+---
+
+<Base title={title} description={description} schema={schema}>
+    <link rel="preconnect" href="https://challenges.cloudflare.com"/>
+    <script is:inline
+            src="https://challenges.cloudflare.com/turnstile/v0/api.js"
+            async
+            defer
+    ></script>
+
+    <section class="check-head">
+        <h1>Contact Us</h1>
+        <p class="lede">
+            Questions about using Osprey in your business, joining the MSP program, support, or anything else? Reach the
+            Osprey team below.
+        </p>
+    </section>
+
+    <form id="contact-form" class="contact-form" novalidate>
+        <label class="field">
+            <span class="field-label">What is this about?</span>
+            <select id="category" class="select-input" name="category" required>
+                <option value="" selected disabled>Choose one</option>
+                {categories.map((c) => (
+                        <option value={c.value} data-company={c.company}>{c.label}</option>
+                ))}
+            </select>
+        </label>
+
+        <div class="field-row">
+            <label class="field">
+                <span class="field-label">Your name <span class="req" aria-hidden="true">*</span></span>
+                <input id="name" class="text-input" type="text" name="name" autocomplete="name" maxlength="120"
+                       required/>
+            </label>
+            <label class="field">
+                <span class="field-label">Email <span class="req" aria-hidden="true">*</span></span>
+                <input id="email" class="text-input" type="email" name="email" autocomplete="email"
+                       maxlength="200" required/>
+            </label>
+        </div>
+
+        <label class="field" id="company-field">
+            <span class="field-label">Company <span id="company-mark" class="opt">(optional)</span></span>
+            <input id="company" class="text-input" type="text" name="company" autocomplete="organization"
+                   maxlength="160"/>
+        </label>
+
+        <label class="field">
+            <span class="field-label">Message <span class="req" aria-hidden="true">*</span></span>
+            <textarea id="message" class="text-input area" name="message" rows="7" maxlength="4000"
+                      required></textarea>
+        </label>
+
+        <p id="contact-error" class="scan-error" role="alert" hidden></p>
+        <p id="captcha-note" class="captcha-note" role="status" hidden></p>
+
+        <div
+                id="cf-turnstile"
+                class="cf-turnstile"
+                data-sitekey="0x4AAAAAAEIwxP1XUsXc5UsE"
+                data-size="normal"
+                data-theme="auto"
+                data-callback="onSuccess"
+                data-expired-callback="onExpired"
+        ></div>
+
+        <p class="contact-actions">
+            <button id="contact-button" class="install-btn scan-button" type="submit">Send message</button>
+        </p>
+    </form>
+
+    <section id="contact-done" class="contact-done" aria-live="polite" hidden>
+        <h2 id="done-title"></h2>
+        <p id="done-text"></p>
+    </section>
+
+    <p class="scan-terms">
+        By sending a message, you agree to our <a href="/privacy/" class="contact-link">Privacy Policy</a> and <a
+            href="/terms/" class="contact-link">Terms of Service</a>.
+        <br>
+        Prefer email? Write to <a href="mailto:support@osprey.ac" class="contact-link">support@osprey.ac</a>.
+    </p>
+</Base>
+
+<script is:inline data-cfasync="false">
+    let captchaToken = '';
+
+    window.onSuccess = function (token) {
+        captchaToken = token;
+        const captchaNote = document.getElementById('captcha-note');
+
+        if (captchaNote) {
+            captchaNote.hidden = true;
+            captchaNote.textContent = '';
+        }
+    };
+
+    window.onExpired = function () {
+        captchaToken = '';
+    };
+
+    (function () {
+        const submitEndpoint = 'https://api.osprey.ac/contact/submit';
+        const verifyEndpoint = 'https://api.osprey.ac/contact/verify';
+
+        const form = document.getElementById('contact-form');
+        const category = document.getElementById('category');
+        const nameInput = document.getElementById('name');
+        const emailInput = document.getElementById('email');
+        const companyMark = document.getElementById('company-mark');
+        const companyInput = document.getElementById('company');
+        const messageInput = document.getElementById('message');
+        const errorEl = document.getElementById('contact-error');
+        const captchaNote = document.getElementById('captcha-note');
+        const button = document.getElementById('contact-button');
+        const done = document.getElementById('contact-done');
+        const doneTitle = document.getElementById('done-title');
+        const doneText = document.getElementById('done-text');
+
+        let sending = false;
+        let companyRequired = false;
+
+        function markInvalid(el, invalid) {
+            el.classList.toggle('invalid', invalid);
+        }
+
+        function clearInvalid() {
+            [category, nameInput, emailInput, companyInput, messageInput].forEach(function (el) {
+                markInvalid(el, false);
+            });
+        }
+
+        function showError(message) {
+            errorEl.textContent = message;
+            errorEl.hidden = false;
+        }
+
+        function clearError() {
+            errorEl.hidden = true;
+            errorEl.textContent = '';
+        }
+
+        function showDone(title, text) {
+            form.hidden = true;
+            doneTitle.textContent = title;
+            doneText.textContent = text;
+            done.hidden = false;
+        }
+
+        function updateCategory() {
+            const option = category.options[category.selectedIndex];
+            const companyName = option ? option.getAttribute('data-company') || '' : '';
+
+            companyRequired = !!companyName;
+            companyMark.textContent = companyRequired ? '*' : '(optional)';
+            companyMark.className = companyRequired ? 'req' : 'opt';
+            companyMark.setAttribute('aria-hidden', companyRequired ? 'true' : 'false');
+            companyInput.required = companyRequired;
+            markInvalid(companyInput, false);
+        }
+
+        category.addEventListener('change', function () {
+            clearError();
+            markInvalid(category, false);
+            updateCategory();
+        });
+
+        [nameInput, emailInput, companyInput, messageInput].forEach(function (el) {
+            el.addEventListener('input', function () {
+                markInvalid(el, false);
+            });
+        });
+
+        updateCategory();
+
+        function validEmail(value) {
+            return /^[\w\-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(value);
+        }
+
+        form.addEventListener('submit', async function (event) {
+            event.preventDefault();
+
+            if (sending) {
+                return;
+            }
+
+            const payload = {
+                category: category.value,
+                name: nameInput.value.trim(),
+                email: emailInput.value.trim(),
+                company: companyInput.value.trim(),
+                message: messageInput.value.trim(),
+                token: captchaToken,
+            };
+
+            clearInvalid();
+
+            let missing = false;
+
+            if (!payload.category) {
+                markInvalid(category, true);
+                missing = true;
+            }
+
+            if (!payload.name) {
+                markInvalid(nameInput, true);
+                missing = true;
+            }
+
+            if (!validEmail(payload.email)) {
+                markInvalid(emailInput, true);
+                missing = true;
+            }
+
+            if (companyRequired && !payload.company) {
+                markInvalid(companyInput, true);
+                missing = true;
+            }
+
+            if (payload.message.length < 10) {
+                markInvalid(messageInput, true);
+                missing = true;
+            }
+
+            if (missing) {
+                showError('Please fill out all required fields.');
+                return;
+            }
+
+            if (!captchaToken) {
+                captchaNote.textContent = 'Please wait a moment before sending your message.';
+                captchaNote.hidden = false;
+                return;
+            }
+
+            clearError();
+            sending = true;
+            button.disabled = true;
+            button.textContent = 'Sending';
+
+            try {
+                const response = await fetch(submitEndpoint, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(payload),
+                });
+
+                let data = null;
+
+                try {
+                    data = await response.json();
+                } catch {
+                    data = null;
+                }
+
+                if (!response.ok) {
+                    throw new Error((data && data.error) || 'Your message could not be sent right now. Please try again later or email support@osprey.ac.');
+                }
+
+                showDone('Check your inbox',
+                    'We sent a confirmation link to ' + payload.email + '. Open it within 24 hours to deliver your message. If it is not there, check your spam folder.');
+            } catch (err) {
+                showError(err && err.message ? err.message : 'Your message could not be sent.');
+            } finally {
+                sending = false;
+                button.disabled = false;
+                button.textContent = 'Send message';
+                captchaToken = '';
+
+                if (window.turnstile) {
+                    window.turnstile.reset();
+                }
+            }
+        });
+
+        async function verify(token) {
+            form.hidden = true;
+            showDone('Confirming', 'One moment while we confirm your email address.');
+
+            try {
+                const response = await fetch(verifyEndpoint, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({token: token}),
+                });
+
+                let data = null;
+
+                try {
+                    data = await response.json();
+                } catch {
+                    data = null;
+                }
+
+                if (!response.ok) {
+                    throw new Error((data && data.error) || 'This verification link could not be confirmed.');
+                }
+
+                showDone('Message delivered', 'Thanks, your email address is confirmed and your message has been sent to our team. We will reply to you by email.');
+            } catch (err) {
+                done.hidden = true;
+                form.hidden = false;
+                showError(err && err.message ? err.message : 'This verification link could not be confirmed.');
+            }
+
+            if (window.history && window.history.replaceState) {
+                window.history.replaceState(null, '', '/contact/');
+            }
+        }
+
+        const params = new URLSearchParams(window.location.search);
+        const verifyToken = params.get('verify');
+
+        if (verifyToken && /^[A-Za-z0-9_-]{40,64}$/.test(verifyToken)) {
+            verify(verifyToken);
+        }
+    })();
+</script>
+
+<style is:global>
+    .contact-form {
+        max-width: 42rem;
+        margin: 0 auto;
+    }
+
+    .field {
+        display: block;
+        margin-top: 0.9rem;
+    }
+
+    .field-label {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 0.3rem;
+    }
+
+    .field-label .req {
+        color: var(--danger) !important;
+        font-weight: 700;
+    }
+
+    .field-label .opt {
+        color: var(--text-muted) !important;
+        font-weight: 400 !important;
+    }
+
+    .text-input.invalid,
+    .select-input.invalid {
+        border-color: var(--danger);
+    }
+
+    .field-row {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        gap: 0 1rem;
+    }
+
+    @media (max-width: 640px) {
+        .field-row {
+            grid-template-columns: minmax(0, 1fr);
+        }
+    }
+
+    .text-input,
+    .select-input {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 0.6rem 0.7rem;
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        background-color: var(--surface);
+        color: var(--text);
+        font-family: inherit;
+        font-size: 1rem;
+    }
+
+    .text-input:focus,
+    .select-input:focus {
+        outline: none;
+        border-color: var(--accent);
+        box-shadow: 0 0 0 2px var(--accent-faint);
+    }
+
+    .area {
+        resize: vertical;
+        min-height: 8rem;
+    }
+
+    .contact-form .cf-turnstile {
+        margin-top: 1rem;
+    }
+
+    .contact-actions {
+        margin: 1rem 0 0;
+    }
+
+    .contact-done {
+        max-width: 42rem;
+        margin: 1.5rem auto 0;
+        padding: 1.2rem 1.4rem;
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        background-color: var(--surface);
+    }
+
+    .contact-done h2 {
+        margin: 0 0 0.5rem;
+        font-size: 1.2rem;
+    }
+
+    .contact-done p {
+        margin: 0;
+        color: var(--text-muted);
+    }
+</style>
