@@ -1,0 +1,6 @@
+Contact: mailto:support@osprey.ac
+Contact: https://osprey.ac/contact/
+Expires: 2027-08-23T00:00:00.000Z
+Preferred-Languages: en
+Canonical: https://osprey.ac/.well-known/security.txt
+Policy: https://github.com/OspreyProject/Osprey/security/policy
