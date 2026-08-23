@@ -87,56 +87,6 @@ const localData = [
             <li><strong>Local threat intelligence lists</strong> are checked on the proxy server with no external calls</li>
         </ul>
 
-        <h2>The website and safety checker page</h2>
-        <p>
-            The website does not require an account and does not use advertising or cross-site tracking cookies.
-        </p>
-        <p>
-            The website safety checker page lets you submit a single link to be scanned on demand. The link is sent to
-            the proxy server and checked with the same providers and protections described above. It is not used to
-            build a profile of you and is not sold to any third party.
-        </p>
-
-        <h2>Contact form</h2>
-        <p>
-            When you submit a contact form on the website, we process your name, email, company (if provided), and message to respond to your inquiry. This data is retained only as long as needed to provide you an answer. We do not use contact form submissions for marketing or any purpose beyond addressing your question.
-        </p>
-        <p>
-            The proxy server keeps a durable record of the aggregate result for each scanned link, with the query
-            string and fragment removed. This record is about the link, not about you: it holds no IP address or
-            other identifier.
-        </p>
-        <p>
-            When a scanned link is reported as phishing or malicious by one authoritative vendor or by two or more
-            vendors of any kind, we may publish a public warning page for the link's registrable domain (for
-            example <code>osprey.ac/check/example.com/</code>). Paths, query strings, and subdomains are discarded, so a
-            published page never identifies a specific page, account, or resource, and a page is never published for a
-            shared hosting platform on the basis of one of its tenant sites. Clean results and lower-confidence
-            signals are never published. Published pages are listed in the website's sitemap and announced to search
-            engines, and a page is removed when the underlying record no longer meets the publishing threshold.
-        </p>
-
-        <h2>Bot protection (Cloudflare Turnstile)</h2>
-        <p>
-            The website safety checker and contact pages use Cloudflare Turnstile to prevent automated abuse. Cloudflare
-            processes certain browser and device information when the page loads and when you submit a link or message, as described in
-            the <a href="https://www.cloudflare.com/en-gb/turnstile-privacy-policy/" class="contact-link">Cloudflare
-            Turnstile Privacy Addendum</a>.
-        </p>
-
-        <h2>Your IP address</h2>
-        <p>
-            The proxy server uses your IP address solely for abuse protections such as rate limiting. It is hashed and
-            held in memory, and raw IP addresses are not written to disk in normal operation.
-        </p>
-
-        <h2>Third-party integrations</h2>
-        <p>
-            If you configure a provider with your own API key (for example, MetaDefender), that provider receives
-            requests directly from your device, the protections above do not apply, and the provider's own privacy
-            practices govern.
-        </p>
-
         <h2>Browser permissions</h2>
         <p>The extension requires the following permissions, used strictly for its security features:</p>
 
@@ -169,6 +119,58 @@ const localData = [
         <p>
             Local data is cleared when you uninstall the extension. None of it is sent to the proxy server or any
             third party.
+        </p>
+
+        <h2>Third-party integrations</h2>
+        <p>
+            If you configure a provider with your own API key (for example, MetaDefender), that provider receives
+            requests directly from your device, the protections above do not apply, and the provider's own privacy
+            practices govern.
+        </p>
+
+        <h2>The website and safety checker page</h2>
+        <p>
+            The website does not require an account and does not use advertising or cross-site tracking cookies.
+        </p>
+        <p>
+            The website safety checker page lets you submit a single link to be scanned on demand. The link is sent to
+            the proxy server and checked with the same providers and protections described above. It is not used to
+            build a profile of you and is not sold to any third party.
+        </p>
+
+        <h2>Scan records and published warning pages</h2>
+        <p>
+            The proxy server keeps a durable record of the aggregate result for each scanned link, with the query
+            string and fragment removed. This record is about the link, not about you: it holds no IP address or
+            other identifier.
+        </p>
+        <p>
+            When a scanned link is reported as phishing or malicious by one authoritative vendor or by two or more
+            vendors of any kind, we may publish a public warning page for the link's registrable domain (for
+            example <code>osprey.ac/check/example.com/</code>). Paths, query strings, and subdomains are discarded, so a
+            published page never identifies a specific page, account, or resource, and a page is never published for a
+            shared hosting platform on the basis of one of its tenant sites. Clean results and lower-confidence
+            signals are never published. Published pages are listed in the website's sitemap and announced to search
+            engines, and a page is removed when the underlying record no longer meets the publishing threshold.
+        </p>
+
+        <h2>Contact form</h2>
+        <p>
+            When you submit a contact form on the website, we process your name, email, company (if provided), and message to respond to your inquiry. This data is retained only as long as needed to provide you an answer. We do not use contact form submissions for marketing or any purpose beyond addressing your question.
+        </p>
+
+        <h2>Bot protection (Cloudflare Turnstile)</h2>
+        <p>
+            The website safety checker and contact pages use Cloudflare Turnstile to prevent automated abuse. Cloudflare
+            processes certain browser and device information when the page loads and when you submit a link or message, as described in
+            the <a href="https://www.cloudflare.com/en-gb/turnstile-privacy-policy/" class="contact-link">Cloudflare
+            Turnstile Privacy Addendum</a>.
+        </p>
+
+        <h2>Your IP address</h2>
+        <p>
+            The proxy server uses your IP address solely for abuse protections such as rate limiting. It is hashed and
+            held in memory, and raw IP addresses are not written to disk in normal operation.
         </p>
 
         <h2>Operational and false-positive monitoring</h2>
