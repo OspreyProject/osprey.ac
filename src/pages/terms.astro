@@ -11,8 +11,9 @@ const acceptableUse = [
     'bypass security controls or rate limits;',
     'send abusive, excessive, or malformed automated traffic;',
     'submit links to the URL check page in an automated, bulk, or abusive manner, or to harass, defame, or harm others;',
-    'use the hosted Service or its APIs to operate, resell, or support a commercial product or service without prior written permission; or',
-    'use the Service to support harmful, fraudulent, or abusive activity.',
+    'use the hosted Service or its APIs to operate, resell, or support a commercial product or service without prior written permission;',
+    'use the Service to support harmful, fraudulent, or abusive activity; or',
+    'extract, aggregate, compile, republish, or redistribute detection results, threat verdicts, or other output derived from the third-party threat intelligence sources described in Section 8a, whether manually or through automated means, without prior written permission from Osprey Project LLC.',
 ];
 ---
 
@@ -84,6 +85,12 @@ const acceptableUse = [
             users, researchers, and organizations using them for their own internal purposes. See Section 7 for
             restrictions on commercial use.
         </p>
+        <p>
+            Managed service providers and their clients who access the Service through the Osprey management console
+            under a separate agreement with Osprey Project LLC are authorized to use the Service in the course of
+            that managed relationship. This authorization does not extend beyond the scope of that agreement or
+            override the restrictions in Section 8a.
+        </p>
 
         <h2>6. No guarantee of detection</h2>
         <p>
@@ -108,6 +115,32 @@ const acceptableUse = [
             The Service relies on third-party threat intelligence, DNS filtering, hosting, security, and
             infrastructure providers, including Cloudflare Turnstile on the website safety checker page. We are not
             responsible for outages, errors, policy changes, or inaccuracies caused by third-party services.
+        </p>
+
+        <h2>8a. Third-party threat intelligence data</h2>
+        <p>
+            The Service checks URLs against threat intelligence providers, DNS filtering services, and curated threat
+            feeds operated by third parties ("Threat Intelligence Sources"). The detection results, threat verdicts,
+            provider identities, and other output you receive through the Service remain the intellectual property of
+            their respective providers and are made available to you solely for your own security purposes, or
+            for the security purposes of clients you manage through the Osprey management console, through the
+            Service.
+        </p>
+        <p>
+            You may not extract, aggregate, compile, scrape, republish, redistribute, sell, sublicense, or make
+            available to any third party the detection data or output derived from any Threat Intelligence Source,
+            whether in whole or in part, whether manually or through automated means, without prior written permission
+            from Osprey Project LLC. This includes building or contributing to blocklists, threat feeds, datasets,
+            reports, or publications based on data obtained through the Service.
+        </p>
+        <p>
+            This restriction applies regardless of the format or medium and regardless of whether the data is combined
+            with data from other sources. It does not prevent you from acting on detection results for your own
+            protection or for the protection of clients you manage through the Osprey management console, from
+            sharing a specific result with your own security team in the ordinary course of responding to a threat,
+            or from including detection summaries in reports prepared for a managed client as part of that managed
+            relationship, provided that such reports are not published or made available beyond the intended
+            recipient.
         </p>
 
         <h2>9. Privacy</h2>
