@@ -1,0 +1,166 @@
+---
+// Copyright (C) 2026 Osprey Project LLC (https://osprey.ac) All rights reserved.
+// This software is not licensed for redistribution or self-hosting.
+
+import Base from '../layouts/Base.astro';
+const effective = '24 August 2026';
+---
+
+<Base
+        title="Management Console Agreement - Osprey: Browser Protection"
+        description="The agreement governing managed service provider use of the Osprey management console."
+>
+    <article class="legal">
+        <h1>Management Console Agreement</h1>
+        <p class="meta">Effective date: {effective}</p>
+        <hr/>
+
+        <p>
+            This Management Console Agreement ("Agreement") is between Osprey Project LLC, a California limited
+            liability company ("Osprey Project LLC", "we", "us", or "our"), and the entity on whose behalf an account
+            is created ("Provider", "you", or "your"). By creating an account, clicking to accept, or using the Osprey
+            management console at <a href="https://console.osprey.ac" class="contact-link">console.osprey.ac</a> (the
+            "Console"), you accept this Agreement. The person accepting represents that they have authority to bind the
+            Provider. This is the separate agreement referenced in Sections 5 and 9 of
+            the <a href="/terms/" class="contact-link">Terms of Service</a> ("Public Terms").
+        </p>
+
+        <h2>1. Definitions</h2>
+        <p>
+            "Managed Client" means an organization the Provider manages through the Console. "End User" means a person
+            using the Osprey extension on a device enrolled under a Managed Client. "Active Device" means an enrolled
+            device that is not archived, as shown on the Console's usage page. "Threat Intelligence Sources" has the
+            meaning given in Section 9 of the Public Terms. Capitalized terms used but not defined in this
+            Agreement have the meanings given in the Public Terms.
+        </p>
+
+        <h2>2. Access and license</h2>
+        <p>
+            We grant the Provider a non-exclusive, non-transferable right to access and use the Console during the term
+            of this Agreement to deploy, configure, and manage the Osprey extension for Managed Clients. The Console is
+            closed-source and is not licensed for self-hosting or redistribution. The Provider may not reverse engineer
+            the Console except where law permits notwithstanding this limit, sublicense or resell Console access outside
+            the managed relationship, or use the Console to build a competing product.
+        </p>
+
+        <h2>3. Relationship to the Public Terms</h2>
+        <p>
+            The Public Terms govern use of the Service, including the hosted proxy, by the Provider, Managed Clients,
+            and End Users. This Agreement governs the Console. If this Agreement conflicts with the Public Terms
+            regarding the Console, this Agreement controls.
+        </p>
+
+        <h2>4. Provider responsibilities</h2>
+        <p>
+            The Provider is responsible for its team members' accounts and credentials, for the accuracy of enrollment
+            and configuration, and for the acts and omissions of its Managed Clients and End Users as if they were the
+            Provider's own. The Provider will bind each Managed Client, and will require each Managed Client to bind
+            its End Users, to terms no less protective of Osprey Project LLC than the Public Terms, including the
+            restrictions in Section 9 of the Public Terms, the acceptable use rules, the disclaimers, and the absence
+            of any direct claim against Osprey Project LLC. The Provider will take commercially reasonable steps to
+            ensure Managed Client and End User compliance and will assist us in enforcing these terms on reasonable
+            request. Pricing between the Provider and its Managed Clients is the Provider's own business.
+        </p>
+
+        <h2>5. Fees and billing</h2>
+        <p>
+            Fees accrue on Active Devices during each billing period at the rates presented at signup or in the
+            Console, are billed monthly through Stripe, and are exclusive of taxes, which the Provider is responsible
+            for. Archived devices are excluded from the billable count. We may change rates with at least 30 days'
+            notice, effective at the next billing period. If payment fails, we may suspend Console access after notice
+            until payment is made. Billing disputes must be raised within 60 days of the charge. Fees are
+            non-refundable except where required by law.
+        </p>
+
+        <h2>6. Threat intelligence licensing</h2>
+        <p>
+            Section 9 of the Public Terms is incorporated into this Agreement. Some Threat Intelligence Sources are
+            licensed for non-commercial use only and are disabled for managed deployments through the configuration
+            the Console delivers. The Provider may not circumvent these restrictions and will not permit Managed
+            Clients or End Users to do so; circumvention is grounds for immediate termination. Threat Intelligence
+            Sources may be added, removed, or restricted at any time as upstream licensing requires, without credit
+            or refund. The Provider acknowledges that the Console records compliance-relevant events, including
+            events indicating use of a restricted Source.
+        </p>
+
+        <h2>7. Branding</h2>
+        <p>
+            The Provider may brand client-facing output using the Console's branding features and may not otherwise
+            misrepresent the origin of the Service. The Provider grants us a license to host and display its brand
+            assets within its tenant for that purpose and warrants that it holds the rights to those assets. Use of
+            the Osprey name and branding is governed by Section 11 of the Public Terms.
+        </p>
+
+        <h2>8. Data</h2>
+        <p>
+            As between the parties, the Provider owns the data in its tenant, including enrollment, configuration,
+            event, and device data. We process that data to provide, operate, secure, and improve the Console and
+            the Service as described in the <a href="/privacy/" class="contact-link">Privacy Policy</a>. The Provider
+            is responsible for the lawful basis, notices, and consents needed to submit Managed Client and End User
+            data, including device tags and user email addresses. For 30 days after termination, the Provider may
+            export its tenant data from the Console; we then delete it in the ordinary course, subject to backup
+            cycles and legal obligations.
+        </p>
+
+        <h2>9. Service level</h2>
+        <p>
+            The Console and the Service are provided on a best-effort basis with no service level commitment. We may
+            perform maintenance, and features may change over time. Preview and beta features are provided as is and
+            may be modified or withdrawn at any time.
+        </p>
+
+        <h2>10. Term, suspension, and termination</h2>
+        <p>
+            This Agreement runs month to month and renews with each billing period. Either party may terminate at any
+            time; accrued fees remain due. We may suspend or terminate immediately for breach of this Agreement or
+            the Public Terms, circumvention under Section 6, non-payment, a security risk, or where required by law
+            or by a Threat Intelligence Source's licensing. On termination, Console access ends and configuration
+            documents stop being served to enrolled devices. Sections 4, 6, 8, and 11 through 14 survive termination.
+        </p>
+
+        <h2>11. Disclaimers</h2>
+        <p>
+            Each party represents that it has the authority to enter this Agreement. The disclaimers in Section 14 of
+            the Public Terms apply to the Console and this Agreement. The Console and the Service are provided as is
+            and as available.
+        </p>
+
+        <h2>12. Indemnification</h2>
+        <p>
+            The Provider will defend, indemnify, and hold harmless Osprey Project LLC and its members, managers,
+            contributors, maintainers, operators, licensors, and service providers from any claim, liability, damage,
+            loss, or expense, including reasonable attorneys' fees, arising out of the Provider's use of the Console,
+            claims by Managed Clients or End Users, data the Provider submits, the Provider's breach of this Agreement,
+            or circumvention under Section 6.
+        </p>
+
+        <h2>13. Limitation of liability</h2>
+        <p class="legal-caps">
+            TO THE MAXIMUM EXTENT PERMITTED BY LAW, NEITHER PARTY WILL BE LIABLE FOR ANY INDIRECT, INCIDENTAL,
+            SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES ARISING OUT OF OR RELATED TO THIS AGREEMENT OR THE CONSOLE.
+        </p>
+        <p class="legal-caps">
+            TO THE MAXIMUM EXTENT PERMITTED BY LAW, THE TOTAL AGGREGATE LIABILITY OF OSPREY PROJECT LLC ARISING OUT
+            OF OR RELATED TO THIS AGREEMENT OR THE CONSOLE WILL NOT EXCEED THE FEES PAID BY THE PROVIDER IN THE 12
+            MONTHS PRECEDING THE EVENT GIVING RISE TO THE CLAIM. THIS CAP DOES NOT APPLY TO THE PROVIDER'S PAYMENT
+            OBLIGATIONS, THE PROVIDER'S INDEMNIFICATION OBLIGATIONS, OR THE PROVIDER'S BREACH OF SECTION 6.
+        </p>
+
+        <h2>14. General</h2>
+        <p>
+            This Agreement is governed by the laws of the State of California, without regard to its conflict of laws
+            rules, and the state and federal courts located in San Diego County, California have exclusive
+            jurisdiction over disputes arising out of or related to it, except to the extent applicable law requires
+            otherwise. Notices to the Provider may be sent to the account email; notices to us go
+            to <a href="mailto:support@osprey.ac">support@osprey.ac</a>. We may update this Agreement with at least 30
+            days' notice, and continued use of the Console after the effective date of an update means the Provider
+            accepts it. The Provider may not assign this Agreement without our prior written consent; we may assign
+            it in connection with a reorganization or transfer of the Service. The parties are independent
+            contractors. Managed Clients and End Users are not third-party beneficiaries of this Agreement and have
+            no claim against Osprey Project LLC under it. This Agreement, the Public Terms, and the Privacy Policy
+            are the entire agreement regarding the Console. If any provision is found unenforceable, it will be
+            limited or eliminated to the minimum extent necessary and the remaining provisions will remain in full
+            force. Failure to enforce a provision is not a waiver of it.
+        </p>
+    </article>
+</Base>
