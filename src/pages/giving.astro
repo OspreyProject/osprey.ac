@@ -58,7 +58,8 @@ const schema = {
                     widths={[480, 800, 1200]}
                     sizes="(max-width: 48rem) 100vw, 42rem"
                     format="avif"
-                    loading="lazy"
+                    loading="eager"
+                    fetchpriority="high"
                     decoding="async"
             />
             <figcaption>Photo courtesy of the Sanibel-Captiva Conservation Foundation's website.</figcaption>
