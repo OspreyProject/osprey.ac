@@ -1296,6 +1296,54 @@ html[data-browser="edge"] .download-card[data-browser="edge"] .download-badge {
 }
 
 /* --------------------------------------------------
+   Giving pledge counter
+-------------------------------------------------- */
+.giving-counter {
+    margin: 2rem 0 2.5rem;
+    padding: 1.5rem 1rem;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    text-align: center;
+}
+
+.giving-label {
+    margin: 0 0 0.5rem;
+    color: var(--text-muted);
+}
+
+.giving-total {
+    margin: 0;
+    font-size: 2.5rem;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+}
+
+.giving-detail {
+    margin: 0.5rem 0 0;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+.giving-figure {
+    margin: 0 0 2rem;
+}
+
+.giving-figure img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 12px;
+}
+
+.giving-figure figcaption {
+    margin-top: 0.5rem;
+    font-size: 0.85rem;
+    font-style: italic;
+    text-align: center;
+    color: var(--text-muted);
+}
+
+/* --------------------------------------------------
    Check page
 -------------------------------------------------- */
 .check-head {

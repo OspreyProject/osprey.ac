@@ -1,0 +1,210 @@
+---
+// Copyright (C) 2026 Osprey Project LLC (https://osprey.ac) All rights reserved.
+// This software is not licensed for redistribution or self-hosting.
+
+import Base from '../layouts/Base.astro';
+import {Image} from 'astro:assets';
+import fledgling from '../assets/osprey-fledgling.png';
+
+const effective = '1 October 2026';
+const title = 'Giving Pledge - Osprey: Browser Protection';
+const description =
+    'Osprey Project LLC gives 10% of its net revenue to the Sanibel-Captiva Conservation Foundation to protect ospreys and their habitat. See the lifetime total donated.';
+
+const schema = {
+    '@context': 'https://schema.org',
+    '@graph': [
+        {
+            '@type': 'WebPage',
+            '@id': 'https://osprey.ac/giving/#page',
+            url: 'https://osprey.ac/giving/',
+            name: 'Giving Pledge',
+            isPartOf: {'@id': 'https://osprey.ac/#website'},
+            about: {'@id': 'https://osprey.ac/giving/#charity'},
+        },
+        {
+            '@type': 'NGO',
+            '@id': 'https://osprey.ac/giving/#charity',
+            name: 'Sanibel-Captiva Conservation Foundation',
+            alternateName: 'SCCF',
+            url: 'https://sccf.org/',
+            taxID: '59-1205087',
+            nonprofitStatus: 'Nonprofit501c3',
+            foundingDate: '1967',
+            address: {
+                '@type': 'PostalAddress',
+                postOfficeBoxNumber: 'PO Box 839',
+                addressLocality: 'Sanibel',
+                addressRegion: 'FL',
+                postalCode: '33957',
+                addressCountry: 'US',
+            },
+        },
+    ],
+};
+---
+
+<Base title={title} description={description} schema={schema}>
+    <article class="legal">
+        <h1>Our Giving Pledge</h1>
+        <p class="meta">Effective Date: {effective}</p>
+
+        <hr/>
+
+        <figure class="giving-figure">
+            <Image
+                    src={fledgling}
+                    alt="Two ospreys, an adult and a fledgling, standing in a stick nest on a wooden nesting platform against a blue sky"
+                    widths={[480, 800, 1200]}
+                    sizes="(max-width: 48rem) 100vw, 42rem"
+                    format="avif"
+                    loading="lazy"
+                    decoding="async"
+            />
+            <figcaption>Photo courtesy of the Sanibel-Captiva Conservation Foundation's website.</figcaption>
+        </figure>
+
+        <p>
+            If you didn't know, our company, products, and services are named after the osprey bird. The osprey nearly
+            vanished from North America in the middle of the last century. The DDT insecticide washed off farmland,
+            concentrated in fish, and thinned the shells of the eggs that ate them. The species came back because people
+            counted nests, built platforms, banned the pesticide, and kept watching. We think a company that borrows the
+            bird's name owes it something.
+        </p>
+
+        <h2>The commitment</h2>
+        <p>
+            Osprey Project LLC gives <strong>10% of its net revenue</strong>, from every product and every customer, to
+            the <a href="https://sccf.org/" class="contact-link">Sanibel-Captiva Conservation Foundation</a> (SCCF), a
+            501(c)(3) public charity in Sanibel, Florida (EIN 59-1205087). Net revenue means what the company actually
+            receives after payment processing fees, refunds, and disputes, before any other expense. It is not a
+            promotion, a campaign, or a percentage of profit, and it applies whether or not the company is profitable.
+            The pledge lasts for as long as Osprey Project LLC operates under its present ownership. If SCCF should ever
+            cease to exist, the pledge passes to whichever charity carries on its osprey conservation work.
+        </p>
+        <p>
+            The pledge is recorded in a
+            signed <a href="/giving/osprey-charitable-commitment.pdf" class="contact-link">Declaration of Charitable
+            Commitment</a>. It ends if the company is sold or its ownership changes, but every dollar accrued up to that
+            day is still paid.
+        </p>
+
+        <section class="giving-counter" aria-live="polite">
+            <p class="giving-label">Total amount donated (so far)</p>
+            <p id="giving-total" class="giving-total">$0.00</p>
+            <p id="giving-detail" class="giving-detail">Loading the latest figure.</p>
+        </section>
+
+        <h2>Why SCCF</h2>
+        <p>
+            SCCF carries forward the work of <strong>The International Osprey Foundation</strong> (TIOF), which was
+            founded on Sanibel Island in 1981 to protect and preserve ospreys worldwide. For more than forty years TIOF
+            volunteers built and maintained nest platforms, monitored nests through every breeding season, assisted with
+            emergency responses for injured birds, and developed educational material about the species. On 1 January
+            2026, TIOF formally transferred its mission, programs, and volunteer network to SCCF, and TIOF's osprey
+            monitoring now runs inside SCCF's research department.
+        </p>
+        <p>
+            SCCF itself was founded in 1967 as a land trust and is the largest private landowner on Sanibel Island,
+            managing more than 1,800 acres of preserved habitat on the islands and several hundred more across Southwest
+            Florida. Its programs cover water quality research through its Marine Laboratory, sea turtle and shorebird
+            monitoring, native landscaping, habitat and wildlife management, environmental policy, and education through
+            the Sanibel Sea School. It publishes its Form 990 and is listed with Charity Navigator, GuideStar, and the
+            IRS Tax Exempt Organization Search under EIN 59-1205087.
+        </p>
+
+        <h2>How it works</h2>
+        <p>
+            Revenue is measured automatically from the company's payment records, and the pledge is set aside from it
+            as it comes in. Donations are made to SCCF on a rolling basis once a modest amount has accrued, and at
+            least once a year regardless, so the pledge never sits idle. Each donation is recorded against the revenue
+            it covers, and those records are retained.
+        </p>
+        <p>
+            The figure at the top of this page is the lifetime total that has actually been donated, not the amount
+            pledged. It is updated after each donation is made.
+        </p>
+
+        <h2>What is counted</h2>
+        <p>
+            All revenue from Osprey products and services from every customer. Refunds and disputes are deducted, as are
+            the fees charged by the payment processor, since the company never receives that money. Nothing else is
+            deducted. Voluntary tips to the open-source project through Ko-fi are not company revenue and are not
+            counted.
+        </p>
+
+        <h2>Contact</h2>
+        <p>
+            For questions about this pledge, contact <a href="mailto:support@osprey.ac">support@osprey.ac</a> or write
+            to:
+        </p>
+        <address>
+            Osprey Project LLC<br/>
+            4225 Executive Square, Suite 600, PMB 6007<br/>
+            La Jolla, CA 92037<br/>
+            United States
+        </address>
+    </article>
+
+    <script is:inline>
+        (function () {
+            const endpoint = 'https://console.osprey.ac/giving';
+            const total = document.getElementById('giving-total');
+            const detail = document.getElementById('giving-detail');
+
+            if (!total || !detail || !window.fetch) {
+                return;
+            }
+
+            const money = new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD'
+            });
+
+            function dayName(period) {
+                const parts = String(period || '').split('-');
+
+                if (parts.length !== 3) {
+                    return '';
+                }
+
+                const date = new Date(Date.UTC(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2])));
+
+                return date.toLocaleDateString('en-US', {
+                    month: 'long',
+                    day: 'numeric',
+                    year: 'numeric',
+                    timeZone: 'UTC'
+                });
+            }
+
+            fetch(endpoint, {
+                method: 'GET',
+                mode: 'cors',
+                credentials: 'omit'
+            })
+                .then(function (response) {
+                    if (!response.ok) {
+                        throw new Error('bad status');
+                    }
+                    return response.json();
+                })
+                .then(function (data) {
+                    const donated = Number(data.lifetime_donated_cents || 0) / 100;
+                    const grants = Number(data.grant_count || 0);
+                    total.textContent = money.format(donated);
+
+                    if (grants === 0) {
+                        detail.textContent = 'The first donation is made once the pledge begins accruing.';
+                        return;
+                    }
+
+                    detail.textContent = grants + (grants === 1 ? ' donation' : ' donations') + ' to date, the'
+                        + ' latest covering revenue through ' + dayName(data.last_period) + '.';
+                })
+                .catch(function () {
+                    detail.textContent = 'The live figure could not be loaded right now.';
+                });
+        })();
+    </script>
+</Base>
