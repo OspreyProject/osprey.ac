@@ -61,7 +61,6 @@
     "https://osprey.ac/check/veepee-fr.com": "sha256:616be7eb172e313728f7325ca2f32ecb62c0bb39f09a1f8003f9b594cacf5333",
     "https://osprey.ac/check/weball.cn": "sha256:8046e146ebb092571df3121758cbd9853dbd281c0d87d109cbf88cb7c7749fef",
     "https://osprey.ac/check/yaoohooen.com": "sha256:3f9d90ce2b8d837d3824badd9eb2dbeeb421bf884bb3913dcd7c55e9c57c290b",
-    "https://osprey.ac/config-generator": "sha256:0922a5625f1b332fa5533635bbbeff04ff55f91fc739d3d14ec7f574d04a1e49",
     "https://osprey.ac/console-agreement": "sha256:b3cf28dbfaea9ea8436d0943f381992b386f8fdcb2192eb25b3cc62a740cf683",
     "https://osprey.ac/contact": "sha256:7cdcdaad29f4027d6d4d1f717887ef839a165a5f2d1f903d68ad87865f160dd8",
     "https://osprey.ac/deployment": "sha256:928b397157cf2d803526cf0ebaf9bda89d7087ae3ddab861450421fe01eadce7",
@@ -70,7 +69,6 @@
     "https://osprey.ac/": "sha256:5e7e24c1f9c102bf076e9b7fcd4f88e2c8ef21f304b16a8171f77b05dc7fff19",
     "https://osprey.ac/pricing": "sha256:b47e799d63304fb4a5a22c9df2003026cdf62cf482f063872505104d9ccdd246",
     "https://osprey.ac/privacy": "sha256:fa433c60d72f2a45f7e30845033a0376000c47925b37eede1fe68ebd9885ae65",
-    "https://osprey.ac/reporting-check": "sha256:e851cba299acc8864d28a7004637b0ceecc48f8df878dac466e70a8d1fd60f22",
     "https://osprey.ac/terms": "sha256:558ddd55cc69dac6b79fd38ff29b0a67b376ef90da59336d802d2ac45c47848f"
   }
 }

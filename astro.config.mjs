@@ -8,7 +8,7 @@ const primaryPages = ['/download/', '/check/', '/pricing/'];
 // Funnel and brand pages: worth ranking, below the primary landings. The deployment and
 // config generator pages target the console's buying audience, and the giving page's
 // lifetime total changes as donations accrue.
-const secondaryPages = ['/deployment/', '/config-generator/', '/giving/'];
+const secondaryPages = ['/deployment/', '/giving/'];
 
 export default defineConfig({
     // Custom domain on GitHub Pages, so no `base` is needed.

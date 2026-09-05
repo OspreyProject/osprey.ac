@@ -4,9 +4,9 @@
 
 import Base from '../layouts/Base.astro';
 
-const title = 'MSP Deployment - Osprey: Browser Protection';
+const title = 'Deployment - Osprey: Browser Protection';
 const description =
-    'Ready-to-push Osprey deployment templates for Group Policy (ADMX), Intune, macOS, Linux, and Firefox. Configure every managed policy across Chrome, Edge, and Firefox without editing raw registry keys.';
+    'Deploy Osprey across an organization. The Osprey Management Console manages policies, dashboards, and reports for whole fleets; force-install templates cover Group Policy, Intune, macOS, Linux, and Firefox.';
 
 const bundleZip = '/osprey-deployment-templates.zip';
 
@@ -107,39 +107,28 @@ const chromiumParity = [
 
 const docs = [
     {label: 'Full deployment guide', href: '/deployment/README.md'},
-    {label: 'Policy reference (all 40 keys)', href: '/deployment/policy-reference.md'},
-    {label: 'Recommended hardened baseline', href: '/deployment/hardened-baseline.md'},
     {label: 'Removal protection note', href: '/deployment/tamper-protection.md'},
 ];
 ---
 
 <Base title={title} description={description}>
     <section class="hero">
-        <h1>MSP Deployment</h1>
+        <h1>Deployment</h1>
         <p class="hero-sub">
-            Configure every managed policy on Chrome, Edge, and Firefox from your own tooling, without editing raw
-            registry keys by hand. These templates cover Group Policy, Intune, macOS, Linux, and Firefox.
+            Force-install Osprey on managed browsers with the templates below, covering Group Policy, Intune, macOS,
+            Linux, and Firefox.
         </p>
-        <div class="note console-cta">
-            Managing multiple clients?
-            The <a href="https://console.osprey.ac" class="contact-link">Osprey Management Console</a> fills
-            these templates' values in per client, hosts the config and reporting endpoints, and updates every
-            enrolled device without re-pushing files.
+        <div class="note pricing-free-note">
+            <p>
+                <strong>Managing an organization? Use
+                    the <a href="https://console.osprey.ac" class="contact-link">Osprey Management Console</a> instead.</strong><br>
+                Enroll devices with a script, push policies to every browser from one place, and get dashboards, alerts,
+                and white-labeled reports across every client. The templates below then only need to force-install the
+                extension; the console handles everything else.
+            </p>
+            <br>
+            <a class="btn" href="/pricing/">See plans and pricing</a>
         </div>
-        <br>
-        <p class="deploy-cta-note">
-            Prefer to pick settings and get the exact files? Use
-            the <a class="contact-link" href="/config-generator/">configuration generator</a>.
-            <br>
-            <br>
-            Running your own receiver instead of the management console? Verify it live with
-            the <a class="contact-link" href="/reporting-check/">reporting setup checker</a>.
-            <br>
-            Console customers skip it; enrolled devices simply appear in the console.
-        </p>
-        <p class="deploy-cta">
-            <a class="install-btn" href={bundleZip} download>Download all templates</a>
-        </p>
     </section>
 
     <section class="band">
@@ -164,6 +153,10 @@ const docs = [
                 ))
             }
         </ul>
+        <br>
+        <p class="deploy-cta">
+            <a class="install-btn" href={bundleZip} download>Download all templates</a>
+        </p>
     </section>
 
     <section class="band">
@@ -243,7 +236,6 @@ const docs = [
         </div>
     </section>
 
-    <!-- TODO: Make the entries vertical, not horizontal -->
     <section class="band">
         <h2 class="band-title">Documentation</h2>
         <p class="files docs-files">

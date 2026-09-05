@@ -5,9 +5,10 @@ managed fleet. It covers every managed policy the extension reads, on every supp
 an administrator can deploy without hand-writing raw registry keys.
 
 Every template embeds the same hardened example configuration. Values such as
-`example.example` domains and `REPLACE-WITH-...` tokens are placeholders you edit before pushing. See
-`policy-reference.md` for the full list of keys and
-`hardened-baseline.md` for what the example enforces and why.
+`example.example` domains and `REPLACE-WITH-...` tokens are placeholders you edit before pushing. For managing what
+Osprey does across a fleet, use the [Osprey Management Console](https://console.osprey.ac): the templates then only need
+to force-install the extension, and the console handles policies, dashboards, alerts, and reports per client. Plans are
+at <https://osprey.ac/pricing/>.
 
 ## Extension IDs
 
@@ -31,8 +32,6 @@ The extension has a different id in each store. Use the right one for each brows
 | `firefox/managed-storage/osprey@foulest.net.json` | Firefox native managed-storage manifest.                                                               |
 | `firefox/policies.json`                           | Firefox enterprise policy with the `3rdparty.Extensions` block and force-install.                      |
 | `windows/*.reg`                                   | Registry import files for Chrome, Edge, and the Firefox managed-storage pointer.                       |
-| `policy-reference.md`                             | Every policy key: type, default, constraints, description.                                             |
-| `hardened-baseline.md`                            | The recommended starting configuration.                                                                |
 | `tamper-protection.md`                            | Why removal protection is a browser policy, not an Osprey policy.                                      |
 
 ## Where each browser reads managed settings
