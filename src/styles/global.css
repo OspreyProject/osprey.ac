@@ -343,6 +343,24 @@ html[data-theme="light"] .theme-toggle .icon-sun {
     height: 20px;
 }
 
+.note.pricing-free-note {
+    max-width: 44rem;
+    margin: 1.5rem auto 0;
+    text-align: center;
+    border-left: none;
+    border-radius: var(--radius);
+}
+
+.note.pricing-free-note p {
+    margin: 0 0 0.85rem;
+}
+
+.note.pricing-free-note .btn {
+    display: block;
+    width: fit-content;
+    margin: 0 auto 0.5rem;
+}
+
 .note.console-cta {
     max-width: 44rem;
     margin: 1.5rem auto 0;
@@ -412,7 +430,7 @@ html[data-theme="light"] .theme-toggle .icon-sun {
 .btn {
     display: inline-block;
     background-color: var(--accent);
-    color: #ffffff;
+    color: #282828;
     border: none;
     border-radius: 5px;
     padding: 0.65rem 1.5rem;
@@ -420,7 +438,6 @@ html[data-theme="light"] .theme-toggle .icon-sun {
     font-size: 1rem;
     font-weight: 600;
     cursor: pointer;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
     box-shadow: var(--shadow);
 }
 

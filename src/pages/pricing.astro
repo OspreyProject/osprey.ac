@@ -1,0 +1,386 @@
+---
+// Copyright (C) 2026 Osprey Project LLC (https://osprey.ac) All rights reserved.
+// This software is not licensed for redistribution or self-hosting.
+
+import Base from '../layouts/Base.astro';
+
+const title = 'Pricing - Osprey: Browser Protection';
+const description =
+    'Osprey is free for everyone. The Osprey Management Console has Starter, Professional, and Enterprise plans with per-seat pricing that scales with your fleet size.';
+
+const schema = {
+    '@context': 'https://schema.org',
+    '@graph': [
+        {
+            '@type': 'WebPage',
+            '@id': 'https://osprey.ac/pricing/#page',
+            url: 'https://osprey.ac/pricing/',
+            name: 'Pricing',
+            isPartOf: {'@id': 'https://osprey.ac/#website'},
+        },
+        {
+            '@type': 'OfferCatalog',
+            '@id': 'https://osprey.ac/pricing/#plans',
+            name: 'Osprey Management Console plans',
+            itemListElement: [
+                {
+                    '@type': 'Offer',
+                    name: 'Free',
+                    price: '0',
+                    priceCurrency: 'USD',
+                    description: 'The Osprey browser extension, free forever for everyone.',
+                },
+                {
+                    '@type': 'Offer',
+                    name: 'Starter',
+                    price: '99',
+                    priceCurrency: 'USD',
+                    description: 'Management Console platform fee of $99 per 30 days plus $1.25 per seat, 100-seat minimum.',
+                },
+                {
+                    '@type': 'Offer',
+                    name: 'Professional',
+                    price: '249',
+                    priceCurrency: 'USD',
+                    description: 'Management Console platform fee of $249 per 30 days plus $1.00 per seat, 500-seat minimum.',
+                },
+                {
+                    '@type': 'Offer',
+                    name: 'Enterprise',
+                    price: '499',
+                    priceCurrency: 'USD',
+                    description: 'Management Console platform fee of $499 per 30 days plus $0.75 per seat, 2,000-seat minimum.',
+                },
+            ],
+        },
+    ],
+};
+
+const yesIcon = `<svg class="cmp-icon yes" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="Yes"><path d="M4 12.5 9 17.5 20 6.5"/></svg>`;
+
+const noIcon = `<svg class="cmp-icon no" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="No"><circle cx="12" cy="12" r="9"/><line x1="5.6" y1="5.6" x2="18.4" y2="18.4"/></svg>`;
+
+const rates = [
+    {
+        row: 'Platform fee',
+        free: '-',
+        starter: '$99 / month',
+        professional: '$249 / month',
+        enterprise: '$499 / month'
+    },
+    {
+        row: 'Per seat cost',
+        free: '-',
+        starter: '$1.25',
+        professional: '$1.00',
+        enterprise: '$0.75'
+    },
+    {
+        row: 'Minimum billed seats',
+        free: '-',
+        starter: '100',
+        professional: '500',
+        enterprise: '2,000'
+    },
+    {
+        row: 'Minimum monthly total',
+        free: '-',
+        starter: '$224',
+        professional: '$749',
+        enterprise: '$1,999'
+    },
+];
+
+const features = [
+    {
+        feature: 'Real-time phishing and malware blocking',
+        free: 'yes',
+        starter: 'yes',
+        professional: 'yes',
+        enterprise: 'yes'
+    },
+    {
+        feature: 'Works in Chrome, Firefox, and Edge',
+        free: 'yes',
+        starter: 'yes',
+        professional: 'yes',
+        enterprise: 'yes'
+    },
+    {
+        feature: 'Access to the Management Console',
+        free: 'no',
+        starter: 'yes',
+        professional: 'yes',
+        enterprise: 'yes'
+    },
+    {
+        feature: 'Central client and device management',
+        free: 'no',
+        starter: 'yes',
+        professional: 'yes',
+        enterprise: 'yes'
+    },
+    {
+        feature: 'Webhook and email alerting',
+        free: 'no',
+        starter: 'yes',
+        professional: 'yes',
+        enterprise: 'yes'
+    },
+    {
+        feature: 'Scheduled per-client reports',
+        free: 'no',
+        starter: 'yes',
+        professional: 'yes',
+        enterprise: 'yes'
+    },
+    {
+        feature: 'Weekly fleet health digests',
+        free: 'no',
+        starter: 'yes',
+        professional: 'yes',
+        enterprise: 'yes'
+    },
+    {
+        feature: 'Custom unblock request page',
+        free: 'no',
+        starter: 'yes',
+        professional: 'yes',
+        enterprise: 'yes'
+    },
+    {
+        feature: 'Managed policy deployment',
+        free: 'no',
+        starter: 'yes',
+        professional: 'yes',
+        enterprise: 'yes'
+    },
+    {
+        feature: 'Custom white-labeling support',
+        free: 'no',
+        starter: 'yes',
+        professional: 'yes',
+        enterprise: 'yes'
+    },
+    {
+        feature: 'Emergency fleet-wide block and allow',
+        free: 'no',
+        starter: 'yes',
+        professional: 'yes',
+        enterprise: 'yes'
+    },
+    {
+        feature: 'Device and event CSV exports',
+        free: 'no',
+        starter: 'yes',
+        professional: 'yes',
+        enterprise: 'yes'
+    },
+    {
+        feature: 'REST API and outbound signed webhooks',
+        free: 'no',
+        starter: 'yes',
+        professional: 'yes',
+        enterprise: 'yes'
+    },
+    {
+        feature: 'RMM deployment scripts (NinjaOne, Datto, Automate, Kaseya)',
+        free: 'no',
+        starter: 'yes',
+        professional: 'yes',
+        enterprise: 'yes'
+    },
+    {
+        feature: 'PSA ticketing (ConnectWise, Autotask, HaloPSA, generic)',
+        free: 'no',
+        starter: 'no',
+        professional: 'yes',
+        enterprise: 'yes'
+    },
+    {
+        feature: 'Baseline profiles with propagation and drift detection',
+        free: 'no',
+        starter: 'no',
+        professional: 'yes',
+        enterprise: 'yes'
+    },
+    {
+        feature: 'Extension version visibility and pinning',
+        free: 'no',
+        starter: 'no',
+        professional: 'yes',
+        enterprise: 'yes'
+    },
+    {
+        feature: 'Single sign-on (OIDC) and sign-in policy controls',
+        free: 'no',
+        starter: 'no',
+        professional: 'yes',
+        enterprise: 'yes'
+    },
+    {
+        feature: 'Technician client scoping',
+        free: 'no',
+        starter: 'no',
+        professional: 'yes',
+        enterprise: 'yes'
+    },
+    {
+        feature: 'SIEM forwarding',
+        free: 'no',
+        starter: 'no',
+        professional: 'no',
+        enterprise: 'yes'
+    },
+    {
+        feature: 'Data retention controls',
+        free: 'no',
+        starter: 'no',
+        professional: 'no',
+        enterprise: 'yes'
+    },
+    {
+        feature: 'Audit log exporting',
+        free: 'no',
+        starter: 'no',
+        professional: 'no',
+        enterprise: 'yes'
+    },
+    {
+        feature: 'SCIM user provisioning',
+        free: 'no',
+        starter: 'no',
+        professional: 'no',
+        enterprise: 'yes'
+    },
+];
+
+const cell = (value: string): string => (value === 'yes' ? yesIcon : value === 'no' ? noIcon : '');
+---
+<Base title={title} description={description} schema={schema}>
+    <section class="hero">
+        <h1>Pricing</h1>
+        <br>
+        <div class="note pricing-free-note">
+            <p>
+                <strong>Heads up: the prices on this page are for businesses and enterprise users.</strong><br>
+                Osprey is, and will always be completely free for home users. The pricing on this page is only for the
+                Management Console used by businesses, MSPs, and IT teams.
+                <br><br>If you just want to download the extension for your browser, click the button below.
+            </p>
+            <br>
+            <a class="btn" href="/download/">Download Osprey</a>
+        </div>
+    </section>
+
+    <section class="band">
+        <h2 class="band-title">What is the Management Console?</h2>
+        <div class="prose">
+            <p class="band-sub">
+                The <a class="contact-link" href="https://console.osprey.ac">Osprey Management Console</a> is how an
+                MSP or IT team runs Osprey across a whole fleet from one place. The console allows teams to enroll
+                devices with a script, push policies to every browser, and see detections, offline devices, and unblock
+                requests across every client or site they manage on one dashboard, with reports, alerts, and
+                integrations that fit into the tools you already run. Every enrolled device gets the same full
+                protection as the free extension; the console adds the management and compliance around it.
+            </p>
+        </div>
+    </section>
+
+    <section class="band">
+        <h2 class="band-title">What each plan includes</h2>
+        <div class="table-scroll" tabindex="0" role="region" aria-label="What each plan includes">
+            <table class="compare">
+                <caption class="sr-only">Feature availability across the Free, Starter, Professional, and Enterprise
+                    plans
+                </caption>
+                <thead>
+                <tr>
+                    <th scope="col"><span class="sr-only">Feature</span></th>
+                    <th scope="col">Free</th>
+                    <th scope="col">Starter</th>
+                    <th scope="col">Professional</th>
+                    <th scope="col">Enterprise</th>
+                </tr>
+                </thead>
+                <tbody>
+                {
+                    features.map((row) => (
+                            <tr>
+                                <th scope="row">{row.feature}</th>
+                                <td>
+                                    <Fragment set:html={cell(row.free)}/>
+                                </td>
+                                <td>
+                                    <Fragment set:html={cell(row.starter)}/>
+                                </td>
+                                <td>
+                                    <Fragment set:html={cell(row.professional)}/>
+                                </td>
+                                <td>
+                                    <Fragment set:html={cell(row.enterprise)}/>
+                                </td>
+                            </tr>
+                    ))
+                }
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="band">
+        <h2 class="band-title">How much they cost</h2>
+        <div class="table-scroll" tabindex="0" role="region" aria-label="Plan pricing">
+            <table class="compare">
+                <caption class="sr-only">Pricing for the Free extension and the Starter, Professional, and Enterprise
+                    Management Console plans
+                </caption>
+                <thead>
+                <tr>
+                    <th scope="col"><span class="sr-only">Item</span></th>
+                    <th scope="col">Free</th>
+                    <th scope="col">Starter</th>
+                    <th scope="col">Professional</th>
+                    <th scope="col">Enterprise</th>
+                </tr>
+                </thead>
+                <tbody>
+                {
+                    rates.map((row) => (
+                            <tr>
+                                <th scope="row">{row.row}</th>
+                                <td><span class="val">{row.free}</span></td>
+                                <td><span class="val">{row.starter}</span></td>
+                                <td><span class="val">{row.professional}</span></td>
+                                <td><span class="val">{row.enterprise}</span></td>
+                            </tr>
+                    ))
+                }
+                </tbody>
+            </table>
+        </div>
+        <br>
+        <br>
+        <div class="prose">
+            <p class="band-sub">
+                Each period bills the highest nightly count of active seats, raised to the plan's minimum when the
+                count falls below it. Seats above the minimum bill at the plan's flat per-seat rate, so the total
+                always scales with the fleet. Plans can be changed self-service in either direction and take effect
+                at the next period boundary. Osprey Project LLC gives 10% of its net revenue to
+                the <a class="contact-link" href="https://sccf.org/">Sanibel-Captiva Conservation Foundation</a> to
+                protect ospreys and their habitats. You can
+                view <a class="contact-link" href="/giving/">Our Giving Pledge</a> for more information.
+            </p>
+        </div>
+    </section>
+
+    <section class="band">
+        <h2 class="band-title">Questions, or ready to start?</h2>
+        <div class="prose">
+            <p class="band-sub">
+                <a href="/contact/" class="contact-link" aria-label="Send us a message">Send us a message</a> and
+                we'll set up a demo for your organization.
+            </p>
+        </div>
+    </section>
+</Base>
