@@ -3,7 +3,7 @@
 // This software is not licensed for redistribution or self-hosting.
 
 import Base from '../layouts/Base.astro';
-const effective = '25 August 2026';
+const effective = '5 September 2026';
 
 const permissions = [
     {
@@ -219,6 +219,31 @@ const localData = [
             flagged, it also keeps an in-memory log entry when a provider returns a malicious or phishing verdict,
             recording only the provider, the verdict, and the hostname or query-stripped URL that was checked. Safe
             results are never logged, and no entry includes your IP address or any other identifier.
+        </p>
+
+        <h2>The management console</h2>
+        <p>
+            Organizations that use the Osprey management console at console.osprey.ac under the Management Console
+            Agreement submit additional data to their own tenant, and they decide what that data contains. For those
+            tenants we process: account data for the organization's console users (name, email address, and role);
+            enrolled device data (the device tag the organization chooses, which may be an email address, along with
+            heartbeat times, extension version, and security events such as detections and bypasses); the
+            organization's configuration, policies, and branding; and an audit log of console actions. We process this
+            data to provide, operate, and secure the console and the Service for that organization, as instructed
+            through its use of the console.
+        </p>
+        <p>
+            Console subscriptions are billed through Stripe, which processes payment details under its own privacy
+            policy; we store billing status and references to Stripe records, never card numbers. When an organization
+            enables single sign-on or SCIM provisioning, we receive the name, email address, and role of its users
+            from the identity provider the organization connects. Reports, alerts, and digests are emailed to the
+            recipients the organization configures.
+        </p>
+        <p>
+            Console tenant data is retained while the organization's account is active, subject to the retention
+            settings its plan provides. After a subscription ends, tenant data remains exportable for 30 days as
+            described in the Management Console Agreement; the tenant is then closed and its data is removed from
+            active use. Organizations can contact us to request deletion.
         </p>
 
         <h2>Data retention</h2>
