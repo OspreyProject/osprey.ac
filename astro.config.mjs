@@ -3,7 +3,12 @@ import sitemap from '@astrojs/sitemap';
 import indexnow from 'astro-indexnow';
 
 // The primary landing pages we want ranked, alongside the home page.
-const primaryPages = ['/download/', '/check/'];
+const primaryPages = ['/download/', '/check/', '/pricing/'];
+
+// Funnel and brand pages: worth ranking, below the primary landings. The deployment and
+// config generator pages target the console's buying audience, and the giving page's
+// lifetime total changes as donations accrue.
+const secondaryPages = ['/deployment/', '/config-generator/', '/giving/'];
 
 export default defineConfig({
     // Custom domain on GitHub Pages, so no `base` is needed.
@@ -32,6 +37,9 @@ export default defineConfig({
                 } else if (primaryPages.some((page) => item.url === 'https://osprey.ac' + page)) {
                     item.priority = 0.9;
                     item.changefreq = 'weekly';
+                } else if (secondaryPages.some((page) => item.url === 'https://osprey.ac' + page)) {
+                    item.priority = 0.6;
+                    item.changefreq = 'monthly';
                 } else {
                     item.priority = 0.3;
                     item.changefreq = 'yearly';
