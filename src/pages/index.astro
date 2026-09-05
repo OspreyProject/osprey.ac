@@ -67,8 +67,8 @@ const features = [
     },
     {
         icon: checksIcon,
-        title: 'Up to 21 checks, not just one',
-        body: 'Your browser checks with one threat list. Osprey checks up to 21 different sources at once for every website you visit.',
+        title: 'Up to 22 checks, not just one',
+        body: 'Your browser checks with one threat list. Osprey checks up to 22 different sources at once for every website you visit.',
     },
     {
         icon: noReadIcon,
@@ -96,7 +96,7 @@ const steps = [
     {
         n: '2',
         title: 'Osprey checks the address',
-        body: 'Osprey\'s secure proxy server asks up to 21 different sources if the page is safe, and gets an answer in a fraction of a second.',
+        body: 'Osprey\'s secure proxy server asks up to 22 different sources if the page is safe, and gets an answer in a fraction of a second.',
     },
     {
         n: '3',
@@ -208,7 +208,7 @@ const faqs = [
     },
     {
         q: 'Do I need Osprey if my browser already has protection?',
-        a: 'Yes. Your browser\'s built-in protection is a good start, but it only checks against one source of threat intelligence, which misses a lot of new phishing websites. Osprey checks every website you visit against up to 21 different sources, so it can catch more threats and block them before they load.',
+        a: 'Yes. Your browser\'s built-in protection is a good start, but it only checks against one source of threat intelligence, which misses a lot of new phishing websites. Osprey checks every website you visit against up to 22 different sources, so it can catch more threats and block them before they load.',
     },
     {
         q: 'Will it slow my computer down?',
@@ -244,7 +244,8 @@ const faqs = [
     },
     {
         q: 'How can I deploy Osprey across an organization?',
-        a: 'Osprey installs from the Chrome, Edge, and Firefox stores, so it can be pushed to managed browsers the same way as any other extension through your existing device management. Because it needs no account and no license keys, there is nothing to provision per user, and every provider is enabled by default. The source is public if your security team wants to review it before rolling it out.',
+        a: 'Osprey installs from the Chrome, Edge, and Firefox stores, so it can be pushed to managed browsers the same way as any other extension through your existing device management. Because it needs no account and no license keys, there is nothing to provision per user, and every provider is enabled by default. For MSPs and IT teams, the Osprey Management Console adds central policies, dashboards, reports, and alerts across the whole fleet; plans and pricing are on the Pricing page. The source is public if your security team wants to review it before rolling it out.',
+        html: 'Osprey installs from the Chrome, Edge, and Firefox stores, so it can be pushed to managed browsers the same way as any other extension through your existing device management. Because it needs no account and no license keys, there is nothing to provision per user, and every provider is enabled by default. For MSPs and IT teams, the <a href="https://console.osprey.ac">Osprey Management Console</a> adds central policies, dashboards, reports, and alerts across the whole fleet; plans start on the <a href="/pricing/">Pricing page</a>. The source is public if your security team wants to review it before rolling it out.',
     },
     {
         q: 'Is anyone still working on it?',
@@ -264,7 +265,7 @@ const schema = {
             applicationSubCategory: 'Browser Extension',
             operatingSystem: 'Chrome, Firefox, Edge',
             description:
-                'Osprey is a free, open-source browser extension that blocks phishing, malware, scams, and other dangerous websites before they load. It checks every site you visit against 21 different threat intelligence providers through a privacy-preserving proxy that hides your IP address.',
+                'Osprey is a free, open-source browser extension that blocks phishing, malware, scams, and other dangerous websites before they load. It checks every site you visit against 22 different threat intelligence providers through a privacy-preserving proxy that hides your IP address.',
             url: 'https://osprey.ac/',
             downloadUrl: 'https://osprey.ac/download/',
             softwareVersion: '2.0.4.3',
@@ -279,7 +280,7 @@ const schema = {
                 'Blocks phishing and fake login pages',
                 'Blocks malware and malicious websites',
                 'Blocks scams and online fraud',
-                'Checks 21 different threat intelligence providers, not one',
+                'Checks 22 different threat intelligence providers, not one',
                 'Cannot read page content: no host permissions',
                 'No account, no ads, no premium tier',
             ],
@@ -540,7 +541,7 @@ const schema = {
             faqs.map((faq) => (
                     <details class="faq">
                         <summary>{faq.q}</summary>
-                        <p>{faq.a}</p>
+                        {faq.html ? <p set:html={faq.html}/> : <p>{faq.a}</p>}
                     </details>
             ))
         }
