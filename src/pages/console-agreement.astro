@@ -3,12 +3,12 @@
 // This software is not licensed for redistribution or self-hosting.
 
 import Base from '../layouts/Base.astro';
-const effective = '24 August 2026';
+const effective = '5 September 2026';
 ---
 
 <Base
         title="Management Console Agreement - Osprey: Browser Protection"
-        description="The agreement governing managed service provider use of the Osprey management console."
+        description="The agreement governing use of the Osprey management console by managed service providers and organizations managing their own fleets."
 >
     <article class="legal">
         <h1>Management Console Agreement</h1>
@@ -27,11 +27,15 @@ const effective = '24 August 2026';
 
         <h2>1. Definitions</h2>
         <p>
-            "Managed Client" means an organization the Provider manages through the Console. "End User" means a person
-            using the Osprey extension on a device enrolled under a Managed Client. "Active Device" means an enrolled
-            device that is not archived, as shown on the Console's usage page. "Threat Intelligence Sources" has the
-            meaning given in Section 9 of the Public Terms. Capitalized terms used but not defined in this
-            Agreement have the meanings given in the Public Terms.
+            "Managed Client" means an organization the Provider manages through the Console. Where the Provider uses
+            the Console to manage its own organization rather than third parties, references to Managed Clients mean
+            the Provider's own sites, locations, or business units, and obligations to bind Managed Clients apply to
+            the Provider itself. "End User" means a person using the Osprey extension on a device enrolled under a
+            Managed Client. "Active Device" means an enrolled device that is not archived, as shown on the Console's
+            usage page. "Plan" means the Console subscription tier selected for the Provider's account, with the
+            platform fee, per-seat rate, and minimum seat count presented in the Console. "Threat Intelligence
+            Sources" has the meaning given in Section 9 of the Public Terms. Capitalized terms used but not defined
+            in this Agreement have the meanings given in the Public Terms.
         </p>
 
         <h2>2. Access and license</h2>
@@ -55,21 +59,25 @@ const effective = '24 August 2026';
             The Provider is responsible for its team members' accounts and credentials, for the accuracy of enrollment
             and configuration, and for the acts and omissions of its Managed Clients and End Users as if they were the
             Provider's own. The Provider will bind each Managed Client, and will require each Managed Client to bind
-            its End Users, to terms no less protective of Osprey Project LLC than the Public Terms, including the
-            restrictions in Section 9 of the Public Terms, the acceptable use rules, the disclaimers, and the absence
-            of any direct claim against Osprey Project LLC. The Provider will take commercially reasonable steps to
-            ensure Managed Client and End User compliance and will assist us in enforcing these terms on reasonable
-            request. Pricing between the Provider and its Managed Clients is the Provider's own business.
+            its End Users (or, where the Provider manages its own organization, will bind its End Users directly), to
+            terms no less protective of Osprey Project LLC than the Public Terms, including the restrictions in Section
+            9 of the Public Terms, the acceptable use rules, the disclaimers, and the absence of any direct claim
+            against Osprey Project LLC. The Provider will take commercially reasonable steps to ensure Managed Client
+            and End User compliance and will assist us in enforcing these terms on reasonable request. Pricing between
+            the Provider and its Managed Clients is the Provider's own business.
         </p>
 
         <h2>5. Fees and billing</h2>
         <p>
-            Fees accrue on Active Devices during each billing period at the rates presented at signup or in the
-            Console, are billed monthly through Stripe, and are exclusive of taxes, which the Provider is responsible
-            for. Archived devices are excluded from the billable count. We may change rates with at least 30 days'
-            notice, effective at the next billing period. If payment fails, we may suspend Console access after notice
-            until payment is made. Billing disputes must be raised within 60 days of the charge. Fees are
-            non-refundable except where required by law.
+            Each billing period covers 30 days. Fees for each period consist of the Plan's recurring platform fee
+            plus per-seat fees on the billed seat count: the greater of the period's highest nightly count of Active
+            Devices and the Plan's minimum seat count, at the Plan's per-seat rate presented in the Console. Fees are
+            billed through Stripe and are exclusive of taxes, which the Provider is responsible for. Archived devices
+            are excluded from the Active Device count. Plan changes requested through the Console take effect at the
+            start of the next billing period. We may change Plan rates and structure with at least 30 days' notice,
+            effective at the next billing period. If payment fails, we may suspend Console access after notice until
+            payment is made. Billing disputes must be raised within 60 days of the charge. Fees are non-refundable
+            except where required by law.
         </p>
 
         <h2>6. Threat intelligence licensing</h2>
