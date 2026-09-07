@@ -6,7 +6,7 @@ import Base from '../layouts/Base.astro';
 
 const title = 'Pricing - Osprey: Browser Protection';
 const description =
-    'Osprey is free for everyone. The Osprey Management Console has Starter, Professional, and Enterprise plans with per-seat pricing that scales with your fleet size.';
+    'Osprey is free for everyone. The Osprey Management Console has Lite, Starter, Professional, and Enterprise plans with per-seat pricing that scales with your fleet size.';
 
 const schema = {
     '@context': 'https://schema.org',
@@ -25,31 +25,31 @@ const schema = {
             itemListElement: [
                 {
                     '@type': 'Offer',
-                    name: 'Free',
-                    price: '0',
+                    name: 'Lite',
+                    price: '20',
                     priceCurrency: 'USD',
-                    description: 'The Osprey browser extension, free forever for everyone.',
+                    description: 'Management Console platform fee of $0 per 30 days plus $2.00 per seat, 10-seat minimum; $20 minimum monthly total.',
                 },
                 {
                     '@type': 'Offer',
                     name: 'Starter',
-                    price: '99',
+                    price: '225',
                     priceCurrency: 'USD',
-                    description: 'Management Console platform fee of $99 per 30 days plus $1.25 per seat, 100-seat minimum.',
+                    description: 'Management Console platform fee of $100 per 30 days plus $1.25 per seat, 100-seat minimum; $225 minimum monthly total.',
                 },
                 {
                     '@type': 'Offer',
                     name: 'Professional',
-                    price: '249',
+                    price: '750',
                     priceCurrency: 'USD',
-                    description: 'Management Console platform fee of $249 per 30 days plus $1.00 per seat, 500-seat minimum.',
+                    description: 'Management Console platform fee of $250 per 30 days plus $1.00 per seat, 500-seat minimum; $750 minimum monthly total.',
                 },
                 {
                     '@type': 'Offer',
                     name: 'Enterprise',
-                    price: '499',
+                    price: '2000',
                     priceCurrency: 'USD',
-                    description: 'Management Console platform fee of $499 per 30 days plus $0.75 per seat, 2,000-seat minimum.',
+                    description: 'Management Console platform fee of $500 per 30 days plus $0.75 per seat, 2,000-seat minimum; $2,000 minimum monthly total.',
                 },
             ],
         },
@@ -60,272 +60,270 @@ const yesIcon = `<svg class="cmp-icon yes" viewBox="0 0 24 24" width="20" height
 
 const noIcon = `<svg class="cmp-icon no" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="No"><circle cx="12" cy="12" r="9"/><line x1="5.6" y1="5.6" x2="18.4" y2="18.4"/></svg>`;
 
-const rates = [
-    {
-        row: 'Platform fee',
-        free: '-',
-        starter: '$99 / month',
-        professional: '$249 / month',
-        enterprise: '$499 / month'
-    },
-    {
-        row: 'Per seat cost',
-        free: '-',
-        starter: '$1.25',
-        professional: '$1.00',
-        enterprise: '$0.75'
-    },
-    {
-        row: 'Minimum billed seats',
-        free: '-',
-        starter: '100',
-        professional: '500',
-        enterprise: '2,000'
-    },
-    {
-        row: 'Minimum monthly total',
-        free: '-',
-        starter: '$224',
-        professional: '$749',
-        enterprise: '$1,999'
-    },
-];
-
 const features = [
     {
         feature: 'Real-time phishing and malware blocking',
-        free: 'yes',
-        starter: 'yes',
-        professional: 'yes',
-        enterprise: 'yes'
-    },
-    {
-        feature: 'Works in Chrome, Firefox, and Edge',
-        free: 'yes',
-        starter: 'yes',
-        professional: 'yes',
-        enterprise: 'yes'
-    },
-    {
-        feature: 'Access to the Management Console',
-        free: 'no',
+        lite: 'yes',
         starter: 'yes',
         professional: 'yes',
         enterprise: 'yes'
     },
     {
         feature: 'Central client and device management',
-        free: 'no',
-        starter: 'yes',
-        professional: 'yes',
-        enterprise: 'yes'
-    },
-    {
-        feature: 'Webhook, email, Slack, and Microsoft Teams alerting',
-        free: 'no',
-        starter: 'yes',
-        professional: 'yes',
-        enterprise: 'yes'
-    },
-    {
-        feature: 'Scheduled per-client reports',
-        free: 'no',
-        starter: 'yes',
-        professional: 'yes',
-        enterprise: 'yes'
-    },
-    {
-        feature: 'Weekly fleet health digests',
-        free: 'no',
-        starter: 'yes',
-        professional: 'yes',
-        enterprise: 'yes'
-    },
-    {
-        feature: 'Custom unblock request page',
-        free: 'no',
+        lite: 'yes',
         starter: 'yes',
         professional: 'yes',
         enterprise: 'yes'
     },
     {
         feature: 'Managed policy deployment',
-        free: 'no',
+        lite: 'yes',
         starter: 'yes',
         professional: 'yes',
         enterprise: 'yes'
     },
     {
-        feature: 'Custom white-labeling support',
-        free: 'no',
+        feature: 'Custom unblock request page',
+        lite: 'yes',
         starter: 'yes',
         professional: 'yes',
         enterprise: 'yes'
     },
     {
         feature: 'Emergency fleet-wide block and allow',
-        free: 'no',
-        starter: 'yes',
-        professional: 'yes',
-        enterprise: 'yes'
-    },
-    {
-        feature: 'Device, event, and audit log exports',
-        free: 'no',
-        starter: 'yes',
-        professional: 'yes',
-        enterprise: 'yes'
-    },
-    {
-        feature: 'REST API and outbound signed webhooks',
-        free: 'no',
+        lite: 'yes',
         starter: 'yes',
         professional: 'yes',
         enterprise: 'yes'
     },
     {
         feature: 'RMM, Intune, GPO, and Google Admin deployment scripts',
-        free: 'no',
-        starter: 'yes',
-        professional: 'yes',
-        enterprise: 'yes'
-    },
-    {
-        feature: 'PSA ticketing (ConnectWise, Autotask, HaloPSA, generic)',
-        free: 'no',
-        starter: 'yes',
-        professional: 'yes',
-        enterprise: 'yes'
-    },
-    {
-        feature: 'Extension version visibility and pinning',
-        free: 'no',
-        starter: 'yes',
-        professional: 'yes',
-        enterprise: 'yes'
-    },
-    {
-        feature: 'Single sign-on (OIDC) and sign-in policy controls',
-        free: 'no',
-        starter: 'yes',
-        professional: 'yes',
-        enterprise: 'yes'
-    },
-    {
-        feature: 'Technician client scoping',
-        free: 'no',
-        starter: 'yes',
-        professional: 'yes',
-        enterprise: 'yes'
-    },
-    {
-        feature: 'Access reviews with exportable sign-off records',
-        free: 'no',
-        starter: 'yes',
-        professional: 'yes',
-        enterprise: 'yes'
-    },
-    {
-        feature: 'Compliance evidence packs',
-        free: 'no',
+        lite: 'yes',
         starter: 'yes',
         professional: 'yes',
         enterprise: 'yes'
     },
     {
         feature: 'Per-client seat statements for downstream invoicing',
-        free: 'no',
+        lite: 'yes',
         starter: 'yes',
         professional: 'yes',
         enterprise: 'yes'
     },
     {
         feature: 'Usage forecasting and budget alerts',
-        free: 'no',
+        lite: 'yes',
+        starter: 'yes',
+        professional: 'yes',
+        enterprise: 'yes'
+    },
+    {
+        feature: 'Email alerting',
+        lite: 'yes',
+        starter: 'yes',
+        professional: 'yes',
+        enterprise: 'yes'
+    },
+    {
+        feature: 'Device, event, and audit log exports',
+        lite: 'yes',
+        starter: 'yes',
+        professional: 'yes',
+        enterprise: 'yes'
+    },
+    {
+        feature: 'Extension version visibility and pinning',
+        lite: 'yes',
+        starter: 'yes',
+        professional: 'yes',
+        enterprise: 'yes'
+    },
+    {
+        feature: 'Single sign-on (OIDC) and sign-in policy controls',
+        lite: 'yes',
+        starter: 'yes',
+        professional: 'yes',
+        enterprise: 'yes'
+    },
+    {
+        feature: 'Technician client scoping',
+        lite: 'yes',
         starter: 'yes',
         professional: 'yes',
         enterprise: 'yes'
     },
     {
         feature: 'Shared-device and kiosk seat reporting',
-        free: 'no',
+        lite: 'yes',
         starter: 'yes',
         professional: 'yes',
         enterprise: 'yes'
     },
     {
         feature: 'Privacy-aggregated education reporting',
-        free: 'no',
+        lite: 'yes',
+        starter: 'yes',
+        professional: 'yes',
+        enterprise: 'yes'
+    },
+    {
+        feature: 'Webhook, Slack, and Microsoft Teams alerting',
+        lite: 'no',
+        starter: 'yes',
+        professional: 'yes',
+        enterprise: 'yes'
+    },
+    {
+        feature: 'Scheduled per-client reports',
+        lite: 'no',
+        starter: 'yes',
+        professional: 'yes',
+        enterprise: 'yes'
+    },
+    {
+        feature: 'Weekly fleet health digests',
+        lite: 'no',
+        starter: 'yes',
+        professional: 'yes',
+        enterprise: 'yes'
+    },
+    {
+        feature: 'Custom white-labeling support',
+        lite: 'no',
+        starter: 'yes',
+        professional: 'yes',
+        enterprise: 'yes'
+    },
+    {
+        feature: 'REST API and outbound signed webhooks',
+        lite: 'no',
+        starter: 'yes',
+        professional: 'yes',
+        enterprise: 'yes'
+    },
+    {
+        feature: 'PSA ticketing (ConnectWise, Autotask, HaloPSA, generic)',
+        lite: 'no',
+        starter: 'yes',
+        professional: 'yes',
+        enterprise: 'yes'
+    },
+    {
+        feature: 'Access reviews with exportable sign-off records',
+        lite: 'no',
+        starter: 'yes',
+        professional: 'yes',
+        enterprise: 'yes'
+    },
+    {
+        feature: 'Compliance evidence packs',
+        lite: 'no',
         starter: 'yes',
         professional: 'yes',
         enterprise: 'yes'
     },
     {
         feature: 'Customer-managed export encryption and legal hold',
-        free: 'no',
+        lite: 'no',
         starter: 'yes',
         professional: 'yes',
         enterprise: 'yes'
     },
     {
         feature: 'Baseline profiles with propagation and drift detection',
-        free: 'no',
+        lite: 'no',
         starter: 'no',
         professional: 'yes',
         enterprise: 'yes'
     },
     {
         feature: 'Org-wide triage queue with bulk actions',
-        free: 'no',
+        lite: 'no',
         starter: 'no',
         professional: 'yes',
         enterprise: 'yes'
     },
     {
         feature: 'PSA ticket auto-close and agreement seat sync',
-        free: 'no',
+        lite: 'no',
         starter: 'no',
         professional: 'yes',
         enterprise: 'yes'
     },
     {
         feature: 'SIEM forwarding',
-        free: 'no',
+        lite: 'no',
         starter: 'no',
         professional: 'yes',
         enterprise: 'yes'
     },
     {
         feature: 'Data retention controls',
-        free: 'no',
+        lite: 'no',
         starter: 'no',
         professional: 'yes',
         enterprise: 'yes'
     },
     {
         feature: 'SCIM user provisioning',
-        free: 'no',
+        lite: 'no',
         starter: 'no',
         professional: 'yes',
         enterprise: 'yes'
     },
     {
         feature: 'Delegated Manager role for sub-teams and sites',
-        free: 'no',
+        lite: 'no',
         starter: 'no',
         professional: 'yes',
         enterprise: 'yes'
     },
     {
         feature: 'Invoice, purchase order, and net-30 billing with quotes',
-        free: 'no',
+        lite: 'no',
         starter: 'no',
         professional: 'no',
         enterprise: 'yes'
     },
+    {
+        feature: 'Platform fee (per month)',
+        lite: '$0',
+        starter: '$100',
+        professional: '$250',
+        enterprise: '$500'
+    },
+    {
+        feature: 'Per seat cost',
+        lite: '$2.00',
+        starter: '$1.25',
+        professional: '$1.00',
+        enterprise: '$0.75'
+    },
+    {
+        feature: 'Minimum billed seats',
+        lite: '10',
+        starter: '100',
+        professional: '500',
+        enterprise: '2,000'
+    },
+    {
+        feature: 'Minimum monthly total',
+        lite: '$20',
+        starter: '$225',
+        professional: '$750',
+        enterprise: '$2,000'
+    },
+    {
+        feature: 'Upgrade to this plan when you reach:',
+        lite: '-',
+        starter: '~135 seats',
+        professional: '~600 seats',
+        enterprise: '~1,750 seats'
+    },
 ];
 
-const cell = (value: string): string => (value === 'yes' ? yesIcon : value === 'no' ? noIcon : '');
+const cell = (value: string): string =>
+    (value === 'yes' ? yesIcon : value === 'no' ? noIcon : `<span class="val">${value}</span>`);
 ---
 <Base title={title} description={description} schema={schema}>
     <section class="hero">
@@ -360,16 +358,16 @@ const cell = (value: string): string => (value === 'yes' ? yesIcon : value === '
     </section>
 
     <section class="band">
-        <h2 class="band-title">What each plan includes</h2>
-        <div class="table-scroll" tabindex="0" role="region" aria-label="What each plan includes">
+        <h2 class="band-title">What each plan includes and costs</h2>
+        <div class="table-scroll" tabindex="0" role="region" aria-label="What each plan includes and costs">
             <table class="compare">
-                <caption class="sr-only">Feature availability across the Free, Starter, Professional, and Enterprise
-                    plans
+                <caption class="sr-only">
+                    Feature availability and pricing across the Lite, Starter, Professional, and Enterprise plans
                 </caption>
                 <thead>
                 <tr>
                     <th scope="col"><span class="sr-only">Feature</span></th>
-                    <th scope="col">Free</th>
+                    <th scope="col">Lite</th>
                     <th scope="col">Starter</th>
                     <th scope="col">Professional</th>
                     <th scope="col">Enterprise</th>
@@ -381,7 +379,7 @@ const cell = (value: string): string => (value === 'yes' ? yesIcon : value === '
                             <tr>
                                 <th scope="row">{row.feature}</th>
                                 <td>
-                                    <Fragment set:html={cell(row.free)}/>
+                                    <Fragment set:html={cell(row.lite)}/>
                                 </td>
                                 <td>
                                     <Fragment set:html={cell(row.starter)}/>
@@ -392,39 +390,6 @@ const cell = (value: string): string => (value === 'yes' ? yesIcon : value === '
                                 <td>
                                     <Fragment set:html={cell(row.enterprise)}/>
                                 </td>
-                            </tr>
-                    ))
-                }
-                </tbody>
-            </table>
-        </div>
-    </section>
-
-    <section class="band">
-        <h2 class="band-title">How much they cost</h2>
-        <div class="table-scroll" tabindex="0" role="region" aria-label="Plan pricing">
-            <table class="compare">
-                <caption class="sr-only">Pricing for the Free extension and the Starter, Professional, and Enterprise
-                    Management Console plans
-                </caption>
-                <thead>
-                <tr>
-                    <th scope="col"><span class="sr-only">Item</span></th>
-                    <th scope="col">Free</th>
-                    <th scope="col">Starter</th>
-                    <th scope="col">Professional</th>
-                    <th scope="col">Enterprise</th>
-                </tr>
-                </thead>
-                <tbody>
-                {
-                    rates.map((row) => (
-                            <tr>
-                                <th scope="row">{row.row}</th>
-                                <td><span class="val">{row.free}</span></td>
-                                <td><span class="val">{row.starter}</span></td>
-                                <td><span class="val">{row.professional}</span></td>
-                                <td><span class="val">{row.enterprise}</span></td>
                             </tr>
                     ))
                 }
