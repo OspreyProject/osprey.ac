@@ -1039,6 +1039,13 @@ html[data-theme="dark"] .marquee-item .logo-light {
     font-size: 0.95rem;
 }
 
+/* Column and row titles stay on one line; the wrapping table sits inside .table-scroll,
+   which scrolls horizontally when the labels run wider than the viewport. */
+.compare thead th,
+.compare tbody th {
+    white-space: nowrap;
+}
+
 .compare .col-osprey {
     background-color: var(--surface);
     color: var(--text);
@@ -1065,8 +1072,11 @@ html[data-theme="dark"] .marquee-item .logo-light {
     color: var(--danger);
 }
 
+/* Pricing values (platform fee, per seat cost, seat minimums, monthly totals) stay on
+   one line; the table scrolls horizontally rather than breaking a figure across lines. */
 .compare .val {
     color: inherit;
+    white-space: nowrap;
 }
 
 /* --------------------------------------------------
