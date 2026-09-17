@@ -358,7 +358,7 @@ const features = [
 ];
 
 const cell = (value: string): string =>
-    (value === 'yes' ? yesIcon : value === 'no' ? noIcon : `<span class="val">${value}</span>`);
+    value === 'yes' ? yesIcon : value === 'no' ? noIcon : `<span class="val">${value}</span>`;
 ---
 <Base title={title} description={description} schema={schema}>
     <section class="hero">
@@ -410,7 +410,7 @@ const cell = (value: string): string =>
                 </thead>
                 <tbody>
                 {
-                    features.map((row) => (
+                    features.map(row =>
                             <tr>
                                 <th scope="row">{row.feature}</th>
                                 <td>
@@ -426,7 +426,7 @@ const cell = (value: string): string =>
                                     <Fragment set:html={cell(row.enterprise)}/>
                                 </td>
                             </tr>
-                    ))
+                    )
                 }
                 </tbody>
             </table>

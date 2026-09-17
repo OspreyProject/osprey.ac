@@ -140,17 +140,16 @@ const docs = [
 
         <ul class="deploy-list">
             {
-                platforms.map((platform) => (
+                platforms.map(platform =>
                         <li>
                             <h3>{platform.name}</h3>
                             <p>{platform.body}</p>
                             <p class="files">
-                                {platform.files.map((file) => (
-                                        <a href={file.href} download class="file-link">{file.label}</a>
-                                ))}
+                                {platform.files.map(file => <a href={file.href} download
+                                                               class="file-link">{file.label}</a>)}
                             </p>
                         </li>
-                ))
+                )
             }
         </ul>
         <br>
@@ -174,12 +173,12 @@ const docs = [
                 </thead>
                 <tbody>
                 {
-                    extensionIds.map((row) => (
+                    extensionIds.map(row =>
                             <tr>
                                 <th scope="row">{row.store}</th>
                                 <td class="val"><code>{row.id}</code></td>
                             </tr>
-                    ))
+                    )
                 }
                 </tbody>
             </table>
@@ -205,14 +204,14 @@ const docs = [
                 </thead>
                 <tbody>
                 {
-                    chromiumParity.map((row) => (
+                    chromiumParity.map(row =>
                             <tr>
                                 <th scope="row">{row.browser}</th>
                                 <td class="val"><code>{row.win}</code></td>
                                 <td class="val"><code>{row.mac}</code></td>
                                 <td class="val"><code>{row.linux}</code></td>
                             </tr>
-                    ))
+                    )
                 }
                 </tbody>
             </table>
@@ -240,9 +239,7 @@ const docs = [
         <h2 class="band-title">Documentation</h2>
         <p class="files docs-files">
             {
-                docs.map((doc) => (
-                        <a href={doc.href} class="file-link">{doc.label}</a>
-                ))
+                docs.map(doc => <a href={doc.href} class="file-link">{doc.label}</a>)
             }
         </p>
     </section>

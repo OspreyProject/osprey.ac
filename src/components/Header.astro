@@ -47,12 +47,10 @@ const links = [
         </button>
 
         <nav class="site-nav" id="site-nav" aria-label="Primary">
-            {links.map((link) => (
-                    <a href={link.href} class={link.isNew ? 'has-badge' : ''}>
-                        {link.label}
-                        {link.isNew && <span class="badge-new">NEW</span>}
-                    </a>
-            ))}
+            {links.map(link => <a href={link.href} class={link.isNew ? 'has-badge' : ''}>
+                {link.label}
+                {link.isNew && <span class="badge-new">NEW</span>}
+            </a>)}
 
             <div class="nav-icons">
                 <a

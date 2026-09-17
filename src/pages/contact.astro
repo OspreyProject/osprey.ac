@@ -52,9 +52,9 @@ const schema = {
             <span class="field-label">What is this about?</span>
             <select id="category" class="select-input" name="category" required>
                 <option value="" selected disabled>Choose one</option>
-                {categories.map((c) => (
-                        <option value={c.value} data-company={c.company}>{c.label}</option>
-                ))}
+
+                {categories.map(c =>
+                        <option value={c.value} data-company={c.company}>{c.label}</option>)}
             </select>
         </label>
 
@@ -297,11 +297,13 @@ const schema = {
                 }
 
                 if (!response.ok) {
-                    throw new Error((data && data.error) || 'Your message could not be sent right now. Please try again later or email support@osprey.ac.');
+                    throw new Error(data && data.error
+                        || 'Your message could not be sent right now. Please try again later or email support@osprey.ac.');
                 }
 
                 showDone('Check your inbox',
-                    'We sent a confirmation link to ' + payload.email + '. Open it within 24 hours to deliver your message. If it is not there, check your spam folder.');
+                    'We sent a confirmation link to ' + payload.email
+                    + '. Open it within 24 hours to deliver your message. If it is not there, check your spam folder.');
             } catch (err) {
                 showError(err && err.message ? err.message : 'Your message could not be sent.');
             } finally {
@@ -336,10 +338,13 @@ const schema = {
                 }
 
                 if (!response.ok) {
-                    throw new Error((data && data.error) || 'This verification link could not be confirmed.');
+                    throw new Error(data && data.error
+                        || 'This verification link could not be confirmed.');
                 }
 
-                showDone('Message delivered', 'Thanks, your email address is confirmed and your message has been sent to our team. We will reply to you by email.');
+                showDone('Message delivered',
+                    'Thanks, your email address is confirmed and your message has been sent to our team.'
+                    + ' We will reply to you by email.');
             } catch (err) {
                 done.hidden = true;
                 form.hidden = false;

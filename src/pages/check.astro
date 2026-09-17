@@ -39,7 +39,7 @@ const schema = {
         {
             '@type': 'FAQPage',
             '@id': 'https://osprey.ac/check/#faq',
-            mainEntity: faqs.map((faq) => ({
+            mainEntity: faqs.map(faq => ({
                 '@type': 'Question',
                 name: faq.q,
                 acceptedAnswer: {

@@ -18,9 +18,9 @@ const prepareSvg = (svg: string, prefix: string): string =>
         .replace(/style="([^"]*)"/g, (_match, declarations: string) =>
             declarations
                 .split(';')
-                .map((declaration) => declaration.trim())
+                .map(declaration => declaration.trim())
                 .filter(Boolean)
-                .map((declaration) => {
+                .map(declaration => {
                     const separator = declaration.indexOf(':');
                     const property = declaration.slice(0, separator).trim();
                     const value = declaration.slice(separator + 1).trim();
@@ -86,7 +86,7 @@ const afterInstall = [
 
     <ul class="download-grid">
         {
-            stores.map((store) => (
+            stores.map(store =>
                     <li class="download-card" data-browser={store.id}>
                         <p class="download-badge">Your browser</p>
 
@@ -102,7 +102,7 @@ const afterInstall = [
                             Add to {store.browser}
                         </a>
                     </li>
-            ))
+            )
         }
     </ul>
 
@@ -115,13 +115,13 @@ const afterInstall = [
         <h2 class="band-title">After you install</h2>
         <ol class="steps">
             {
-                afterInstall.map((step) => (
+                afterInstall.map(step =>
                         <li class="step">
                             <span class="step-n">{step.n}</span>
                             <h3>{step.title}</h3>
                             <p>{step.body}</p>
                         </li>
-                ))
+                )
             }
         </ol>
     </section>

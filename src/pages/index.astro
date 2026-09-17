@@ -292,7 +292,7 @@ const schema = {
         {
             '@type': 'FAQPage',
             '@id': 'https://osprey.ac/#faq',
-            mainEntity: faqs.map((faq) => ({
+            mainEntity: faqs.map(faq => ({
                 '@type': 'Question',
                 name: faq.q,
                 acceptedAnswer: {
@@ -327,15 +327,13 @@ const schema = {
 
         <div class="install-row">
             {
-                stores.map((store) => (
-                        <a
+                stores.map(store => <a
                                 class="install-btn"
                                 data-browser={store.id}
-                                href={store.url}
-                        >
-                            {store.label}
+                                href={store.url}>
+                        {store.label}
                         </a>
-                ))
+                )
             }
             <a class="install-btn install-btn-github" href="https://github.com/OspreyProject/Osprey">
                 View on GitHub
@@ -347,10 +345,9 @@ const schema = {
         <p class="trust-rating">
             <span class="stars" role="img" aria-label={`Rated ${rating} out of 5`}>
                 {
-                    Array.from({length: 5}).map((_, i) => (
-                            <span class:list={['star', {filled: i < Math.round(rating)}]}
-                                  aria-hidden="true">&#9733;</span>
-                    ))
+                    Array.from({length: 5}).map((_, i) => <span class:list={['star', {filled: i < Math.round(rating)}]}
+                                                                aria-hidden="true">&#9733;</span>
+                    )
                 }
             </span>
             <span><strong>{rating.toFixed(1)}</strong> rating</span>
@@ -362,7 +359,7 @@ const schema = {
 
     <ul class="shots">
         {
-            shots.map((shot) => (
+            shots.map(shot =>
                     <li>
                         <button class="shot-trigger" type="button" data-full={shot.img.src}>
                             <Image
@@ -377,7 +374,7 @@ const schema = {
                             />
                         </button>
                     </li>
-            ))
+            )
         }
     </ul>
 
@@ -386,7 +383,7 @@ const schema = {
         <div class="marquee">
             <ul class="marquee-track" data-marquee>
                 {
-                    partnerLogos.map((logo) => (
+                    partnerLogos.map(logo =>
                             <li class="marquee-item" data-marquee-set>
                                 <Image
                                         class="logo-light"
@@ -409,7 +406,7 @@ const schema = {
                                         loading="eager"
                                 />
                             </li>
-                    ))
+                    )
                 }
             </ul>
         </div>
@@ -419,14 +416,14 @@ const schema = {
         <h2 class="band-title">What Osprey does</h2>
         <ul class="feature-grid">
             {
-                features.map((feature) => (
+                features.map(feature =>
                         <li class="feature">
                             <img class="feature-icon" src={feature.icon.src} alt="" width="32" height="32"
                                  loading="lazy"/>
                             <h3>{feature.title}</h3>
                             <p>{feature.body}</p>
                         </li>
-                ))
+                )
             }
         </ul>
     </section>
@@ -435,13 +432,13 @@ const schema = {
         <h2 class="band-title">How it works</h2>
         <ol class="steps">
             {
-                steps.map((step) => (
+                steps.map(step =>
                         <li class="step">
                             <span class="step-n">{step.n}</span>
                             <h3>{step.title}</h3>
                             <p>{step.body}</p>
                         </li>
-                ))
+                )
             }
         </ol>
     </section>
@@ -492,17 +489,16 @@ const schema = {
                 </thead>
                 <tbody>
                 {
-                    comparison.map((row) => (
+                    comparison.map(row =>
                             <tr>
                                 <th scope="row">
-                                    {row.featureLink ? (
+                                    {row.featureLink ?
                                             <>
                                                 {row.feature.split(row.featureLink.text)[0]}
                                                 <a class="contact-link"
                                                    href={row.featureLink.href}>{row.featureLink.text}</a>
                                                 {row.feature.split(row.featureLink.text)[1]}
-                                            </>
-                                    ) : row.feature}
+                                            </> : row.feature}
                                 </th>
                                 <td class="col-osprey">
                                     {row.osprey === 'yes' ?
@@ -528,7 +524,7 @@ const schema = {
                                                     <span class="val">{row.bitdefender}</span>}
                                 </td>
                             </tr>
-                    ))
+                    )
                 }
                 </tbody>
             </table>
@@ -538,12 +534,12 @@ const schema = {
     <section class="band">
         <h2 class="band-title">Common questions</h2>
         {
-            faqs.map((faq) => (
+            faqs.map(faq =>
                     <details class="faq">
                         <summary>{faq.q}</summary>
                         {faq.html ? <p set:html={faq.html}/> : <p>{faq.a}</p>}
                     </details>
-            ))
+            )
         }
     </section>
 
@@ -585,14 +581,14 @@ const schema = {
         const speed = 25; // pixels per second
 
         const original = Array.from(track.querySelectorAll('[data-marquee-set]'))
-            .map((el) => el.cloneNode(true) as HTMLElement);
+            .map(el => el.cloneNode(true) as HTMLElement);
 
         const setWidthOf = (nodes: HTMLElement[]) =>
             nodes.reduce((sum, el) => sum + el.getBoundingClientRect().width, 0);
 
         const setup = () => {
             // Remove any existing clones before recalculating
-            track.querySelectorAll('[data-marquee-clone]').forEach((n) => n.remove());
+            track.querySelectorAll('[data-marquee-clone]').forEach(n => n.remove());
 
             const setWidth = setWidthOf(
                 Array.from(
@@ -635,7 +631,7 @@ const schema = {
         setup();
 
         // Schedule setup to run again when images load
-        track.querySelectorAll('img').forEach((img) => {
+        track.querySelectorAll('img').forEach(img => {
             if (img.complete) {
                 return;
             }
@@ -662,7 +658,7 @@ const schema = {
 
     if (dialog && dialogImg) {
         // Add click event listeners to all shot triggers to open the lightbox dialog
-        document.querySelectorAll<HTMLButtonElement>('.shot-trigger').forEach((trigger) => {
+        document.querySelectorAll<HTMLButtonElement>('.shot-trigger').forEach(trigger => {
             trigger.addEventListener('click', () => {
                 const full = trigger.dataset.full;
 
@@ -679,7 +675,7 @@ const schema = {
         });
 
         // Add a click event listener to the dialog to close it when clicking outside the image
-        dialog.addEventListener('click', (event) => {
+        dialog.addEventListener('click', event => {
             if (event.target !== dialogImg) {
                 dialog.close();
             }

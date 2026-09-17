@@ -72,11 +72,11 @@ export function deriveDomain(rawUrl: string): string | null {
 
 // The provider names currently returning a blocking verdict for this record.
 export function flaggingNames(results: Record<string, string[]>): string[] {
-    return providers.filter((p) => {
+    return providers.filter(p => {
         const values = results?.[p.id];
         const state = values && values.length && resultStates[values[0]] ? values[0] : 'failed';
         return blockingResults.includes(state);
-    }).map((p) => p.name);
+    }).map(p => p.name);
 }
 
 // A record may be published only if it is a hard verdict that is corroborated by one
@@ -167,7 +167,7 @@ export async function getStaticPaths() {
         // One page per domain: keep the best-corroborated record, then the most recent.
         if (!current
             || authCount > current.authCount
-            || (authCount === current.authCount && record.lastScanned > current.record.lastScanned)) {
+            || authCount === current.authCount && record.lastScanned > current.record.lastScanned) {
             best.set(domain, {domain, record, authCount});
         }
     }
@@ -188,8 +188,8 @@ const stateFor = (id: string): string => {
 };
 
 const flaggingProviders = providers
-    .filter((p) => blockingResults.includes(stateFor(p.id)))
-    .map((p) => p.name);
+    .filter(p => blockingResults.includes(stateFor(p.id)))
+    .map(p => p.name);
 
 const flaggedCount = flaggingProviders.length;
 const totalCount = record.total ?? providers.length;

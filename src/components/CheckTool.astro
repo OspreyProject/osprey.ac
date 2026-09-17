@@ -36,8 +36,8 @@ const stateFor = (id: string): string => {
 
 const flaggedProviders = finished
     ? providers
-        .filter((p) => blockingResults.includes(stateFor(p.id)))
-        .map((p) => ({name: p.name, state: stateFor(p.id)}))
+        .filter(p => blockingResults.includes(stateFor(p.id)))
+        .map(p => ({name: p.name, state: stateFor(p.id)}))
     : [];
 
 const summary = finished ? summarize(flaggedProviders) : null;
@@ -118,29 +118,27 @@ const fmtDate = (ms: number): string => new Date(ms).toISOString().slice(0, 10);
 </section>
 
 <section id="results" class="results" aria-label="Provider results" hidden={!finished}>
-    {groups.map((group) => (
+    {groups.map(group =>
             <div class="result-group" data-group={group}>
                 <h2 class="group-title">{group}</h2>
                 <ul class="provider-grid">
-                    {providers.filter((p) => p.group === group).map((p) => {
+                    {providers.filter(p => p.group === group).map(p => {
                         const state = finished ? stateFor(p.id) : 'idle';
                         const info = resultStates[state] ?? resultStates.failed;
-                        return (
+                        return;
                                 <li class="provider-card" data-provider={p.id}
                                     data-state={state} data-tone={finished ? info.tone : undefined}>
                                     <img class="provider-logo" src={logo(p.icon)} alt="" width="28" height="28"
                                          loading="lazy"/>
                                     <span class="provider-name">{p.name}</span>
                                     <span class="provider-status">
-                                        <span class="status-dot"></span>
-                                        <span class="status-label">{info.label}</span>
-                                    </span>
-                                </li>
-                        );
+                                <span class="status-dot"></span>
+                                <span class="status-label">{info.label}</span>
+                            </span>
+                                </li>;
                     })}
                 </ul>
-            </div>
-    ))}
+            </div>)}
 </section>
 
 <p id="disclaimer" class="disclaimer" hidden={!finished}>
@@ -158,12 +156,11 @@ const fmtDate = (ms: number): string => new Date(ms).toISOString().slice(0, 10);
     <h2 class="band-title">Common questions</h2>
     <div class="check-faq">
         {
-            faqs.map((faq) => (
+            faqs.map(faq =>
                     <details class="faq">
                         <summary>{faq.q}</summary>
                         <p>{faq.a}</p>
-                    </details>
-            ))
+                    </details>)
         }
     </div>
 </section>
@@ -328,9 +325,9 @@ const fmtDate = (ms: number): string => new Date(ms).toISOString().slice(0, 10);
                 const p = host.split('.').map(Number);
 
                 if (p[0] === 10 || p[0] === 127 || p[0] === 0 ||
-                    (p[0] === 169 && p[1] === 254) ||
-                    (p[0] === 172 && p[1] >= 16 && p[1] <= 31) ||
-                    (p[0] === 192 && p[1] === 168)) {
+                    p[0] === 169 && p[1] === 254 ||
+                    p[0] === 172 && p[1] >= 16 && p[1] <= 31 ||
+                    p[0] === 192 && p[1] === 168) {
                     return false;
                 }
             }
