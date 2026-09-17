@@ -34,7 +34,7 @@ export default defineConfig({
                 } else if (isCheckSubpage) {
                     item.priority = 0.4;
                     item.changefreq = 'daily';
-                } else if (primaryPages.some((page) => item.url === 'https://osprey.ac' + page)) {
+                } else if (primaryPages.some(page => item.url === 'https://osprey.ac' + page)) {
                     item.priority = 0.9;
                     item.changefreq = 'weekly';
                 } else if (secondaryPages.some((page) => item.url === 'https://osprey.ac' + page)) {
