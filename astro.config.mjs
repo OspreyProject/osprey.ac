@@ -37,7 +37,7 @@ export default defineConfig({
                 } else if (primaryPages.some(page => item.url === 'https://osprey.ac' + page)) {
                     item.priority = 0.9;
                     item.changefreq = 'weekly';
-                } else if (secondaryPages.some((page) => item.url === 'https://osprey.ac' + page)) {
+                } else if (secondaryPages.some(page => item.url === 'https://osprey.ac' + page)) {
                     item.priority = 0.6;
                     item.changefreq = 'monthly';
                 } else {
