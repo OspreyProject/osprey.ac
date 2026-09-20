@@ -125,17 +125,18 @@ const fmtDate = (ms: number): string => new Date(ms).toISOString().slice(0, 10);
                     {providers.filter(p => p.group === group).map(p => {
                         const state = finished ? stateFor(p.id) : 'idle';
                         const info = resultStates[state] ?? resultStates.failed;
-                        return;
-                                <li class="provider-card" data-provider={p.id}
-                                    data-state={state} data-tone={finished ? info.tone : undefined}>
-                                    <img class="provider-logo" src={logo(p.icon)} alt="" width="28" height="28"
-                                         loading="lazy"/>
-                                    <span class="provider-name">{p.name}</span>
-                                    <span class="provider-status">
+                        return (
+                            <li class="provider-card" data-provider={p.id}
+                                data-state={state} data-tone={finished ? info.tone : undefined}>
+                                <img class="provider-logo" src={logo(p.icon)} alt="" width="28" height="28"
+                                     loading="lazy"/>
+                                <span class="provider-name">{p.name}</span>
+                                <span class="provider-status">
                                 <span class="status-dot"></span>
                                 <span class="status-label">{info.label}</span>
                             </span>
-                                </li>;
+                            </li>
+                        );
                     })}
                 </ul>
             </div>)}
