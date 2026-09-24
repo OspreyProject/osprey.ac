@@ -3,7 +3,7 @@
 // This software is not licensed for redistribution or self-hosting.
 
 import Base from '../layouts/Base.astro';
-const effective = '5 September 2026';
+const effective = '23 September 2026';
 
 const permissions = [
     {
@@ -21,10 +21,6 @@ const permissions = [
     {
         name: 'https://api.osprey.ac/*',
         why: 'Allows the extension to send URLs to the Osprey proxy server for checking.',
-    },
-    {
-        name: 'https://api.metadefender.com/*',
-        why: 'Allows the extension to contact the MetaDefender API directly, only when you configure your own MetaDefender API key.',
     },
 ];
 
@@ -69,13 +65,13 @@ const localData = [
 
         <h2>How URL checking works</h2>
         <p>
-            When you navigate to a website, the browser extension sends the URL to the proxy server, which checks it
-            against threat intelligence providers, DNS filtering services, and local threat intelligence lists.
+            By default, when you navigate to a website, the browser extension sends the URL to the proxy server, which
+            checks it against threat intelligence providers, DNS filtering services, and local threat intelligence lists.
         </p>
         <p>
-            <strong>Providers never see which websites you visit.</strong> All checks are routed through the proxy
-            server, so providers only see requests from the proxy's IP address, not yours, and many users' checks are
-            mixed together. Recently checked URLs are served from the proxy's cache without contacting any provider.
+            For proxy-routed checks, providers see requests from the proxy's IP address, not yours, and many users'
+            checks are mixed together. Recently checked URLs are served from the proxy's cache without contacting any
+            provider.
         </p>
         <p>When a URL does reach a provider, the data sent depends on the provider type:</p>
         <ul>
@@ -89,7 +85,7 @@ const localData = [
         </ul>
 
         <h2>Browser permissions</h2>
-        <p>The extension requires the following permissions, used strictly for its security features:</p>
+        <p>The extension uses the following permissions for its core security features:</p>
 
         <ul>
             {
@@ -120,13 +116,6 @@ const localData = [
         <p>
             Local data is cleared when you uninstall the extension. None of it is sent to the proxy server or any
             third party.
-        </p>
-
-        <h2>Third-party integrations</h2>
-        <p>
-            If you configure a provider with your own API key (for example, MetaDefender), that provider receives
-            requests directly from your device, the protections above do not apply, and the provider's own privacy
-            practices govern.
         </p>
 
         <h2>The website and safety checker page</h2>

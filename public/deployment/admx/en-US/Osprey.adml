@@ -22,8 +22,6 @@
       <string id="DisableThirdPartyProviders_Explain">If true, third-party providers are disabled and cannot be enabled from settings.</string>
       <string id="CacheExpirationSeconds">Cache Expiration Seconds</string>
       <string id="CacheExpirationSeconds_Explain">Cache entry lifetime in seconds. (minimum 60, maximum 2592000, default 604800)</string>
-      <string id="MetaDefenderApiKey">MetaDefender API Key</string>
-      <string id="MetaDefenderApiKey_Explain">Managed API key for the MetaDefender integrations.</string>
       <string id="HideProviderControls">Hide Provider Controls</string>
       <string id="HideProviderControls_Explain">If true, provider controls are hidden from the popup and options page.</string>
       <string id="ManagedAllowlist">Managed Allowlist</string>
@@ -62,9 +60,6 @@
     <presentationTable>
       <presentation id="Chrome_CacheExpirationSeconds">
         <decimalTextBox refId="Chrome_CacheExpirationSeconds_val" defaultValue="604800">Cache Expiration Seconds</decimalTextBox>
-      </presentation>
-      <presentation id="Chrome_MetaDefenderApiKey">
-        <textBox refId="Chrome_MetaDefenderApiKey_val"><label>MetaDefender API Key</label></textBox>
       </presentation>
       <presentation id="Chrome_ManagedAllowlist">
         <listBox refId="Chrome_ManagedAllowlist_val">Managed Allowlist</listBox>
@@ -113,9 +108,6 @@
       </presentation>
       <presentation id="Edge_CacheExpirationSeconds">
         <decimalTextBox refId="Edge_CacheExpirationSeconds_val" defaultValue="604800">Cache Expiration Seconds</decimalTextBox>
-      </presentation>
-      <presentation id="Edge_MetaDefenderApiKey">
-        <textBox refId="Edge_MetaDefenderApiKey_val"><label>MetaDefender API Key</label></textBox>
       </presentation>
       <presentation id="Edge_ManagedAllowlist">
         <listBox refId="Edge_ManagedAllowlist_val">Managed Allowlist</listBox>

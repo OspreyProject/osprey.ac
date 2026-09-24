@@ -63,13 +63,6 @@
         <decimal id="Chrome_CacheExpirationSeconds_val" valueName="CacheExpirationSeconds" minValue="60" maxValue="2592000" />
       </elements>
     </policy>
-    <policy name="Chrome_MetaDefenderApiKey" class="Machine" displayName="$(string.MetaDefenderApiKey)" explainText="$(string.MetaDefenderApiKey_Explain)" presentation="$(presentation.Chrome_MetaDefenderApiKey)" key="Software\Policies\Google\Chrome\3rdparty\extensions\jmnpibhfpmpfjhhkmpadlbgjnbhpjgnd\policy">
-      <parentCategory ref="CAT_Chrome" />
-      <supportedOn ref="SUPPORTED_OspreyBrowser" />
-      <elements>
-        <text id="Chrome_MetaDefenderApiKey_val" valueName="MetaDefenderApiKey" maxLength="2048" />
-      </elements>
-    </policy>
     <policy name="Chrome_HideProviderControls" class="Machine" displayName="$(string.HideProviderControls)" explainText="$(string.HideProviderControls_Explain)" key="Software\Policies\Google\Chrome\3rdparty\extensions\jmnpibhfpmpfjhhkmpadlbgjnbhpjgnd\policy" valueName="HideProviderControls">
       <parentCategory ref="CAT_Chrome" />
       <supportedOn ref="SUPPORTED_OspreyBrowser" />
@@ -228,13 +221,6 @@
       <supportedOn ref="SUPPORTED_OspreyBrowser" />
       <elements>
         <decimal id="Edge_CacheExpirationSeconds_val" valueName="CacheExpirationSeconds" minValue="60" maxValue="2592000" />
-      </elements>
-    </policy>
-    <policy name="Edge_MetaDefenderApiKey" class="Machine" displayName="$(string.MetaDefenderApiKey)" explainText="$(string.MetaDefenderApiKey_Explain)" presentation="$(presentation.Edge_MetaDefenderApiKey)" key="Software\Policies\Microsoft\Edge\3rdparty\extensions\nopglhplnghfhpniofkcopmhbjdonlgn\policy">
-      <parentCategory ref="CAT_Edge" />
-      <supportedOn ref="SUPPORTED_OspreyBrowser" />
-      <elements>
-        <text id="Edge_MetaDefenderApiKey_val" valueName="MetaDefenderApiKey" maxLength="2048" />
       </elements>
     </policy>
     <policy name="Edge_HideProviderControls" class="Machine" displayName="$(string.HideProviderControls)" explainText="$(string.HideProviderControls_Explain)" key="Software\Policies\Microsoft\Edge\3rdparty\extensions\nopglhplnghfhpniofkcopmhbjdonlgn\policy" valueName="HideProviderControls">
