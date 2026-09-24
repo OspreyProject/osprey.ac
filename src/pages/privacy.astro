@@ -73,7 +73,11 @@ const localData = [
             checks are mixed together. Recently checked URLs are served from the proxy's cache without contacting any
             provider.
         </p>
-        <p>When a URL does reach a provider, the data sent depends on the provider type:</p>
+        <p>
+            If a check is sent directly from your device instead, the receiving service sees the request and its own
+            privacy practices apply. The proxy protections described above do not apply to that check.
+        </p>
+        <p>When a URL reaches a provider through the proxy, the data sent depends on the provider type:</p>
         <ul>
             <li><strong>DNS-based providers</strong> receive only the hostname, never the full URL or path</li>
             <li><strong>API-based providers</strong> receive the URL with query parameters stripped, except for a small
