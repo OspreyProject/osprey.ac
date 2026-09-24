@@ -106,7 +106,7 @@
     "https://osprey.ac/giving": "sha256:bae8490b1b039442193adb28271508385b89e9ecb5391c5b93891bfc48c203bc",
     "https://osprey.ac/": "sha256:1470c3fe255c8c6e611bc39d4fd16a1be16b881616469fd0c43568c0e4192929",
     "https://osprey.ac/pricing": "sha256:e7d35e53dd2a13cdc367cb58b4f00efb73bad5e153c35bb693fc5e98f37e1907",
-    "https://osprey.ac/privacy": "sha256:b0bff25faf374e4d1bdcbc566a2490d81947e411249973d1673336d516303830",
+    "https://osprey.ac/privacy": "sha256:173e816f6ad48446fd4c079e2527f9465112a0001395ed9a973f8d0d2fbae44e",
     "https://osprey.ac/terms": "sha256:193d471215c08c93b22d1d821bdb50fe73c3d3d6a0c4068fc30d21571db2831a"
   }
 }
