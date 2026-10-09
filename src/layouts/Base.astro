@@ -121,7 +121,7 @@ const siteSchema = {
     <meta name="twitter:description" content={description}/>
     <meta name="twitter:image" content={ogImage}/>
 
-    <script is:inline type="application/ld+json" set:html={JSON.stringify(siteSchema)}/>
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(siteSchema).replace(/</g, '\\u003c')}/>
 
     <!-- Google tag (gtag.js), loaded lazily to keep it off the critical path -->
     <script is:inline>
