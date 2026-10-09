@@ -13,7 +13,7 @@
     "@astrojs/sitemap": "^3.7.4",
     "astro": "^7.3.2",
     "astro-indexnow": "^2.3.10",
-    "tldts": "^6.1.86"
+    "tldts": "^7.4.16"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
