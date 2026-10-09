@@ -4,8 +4,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "npm update --save && npm install && astro check && astro dev",
-    "build": "npm update --save && npm install && astro check && astro build",
+    "dev": "astro check && astro dev",
+    "build": "astro check && astro build",
     "preview": "astro preview"
   },
   "dependencies": {
