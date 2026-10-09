@@ -2,7 +2,7 @@
 // Copyright (C) 2026 Osprey Project LLC (https://osprey.ac) All rights reserved.
 // This software is not licensed for redistribution or self-hosting.
 
-import {providers, groups, resultStates, blockingResults, faqs, summarize} from '../data/providers';
+import {providers, groups, resultStates, blockingResults, faqs, summarize, isResultState} from '../data/providers';
 
 // A stored, hard-flagged result used to pre-render a result page. When omitted, the component
 // renders the live tool in its idle state and the inline script drives it. When present, the
@@ -31,7 +31,7 @@ const logo = (name: string): string => logos[`../assets/providers/${name}.avif`]
 
 const stateFor = (id: string): string => {
     const values = result?.results?.[id];
-    return values && values.length && resultStates[values[0]] ? values[0] : 'failed';
+    return values && values.length && isResultState(values[0]) ? values[0] : 'failed';
 };
 
 const flaggedProviders = finished
@@ -40,10 +40,11 @@ const flaggedProviders = finished
         .map(p => ({name: p.name, state: stateFor(p.id)}))
     : [];
 
-const summary = finished ? summarize(flaggedProviders) : null;
+const answeredCount = finished ? providers.filter(p => stateFor(p.id) !== 'failed').length : 0;
+const summary = finished ? summarize(flaggedProviders, answeredCount) : null;
 const totalProviders = result?.total ?? providers.length;
 const initialUrl = finished ? result!.url : '';
-const scannedMs = result?.lastScanned ?? null;
+const scannedMs = Number.isFinite(result?.lastScanned) ? result!.lastScanned! : null;
 const fmtDate = (ms: number): string => new Date(ms).toISOString().slice(0, 10);
 ---
 
@@ -259,6 +260,11 @@ const fmtDate = (ms: number): string => new Date(ms).toISOString().slice(0, 10);
             idle: {label: 'Idle', tone: 'idle'},
         };
 
+        // Own-property check, so inherited keys such as "constructor" are never treated as states
+        function hasState(value) {
+            return typeof value === 'string' && Object.prototype.hasOwnProperty.call(states, value);
+        }
+
         const blocking = new Set(['phishing', 'malicious', 'suspicious', 'newly_registered', 'dynamic_dns']);
 
         // Providers that warrant an "Unsafe" verdict on their own. If a single provider outside
@@ -292,6 +298,23 @@ const fmtDate = (ms: number): string => new Date(ms).toISOString().slice(0, 10);
 
         let scanning = false;
         let forceNext = false;
+
+        // Set when the stream reports an error, so an empty flag list is not read as a clean verdict
+        let incomplete = false;
+
+        // Providers that returned a real verdict, as opposed to waiting, idle, or unavailable
+        function answeredCount() {
+            let count = 0;
+
+            cards.forEach(function (card) {
+                const state = card.getAttribute('data-state');
+
+                if (state && state !== 'failed' && state !== 'waiting' && state !== 'idle') {
+                    count++;
+                }
+            });
+            return count;
+        }
 
         function showCaptchaNote(message) {
             captchaNote.textContent = message;
@@ -373,7 +396,7 @@ const fmtDate = (ms: number): string => new Date(ms).toISOString().slice(0, 10);
                 return;
             }
 
-            const info = states[state] || states.failed;
+            const info = hasState(state) ? states[state] : states.failed;
             card.setAttribute('data-state', state);
             card.setAttribute('data-tone', info.tone);
             const label = card.querySelector('.status-label');
@@ -408,7 +431,7 @@ const fmtDate = (ms: number): string => new Date(ms).toISOString().slice(0, 10);
 
                 // AlphaMountain alone counts as soft when its verdict would not render red
                 if (!caution && flagged === 1 && normalizeName(providerName(only)) === alphaMountain) {
-                    const tone = (states[providerState(only)] || {}).tone;
+                    const tone = (hasState(providerState(only)) ? states[providerState(only)] : {}).tone;
                     caution = tone != null && tone !== 'danger';
                 }
 
@@ -423,6 +446,14 @@ const fmtDate = (ms: number): string => new Date(ms).toISOString().slice(0, 10);
                 summaryText.textContent = flagged === 1
                     ? '1 provider flagged this URL'
                     : flagged + ' providers flagged this URL';
+            } else if (incomplete || answeredCount() === 0) {
+                // Nothing was flagged, but the scan did not complete or no provider answered,
+                // so a clean verdict would be unfounded
+                summaryBadgeLabel.textContent = 'Unavailable';
+                summaryBadge.setAttribute('data-tone', 'muted');
+                summaryText.textContent = incomplete && answeredCount() > 0
+                    ? 'The scan did not complete, so this URL could not be confirmed safe'
+                    : 'No providers could check this URL';
             } else {
                 summaryBadgeLabel.textContent = 'Safe';
                 summaryBadge.setAttribute('data-tone', 'safe');
@@ -437,7 +468,7 @@ const fmtDate = (ms: number): string => new Date(ms).toISOString().slice(0, 10);
         }
 
         function handleResult(providerId, result, seen) {
-            const state = states[result] ? result : 'failed';
+            const state = hasState(result) ? result : 'failed';
             setCardState(providerId, state);
             seen.add(providerId);
         }
@@ -447,6 +478,35 @@ const fmtDate = (ms: number): string => new Date(ms).toISOString().slice(0, 10);
             const decoder = new TextDecoder();
             let buffer = '';
             const flaggedIds = new Set();
+
+            function handleLine(rawLine) {
+                const line = rawLine.trim();
+
+                if (!line) {
+                    return;
+                }
+
+                let event;
+
+                try {
+                    event = JSON.parse(line);
+                } catch {
+                    return;
+                }
+
+                if (event.type === 'result') {
+                    handleResult(event.provider, event.result, seen);
+
+                    if (blocking.has(event.result)) {
+                        flaggedIds.add(event.provider);
+                    }
+
+                    updateSummary(Array.from(flaggedIds), total, false);
+                } else if (event.type === 'error') {
+                    incomplete = true;
+                    showError(event.message || 'The scan could not be completed.');
+                }
+            }
 
             while (true) {
                 const chunk = await reader.read();
@@ -459,35 +519,16 @@ const fmtDate = (ms: number): string => new Date(ms).toISOString().slice(0, 10);
                 let newline = buffer.indexOf('\n');
 
                 while (newline !== -1) {
-                    const line = buffer.slice(0, newline).trim();
+                    const line = buffer.slice(0, newline);
                     buffer = buffer.slice(newline + 1);
                     newline = buffer.indexOf('\n');
-
-                    if (!line) {
-                        continue;
-                    }
-
-                    let event;
-
-                    try {
-                        event = JSON.parse(line);
-                    } catch {
-                        continue;
-                    }
-
-                    if (event.type === 'result') {
-                        handleResult(event.provider, event.result, seen);
-
-                        if (blocking.has(event.result)) {
-                            flaggedIds.add(event.provider);
-                        }
-
-                        updateSummary(Array.from(flaggedIds), total, false);
-                    } else if (event.type === 'error') {
-                        showError(event.message || 'The scan could not be completed.');
-                    }
+                    handleLine(line);
                 }
             }
+
+            // Flush the decoder and handle a final event that has no trailing newline
+            buffer += decoder.decode();
+            handleLine(buffer);
             return Array.from(flaggedIds);
         }
 
@@ -516,6 +557,7 @@ const fmtDate = (ms: number): string => new Date(ms).toISOString().slice(0, 10);
 
             const total = cards.size;
             const seen = new Set();
+            incomplete = false;
             const flagged = await readStream(response, total, seen);
 
             // Any provider that never reported is shown as unavailable
@@ -643,7 +685,7 @@ const fmtDate = (ms: number): string => new Date(ms).toISOString().slice(0, 10);
 
             cards.forEach(function (_card, id) {
                 const values = data.results && data.results[id];
-                const state = values && values.length && states[values[0]] ? values[0] : 'failed';
+                const state = values && values.length && hasState(values[0]) ? values[0] : 'failed';
                 setCardState(id, state);
 
                 if (blocking.has(state)) {

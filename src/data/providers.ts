@@ -55,6 +55,11 @@ export const resultStates: Record<string, ResultState> = {
     idle: {label: 'Idle', tone: 'idle'}
 };
 
+// True only for result strings this table defines. A plain `resultStates[value]` lookup would also
+// accept inherited keys such as "constructor" or "toString" from untrusted feed or API data.
+export const isResultState = (value: unknown): value is string =>
+    typeof value === 'string' && Object.prototype.hasOwnProperty.call(resultStates, value);
+
 // The result strings that count as a block/flag.
 export const blockingResults = ['phishing', 'malicious', 'suspicious', 'newly_registered', 'dynamic_dns'];
 
@@ -99,8 +104,13 @@ const alphaMountain = normalizeName('AlphaMountain');
 // Derives the summary badge label, tone, and text from the flagging providers.
 // This is the server-side twin of updateSummary() in the checker script, so a pre-rendered
 // result page reads exactly like the tool does the moment a scan finishes.
-export const summarize = (flagged: FlaggedProvider[]): SummaryInfo => {
+export const summarize = (flagged: FlaggedProvider[], answered?: number): SummaryInfo => {
     const count = flagged.length;
+
+    // With no flags and no provider that actually answered, nothing was checked, so it is not "Safe"
+    if (count === 0 && answered === 0) {
+        return {label: 'Unavailable', tone: 'muted', text: 'No providers could check this URL'};
+    }
 
     if (count === 0) {
         return {label: 'Safe', tone: 'safe', text: 'No providers flagged this URL'};
@@ -111,7 +121,7 @@ export const summarize = (flagged: FlaggedProvider[]): SummaryInfo => {
 
     // AlphaMountain alone counts as soft when its verdict would not render red
     if (!caution && count === 1 && normalizeName(flagged[0].name) === alphaMountain) {
-        const tone = resultStates[flagged[0].state]?.tone;
+        const tone = isResultState(flagged[0].state) ? resultStates[flagged[0].state].tone : undefined;
         caution = tone != null && tone !== 'danger';
     }
 

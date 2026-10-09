@@ -4,7 +4,7 @@
 
 import Base from '../../layouts/Base.astro';
 import CheckTool from '../../components/CheckTool.astro';
-import {providers, resultStates, blockingResults, isAuthoritative} from '../../data/providers';
+import {providers, resultStates, blockingResults, isAuthoritative, isResultState} from '../../data/providers';
 import {parse} from 'tldts';
 
 interface ScanResult {
@@ -70,11 +70,16 @@ export function deriveDomain(rawUrl: string): string | null {
     return domain;
 }
 
+// True for an epoch-millisecond number that Date can represent.
+export function isValidTimestamp(value: unknown): value is number {
+    return typeof value === 'number' && Number.isFinite(value) && !Number.isNaN(new Date(value).getTime());
+}
+
 // The provider names currently returning a blocking verdict for this record.
 export function flaggingNames(results: Record<string, string[]>): string[] {
     return providers.filter(p => {
         const values = results?.[p.id];
-        const state = values && values.length && resultStates[values[0]] ? values[0] : 'failed';
+        const state = values && values.length && isResultState(values[0]) ? values[0] : 'failed';
         return blockingResults.includes(state);
     }).map(p => p.name);
 }
@@ -122,6 +127,8 @@ export async function getStaticPaths() {
                 'Accept': 'application/json',
                 'User-Agent': 'Mozilla/5.0 (compatible; OspreySiteBuild/1.0; +https://osprey.ac)',
             },
+            // A feed that accepts the connection but never answers must not stall the build.
+            signal: AbortSignal.timeout(30_000),
         });
 
         if (!response.ok) {
@@ -143,6 +150,12 @@ export async function getStaticPaths() {
 
     for (const record of records) {
         if (!record || typeof record.url !== 'string') {
+            continue;
+        }
+
+        // Timestamps feed Date#toISOString at render time, which throws on an invalid date and
+        // would fail the whole build, so a record without usable timestamps is skipped here.
+        if (!isValidTimestamp(record.firstScanned) || !isValidTimestamp(record.lastScanned)) {
             continue;
         }
 
@@ -184,7 +197,7 @@ const {domain, record} = Astro.props;
 
 const stateFor = (id: string): string => {
     const values = record.results?.[id];
-    return values && values.length && resultStates[values[0]] ? values[0] : 'failed';
+    return values && values.length && isResultState(values[0]) ? values[0] : 'failed';
 };
 
 const flaggingProviders = providers
@@ -192,7 +205,10 @@ const flaggingProviders = providers
     .map(p => p.name);
 
 const flaggedCount = flaggingProviders.length;
-const totalCount = record.total ?? providers.length;
+// The feed is untrusted, so only a plausible provider count is accepted into the page text.
+const totalCount = Number.isInteger(record.total) && record.total > 0 && record.total <= 1000
+    ? record.total
+    : providers.length;
 const primaryLabel = resultStates[record.primary]?.label ?? 'Flagged';
 
 const canonicalPath = `/check/${domain}/`;
