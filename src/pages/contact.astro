@@ -217,7 +217,8 @@ const schema = {
         updateCategory();
 
         function validEmail(value) {
-            return /^[\w\-.]+@([\w-]+\.)+[\w-]{2,}$/.test(value);
+            // Deliberately permissive (plus-addressing, apostrophes, etc.); the emailed confirmation link is the real check
+            return /^[^\s@]+@[^\s@.]+(\.[^\s@.]+)*\.[^\s@.]{2,}$/.test(value);
         }
 
         form.addEventListener('submit', async function (event) {
@@ -250,9 +251,12 @@ const schema = {
                 missing = true;
             }
 
+            let badEmail = false;
+
             if (!validEmail(payload.email)) {
                 markInvalid(emailInput, true);
                 missing = true;
+                badEmail = !!payload.email;
             }
 
             if (companyRequired && !payload.company) {
@@ -266,7 +270,9 @@ const schema = {
             }
 
             if (missing) {
-                showError('Please fill out all required fields.');
+                showError(badEmail
+                    ? 'Please enter a valid email address.'
+                    : 'Please fill out all required fields.');
                 return;
             }
 
