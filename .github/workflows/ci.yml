@@ -1,0 +1,39 @@
+# Pull request gate for the site. The deploy workflow only runs after a merge, so this is what
+# catches a broken page, a type error, or a vulnerable dependency before it. Mark it as a required
+# status check in the branch ruleset for main. A full `astro build` is left to the deploy workflow,
+# because the IndexNow integration needs a secret that pull requests do not receive.
+name: CI
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    name: Type check and audit
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Set up Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Type check
+        run: npx astro check
+
+      - name: Audit
+        run: npm audit --audit-level=high
