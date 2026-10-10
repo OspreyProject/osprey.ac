@@ -33,23 +33,23 @@ const schema = {
                 {
                     '@type': 'Offer',
                     name: 'Starter',
-                    price: '225',
+                    price: '125',
                     priceCurrency: 'USD',
-                    description: 'Management Console platform fee of $100 per 30 days plus $1.25 per seat, 100-seat minimum; $225 minimum monthly total.',
+                    description: 'Management Console platform fee of $100 per 30 days plus $1.25 per seat, 20-seat minimum; $125 minimum monthly total.',
                 },
                 {
                     '@type': 'Offer',
                     name: 'Professional',
-                    price: '750',
+                    price: '300',
                     priceCurrency: 'USD',
-                    description: 'Management Console platform fee of $250 per 30 days plus $1.00 per seat, 500-seat minimum; $750 minimum monthly total.',
+                    description: 'Management Console platform fee of $250 per 30 days plus $1.00 per seat, 50-seat minimum; $300 minimum monthly total.',
                 },
                 {
                     '@type': 'Offer',
                     name: 'Enterprise',
-                    price: '2000',
+                    price: '575',
                     priceCurrency: 'USD',
-                    description: 'Management Console platform fee of $500 per 30 days plus $0.75 per seat, 2,000-seat minimum; $2,000 minimum monthly total.',
+                    description: 'Management Console platform fee of $500 per 30 days plus $0.75 per seat, 100-seat minimum; $575 minimum monthly total.',
                 },
             ],
         },
@@ -303,7 +303,7 @@ const features = [
         feature: 'Invoice, purchase order, and net-30 billing with quotes',
         lite: 'no',
         starter: 'no',
-        professional: 'no',
+        professional: 'yes',
         enterprise: 'yes'
     },
     {
@@ -323,23 +323,23 @@ const features = [
     {
         feature: 'Minimum billed seats',
         lite: '10',
-        starter: '100',
-        professional: '500',
-        enterprise: '2,000'
+        starter: '20',
+        professional: '50',
+        enterprise: '100'
     },
     {
         feature: 'Minimum monthly total',
         lite: '$20',
-        starter: '$225',
-        professional: '$750',
-        enterprise: '$2,000'
+        starter: '$125',
+        professional: '$300',
+        enterprise: '$575'
     },
     {
         feature: 'Upgrade to this plan when you reach:',
         lite: '-',
         starter: '~135 seats',
         professional: '~600 seats',
-        enterprise: '~1,750 seats'
+        enterprise: '~1,000 seats'
     },
 ];
 
