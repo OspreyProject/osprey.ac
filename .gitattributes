@@ -1,0 +1,19 @@
+# Text files are CRLF in the working tree on every platform. Shell scripts and the Gradle wrapper
+# script must stay LF or Linux refuses to run them.
+* text=auto eol=crlf
+gradlew text eol=lf
+*.sh text eol=lf
+*.bat text eol=crlf
+
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.webp binary
+*.avif binary
+*.gif binary
+*.ico binary
+*.pdf binary
+*.zip binary
+*.jar binary
+*.woff binary
+*.woff2 binary
